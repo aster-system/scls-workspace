@@ -1,0 +1,30 @@
+<gui_object name="hub_body">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=1 type=scale>
+	<width value=1 type=scale>
+	<x value=0 type=scale>
+	<y value=0 type=scale>
+</gui_object>
+
+<gui_object name="hub_navigation">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=7/10 type=scale>
+	<parent name="hub_body">
+	<width value=9/10 type=scale>
+	<x value=1/2 type=object_scale>
+	<y value=1/20 type=scale>
+</gui_object>
+
+<gui_object name="hub_agatha_button" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=120>Agatha</content>
+	<height value=150 type=pixel>
+	<parent name="hub_navigation">
+	<width value=1 type=scale>
+	<x value=0 type=scale>
+	<y value=0 type=scale>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>

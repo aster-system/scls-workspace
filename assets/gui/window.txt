@@ -1,0 +1,3 @@
+<page_2d name="main_page" type="workspace" displayed>
+	<content src="hub_page.txt">
+</page_2d>
