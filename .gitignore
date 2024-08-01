@@ -412,3 +412,5 @@ mods_hidden/
 *.layout
 *.mp4
 scls-workspace.cbp
+scls-workspace.depend
+scls-workspace.layout
