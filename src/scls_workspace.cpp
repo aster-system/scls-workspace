@@ -30,17 +30,81 @@ namespace scls {
 
     //*********
     //
-    // SCLS_Workspace_Page main members
+    // SCLS_Workspace_Hub_Page main members
     //
     //*********
 
-    // SCLS_Workspace_Page constructor
-    SCLS_Workspace_Page::SCLS_Workspace_Page(_Window_Advanced_Struct* window_struct, std::string name) : GUI_Page(window_struct, name) { }
+    // SCLS_Workspace_Hub_Page constructor
+    SCLS_Workspace_Hub_Page::SCLS_Workspace_Hub_Page(_Window_Advanced_Struct* window_struct, std::string name) : GUI_Page(window_struct, name) {
+        // Full fill the navigations buttons with empty shared pointers
+        std::shared_ptr<GUI_Text> empty_shared_ptr;
+        a_navigation_buttons["agatha"] = empty_shared_ptr;
+    }
+
+    // Check navigations buttons
+    void SCLS_Workspace_Hub_Page::check_navigation_buttons() {
+        if(a_navigation_buttons["agatha"].get() != 0 && a_navigation_buttons["agatha"].get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            a_should_display_agatha = true;
+        }
+    }
+
+    // Create an object from a type
+    std::shared_ptr<GUI_Object> SCLS_Workspace_Hub_Page::__create_loaded_object_from_type(std::string object_name, std::string object_type, GUI_Object* parent) {
+        if(object_type == "navigation_scroller") {
+            std::shared_ptr<GUI_Scroller> scroller = *parent->new_object<GUI_Scroller>(object_name);
+            a_navigation_scroller = scroller;
+
+            // Return the shared pointer
+            std::shared_ptr<GUI_Object> to_return = scroller;
+            return to_return;
+        }
+        else if(object_type.substr(0, 10) == "navigation" && object_type.size() > 11) {
+            std::shared_ptr<GUI_Text> button = *parent->new_object<GUI_Text>(object_name);
+            std::string path = object_type.substr(11, object_type.size() - 11);
+            a_navigation_buttons[path] = button;
+
+            // Return the shared pointer
+            std::shared_ptr<GUI_Object> to_return = button;
+            return to_return;
+        }
+        return GUI_Page::__create_loaded_object_from_type(object_name, object_type, parent);
+    };
+
+    // Update the event of the page
+    void SCLS_Workspace_Hub_Page::update_event() {
+        GUI_Page::update_event();
+        a_should_display_agatha = false;
+        check_navigation_buttons();
+    }
+
+    // Check the state of the hub
+    void SCLS_Workspace_Window::check_hub_state() {
+        if(a_hub_page.get()->should_display_agatha()) {
+            hide_all_pages_2d();
+            display_page_2d(a_agatha_page.get()->name());
+        }
+    }
 
     // Create an object from a type
     std::shared_ptr<Object> SCLS_Workspace_Window::__create_loaded_object_from_type(std::string object_name, std::string object_type) {
-        if(object_type == "workspace") {
-            std::shared_ptr<Object> to_return = *new_page_2d<SCLS_Workspace_Page>(object_name);
+        if(object_type == "hub") {
+            std::shared_ptr<SCLS_Workspace_Hub_Page> hub = *new_page_2d<SCLS_Workspace_Hub_Page>(object_name);
+
+            // Get the special page
+            a_hub_page = hub;
+
+            // Return the good object
+            std::shared_ptr<Object> to_return = hub;
+            return to_return;
+        }
+        else if(object_type == "agatha") {
+            std::shared_ptr<SCLS_Workspace_Agatha_Page> agatha = *new_page_2d<SCLS_Workspace_Agatha_Page>(object_name);
+
+            // Get the special page
+            a_agatha_page = agatha;
+
+            // Return the good object
+            std::shared_ptr<Object> to_return = agatha;
             return to_return;
         }
         return Window::__create_loaded_object_from_type(object_name, object_type);
@@ -56,6 +120,8 @@ namespace scls {
         while(window.get()->run()) {
             window.get()->update_event();
             window.get()->update();
+
+            window.get()->check_hub_state();
 
             window.get()->render();
         }

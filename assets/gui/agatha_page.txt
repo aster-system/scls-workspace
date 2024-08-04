@@ -1,0 +1,94 @@
+<gui_object name="header_agatha" visible>
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=30 type=pixel>
+	<width value=1 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=top>
+</gui_object>
+
+//***************************************************
+//
+//   HELP
+//
+//*************************************************** 
+
+<gui_object name="help_body" visible>
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>
+
+// Footer
+
+<gui_object name="help_footer" visible>
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=1/4 type=scale>
+	<width value=8/9 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=25>
+</gui_object>
+<gui_object name="help_footer_create_pattern" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Créer un modèle</content>
+	<height value=1/3 type=scale>
+	<parent name="help_footer">
+	<width value=1/5 type=scale>
+	<x value=0 type=scale>
+	<y attach=top>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="help_footer_open_pattern" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Ouvrir un modèle</content>
+	<height value=1/3 type=scale>
+	<parent name="help_footer">
+	<width value=1/5 type=scale>
+	<x value=0 type=scale>
+	<y attach=bottom attached_object="help_footer_create_pattern">
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="help_footer_open_replica" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Ouvrir une réplique</content>
+	<height value=1/3 type=scale>
+	<parent name="help_footer">
+	<width value=1/5 type=scale>
+	<x value=1/5 type=scale>
+	<y attach=top>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+
+// Navigation
+
+<gui_object name="help_navigation" type="scroller" visible>
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=3/20 type=scale>
+	<x attach=left offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>
+
+//***************************************************
+//
+//   FILE EXPLORER
+//
+//*************************************************** 
+
+<gui_object name="pattern_open_body" type="file_explorer">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>

@@ -1,3 +1,6 @@
-<page_2d name="main_page" type="workspace" displayed>
+<page_2d name="hub_page" type="hub" displayed>
 	<content src="hub_page.txt">
+</page_2d>
+<page_2d name="agatha_page" type="agatha">
+	<content src="agatha_page.txt" sub_paged>
 </page_2d>

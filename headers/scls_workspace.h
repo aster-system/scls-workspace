@@ -26,7 +26,7 @@
 #ifndef SCLS_WORKSPACE
 #define SCLS_WORKSPACE
 
-#include "../../scls-graphic-benoit/scls_graphic.h"
+#include "scls_workspace_agatha.h"
 
 // The namespace "scls" is used to simplify the all.
 namespace scls {
@@ -37,18 +37,51 @@ namespace scls {
 	//
 	//*********
 
-	class SCLS_Workspace_Page : public GUI_Page {
-	    // Class representating the page of SCLS Workspace
+	class SCLS_Workspace_Hub_Page : public GUI_Page {
+	    // Class representating the hub page of SCLS Workspace
     public:
 
         //*********
         //
-        // SCLS_Workspace_Page main members
+        // SCLS_Workspace_Hub_Page main members
         //
         //*********
 
-        // SCLS_Workspace_Page constructor
-        SCLS_Workspace_Page(_Window_Advanced_Struct* window_struct, std::string name);
+        // SCLS_Workspace_Hub_Page constructor
+        SCLS_Workspace_Hub_Page(_Window_Advanced_Struct* window_struct, std::string name);
+
+        // Load an object in a page from XML
+        virtual std::shared_ptr<GUI_Object> __create_loaded_object_from_type(std::string object_name, std::string object_type, GUI_Object* parent);
+
+        // Getters and setters
+        inline bool should_display_agatha() const {return a_should_display_agatha;};
+
+        //*********
+        //
+        // Event handling
+        //
+        //*********
+
+        // Check navigations buttons
+        void check_navigation_buttons();
+        // Update the event of the page
+        virtual void update_event();
+
+	private:
+
+        //*********
+        //
+        // SCLS_Workspace_Hub_Page main members
+        //
+        //*********
+
+        // Navigation buttons by path
+        std::map<std::string, std::shared_ptr<GUI_Text>> a_navigation_buttons = std::map<std::string, std::shared_ptr<GUI_Text>>();
+        // Scroller of the hub
+        std::shared_ptr<GUI_Scroller> a_navigation_scroller;
+
+        // If the agatha page should be displayer
+        bool a_should_display_agatha = false;
 	};
 
 	class SCLS_Workspace_Window : public Window {
@@ -64,8 +97,24 @@ namespace scls {
         // SCLS_Workspace_Window constructor
         SCLS_Workspace_Window(int window_width, int window_height, std::string a_exec_path) : Window(window_width, window_height, a_exec_path) {};
 
+        // Check the state of the hub
+        void check_hub_state();
+
         // Create an object from a type
         virtual std::shared_ptr<Object> __create_loaded_object_from_type(std::string object_name, std::string object_type);
+
+    private:
+
+        //*********
+        //
+        // SCLS_Workspace_Page main members
+        //
+        //*********
+
+        // Agatha page
+        std::shared_ptr<SCLS_Workspace_Agatha_Page> a_agatha_page;
+        // Hub page
+        std::shared_ptr<SCLS_Workspace_Hub_Page> a_hub_page;
 	};
 
     // Use the SCLS Worspace
