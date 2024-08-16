@@ -44,9 +44,9 @@
 		<cursor type=pointing_hand_cursor>
 	</when>
 </gui_object>
-<gui_object name="hub_pms_button" type="navigation-pms">
+<gui_object name="hub_model_maker_button" type="navigation-model_maker">
 	<border bottom=1 left=1 right=1 top=1>
-	<content font_size=120>Pms</content>
+	<content font_size=120>Model maker</content>
 	<height value=150 type=pixel>
 	<parent name="hub_navigation">
 	<width value=1 type=scale>

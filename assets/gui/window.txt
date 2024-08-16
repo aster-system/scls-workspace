@@ -1,6 +1,13 @@
+// Load the needed variable
+<variable name="model_maker_texture_path">C:/Users/daisy/Pictures/test.png</variable>
+
+// Load the needed pages
 <page_2d name="hub_page" type="hub" displayed>
 	<content src="hub_page.txt">
 </page_2d>
 <page_2d name="agatha_page" type="agatha">
 	<content src="agatha_page.txt" sub_paged>
+</page_2d>
+<page_2d name="model_maker_page" type="model_maker">
+	<content src="model_maker_page.txt" sub_paged>
 </page_2d>

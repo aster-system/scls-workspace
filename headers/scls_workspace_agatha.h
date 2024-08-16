@@ -66,6 +66,10 @@ namespace scls {
         void display_pattern_project();
         // Display the project pattern file page
         void display_pattern_project_file();
+        // Display the open replica page
+        void display_replica_open();
+        // Display the project replica page
+        void display_replica_project();
 
         // Hide all the agatha part
         void hide_all();
@@ -91,6 +95,7 @@ namespace scls {
         // Getters and setters
         inline Pattern_Project* currently_displayed_pattern_project() const {return a_current_state.currently_displayed_pattern_project.get();};
         inline Text_Pattern* currently_displayed_pattern_project_file() const {return a_current_state.currently_displayed_pattern_project_file.get();};
+        inline Replica_Project* currently_displayed_replica_project() const {return a_current_state.currently_displayed_replica_project.get();};
 
         //*********
         //
@@ -98,6 +103,13 @@ namespace scls {
         //
         //*********
 
+        // Returns a loaded pattern by its path
+        inline std::shared_ptr<Pattern_Project> loaded_pattern_by_path(std::string path) {
+            for(int i = 0;i<static_cast<int>(a_loaded_patterns.size());i++) {
+                if(a_loaded_patterns[i].get()->path() == path) return a_loaded_patterns[i];
+            }
+            return std::shared_ptr<Pattern_Project>();
+        };
         // Loads an existing pattern and returns it
         std::shared_ptr<Pattern_Project> load_pattern_project(std::string path);
         // Loads the buttons in the pattern project navigation
@@ -105,7 +117,25 @@ namespace scls {
         // Unloads the buttons in the pattern project navigation
         void unload_pattern_project_navigation();
 
+        //*********
+        //
+        // Replica handling
+        //
+        //*********
+
+        // Loads an existing replica and returns it
+        std::shared_ptr<Replica_Project> load_replica_project(std::string path);
+
 	private:
+
+	    //*********
+        //
+        // Pattern handling
+        //
+        //*********
+
+	    // Every loaded patterns in the software
+        std::vector<std::shared_ptr<Pattern_Project>> a_loaded_patterns = std::vector<std::shared_ptr<Pattern_Project>>();
 
 	    //*********
         //
@@ -120,8 +150,10 @@ namespace scls {
             #define SCLS_WORKSPACE_AGATHA_HELP_PAGE 0
             #define SCLS_WORKSPACE_AGATHA_PATTERN_PROJECT_FILE_PAGE 3
             #define SCLS_WORKSPACE_AGATHA_PATTERN_PROJECT_MAIN_PAGE 2
+            #define SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_MAIN_PAGE 4
             // Define each possible file chosen
             #define SCLS_WORKSPACE_AGATHA_OPEN_PATTERN 0
+            #define SCLS_WORKSPACE_AGATHA_OPEN_REPLICA 1
 
             // Current file chosen in Agatha
             unsigned short current_file_chosen = SCLS_WORKSPACE_AGATHA_OPEN_PATTERN;
@@ -136,6 +168,9 @@ namespace scls {
             std::vector<std::shared_ptr<Text_Pattern>> pattern_project_navigation_files = std::vector<std::shared_ptr<Text_Pattern>>();
             // Buttons in the pattern project navigation
             std::vector<std::shared_ptr<GUI_Text>> pattern_project_navigation_buttons = std::vector<std::shared_ptr<GUI_Text>>();
+
+            // Currently displayed pattern project
+            std::shared_ptr<Replica_Project> currently_displayed_replica_project;
         } a_current_state;
 
 	    //*********
@@ -162,6 +197,12 @@ namespace scls {
         std::shared_ptr<GUI_Object> a_pattern_project_main_footer;
         // Navigation of the pattern project part
         std::shared_ptr<GUI_Scroller> a_pattern_project_main_navigation;
+        // Body of the replica project part
+        std::shared_ptr<GUI_Object> a_replica_project_main_body;
+        // Footer of the replica project part
+        std::shared_ptr<GUI_Object> a_replica_project_main_footer;
+        // Navigation of the replica project part
+        std::shared_ptr<GUI_Scroller> a_replica_project_main_navigation;
 
         // Text / text inputs
 
@@ -169,6 +210,8 @@ namespace scls {
         std::shared_ptr<GUI_Text_Input> a_pattern_project_file_text_input;
         // Title of the pattern project body
         std::shared_ptr<GUI_Text> a_pattern_project_title;
+        // Title of the replica project body
+        std::shared_ptr<GUI_Text> a_replica_project_title;
 
         // Buttons
 

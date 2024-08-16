@@ -1,0 +1,414 @@
+<gui_object name="header_model_maker" visible>
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=30 type=pixel>
+	<width value=1 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=top>
+</gui_object>
+
+//***************************************************
+//
+//   HELP
+//
+//*************************************************** 
+
+<gui_object name="help_body_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_model_maker" offset=15>
+</gui_object>
+
+//***************************************************
+//
+//   Layer creator
+//
+//*************************************************** 
+
+<gui_object name="layer_creator_body_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+    <texture alignment=fit>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_model_maker" offset=15>
+</gui_object>
+<gui_object name="name_title_layer_creator_body_model_maker" type="text">
+	<content font_size=40>Nom de la couche</content>
+	<height value=50 type=pixel>
+	<parent name="layer_creator_body_model_maker">
+	<width value=9/20 type=scale>
+    <texture alignment=fit>
+	<x value=1/4 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+<gui_object name="name_layer_creator_body_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=50 type=pixel>
+	<parent name="layer_creator_body_model_maker">
+	<width value=9/20 type=scale>
+	<x value=3/4 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+<gui_object name="validate_layer_creator_body_model_maker" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=40>Créer la couche</content>
+	<height value=50 type=pixel>
+	<parent name="layer_creator_body_model_maker">
+	<width value=3/10 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=bottom offset=15>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+
+// Regular polygon layer
+
+<gui_object name="regulay_polygon_layer_creator_body_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=2/3 type=scale>
+	<parent name="layer_creator_body_model_maker">
+	<width value=17/20 type=scale>
+    <texture alignment=fit>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom attached_object="name_title_layer_creator_body_model_maker" offset=30>
+</gui_object>
+<gui_object name="title_side_regulay_polygon_layer_creator_body_model_maker" type="text">
+	<content font_size=40>Nombre de côtés</content>
+	<height value=50 type=pixel>
+	<parent name="regulay_polygon_layer_creator_body_model_maker">
+	<width value=3/10 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+<gui_object name="side_regulay_polygon_layer_creator_body_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=50 type=pixel>
+	<parent name="regulay_polygon_layer_creator_body_model_maker">
+	<width value=9/20 type=scale>
+	<x value=3/4 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+
+// Footer
+
+<gui_object name="layer_creator_footer_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=1/4 type=scale>
+	<width value=8/9 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=25>
+</gui_object>
+
+// Navigation
+
+<gui_object name="layer_creator_navigation_model_maker" type="scroller">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=3/20 type=scale>
+	<x attach=left offset=25>
+	<y attach=bottom attached_object="header_model_maker" offset=15>
+</gui_object>
+
+//***************************************************
+//
+//   Layer main
+//
+//*************************************************** 
+
+<gui_object name="layer_main_body_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+    <texture alignment=fit>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_model_maker" offset=15>
+</gui_object>
+<gui_object name="title_layer_main_body_model_maker" type="text">
+	<content font_size=75>Couche</content>
+	<height value=80 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=9/10 type=scale>
+    <texture alignment=fit>
+	<x value=1/2 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+
+// Y and height
+
+<gui_object name="title_y_layer_main_body_model_maker" type="text">
+	<content font_size=35>Y :</content>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/6 type=scale>
+    <texture alignment=fit>
+	<x value=1/5 type=object_scale>
+	<y attach=bottom attached_object="title_layer_main_body_model_maker" offset=15>
+</gui_object>
+<gui_object name="y_layer_main_body_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/6 type=scale>
+    <texture alignment=fit>
+	<x value=2/5 type=object_scale>
+	<y attach=bottom attached_object="title_layer_main_body_model_maker" offset=15>
+</gui_object>
+<gui_object name="title_height_layer_main_body_model_maker" type="text">
+	<content font_size=35>Hauteur :</content>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/6 type=scale>
+    <texture alignment=fit>
+	<x value=3/5 type=object_scale>
+	<y attach=bottom attached_object="title_layer_main_body_model_maker" offset=15>
+</gui_object>
+<gui_object name="height_layer_main_body_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/6 type=scale>
+    <texture alignment=fit>
+	<x value=4/5 type=object_scale>
+	<y attach=bottom attached_object="title_layer_main_body_model_maker" offset=15>
+</gui_object>
+
+// X and Z position
+
+<gui_object name="title_x_layer_main_body_model_maker" type="text">
+	<content font_size=35>X :</content>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/6 type=scale>
+    <texture alignment=fit>
+	<x value=1/5 type=object_scale>
+	<y attach=bottom attached_object="title_y_layer_main_body_model_maker" offset=15>
+</gui_object>
+<gui_object name="x_layer_main_body_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/6 type=scale>
+    <texture alignment=fit>
+	<x value=2/5 type=object_scale>
+	<y attach=bottom attached_object="title_y_layer_main_body_model_maker" offset=15>
+</gui_object>
+<gui_object name="title_z_layer_main_body_model_maker" type="text">
+	<content font_size=35>Z :</content>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/6 type=scale>
+    <texture alignment=fit>
+	<x value=3/5 type=object_scale>
+	<y attach=bottom attached_object="title_y_layer_main_body_model_maker" offset=15>
+</gui_object>
+<gui_object name="z_layer_main_body_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/6 type=scale>
+    <texture alignment=fit>
+	<x value=4/5 type=object_scale>
+	<y attach=bottom attached_object="title_y_layer_main_body_model_maker" offset=15>
+</gui_object>
+
+// X and Z position
+
+<gui_object name="title_width_layer_main_body_model_maker" type="text">
+	<content font_size=35>Largeur :</content>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/6 type=scale>
+    <texture alignment=fit>
+	<x value=1/5 type=object_scale>
+	<y attach=bottom attached_object="title_x_layer_main_body_model_maker" offset=15>
+</gui_object>
+<gui_object name="width_layer_main_body_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/6 type=scale>
+    <texture alignment=fit>
+	<x value=2/5 type=object_scale>
+	<y attach=bottom attached_object="title_x_layer_main_body_model_maker" offset=15>
+</gui_object>
+<gui_object name="title_length_layer_main_body_model_maker" type="text">
+	<content font_size=35>Longueur :</content>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/6 type=scale>
+    <texture alignment=fit>
+	<x value=3/5 type=object_scale>
+	<y attach=bottom attached_object="title_x_layer_main_body_model_maker" offset=15>
+</gui_object>
+<gui_object name="length_layer_main_body_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/6 type=scale>
+    <texture alignment=fit>
+	<x value=4/5 type=object_scale>
+	<y attach=bottom attached_object="title_x_layer_main_body_model_maker" offset=15>
+</gui_object>
+
+//***************************************************
+//
+//   Solid creator
+//
+//*************************************************** 
+
+<gui_object name="solid_creator_body_model_maker" visible>
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+    <texture alignment=fit>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_model_maker" offset=15>
+</gui_object>
+<gui_object name="name_title_solid_creator_body_model_maker" type="text">
+	<content font_size=40>Nom du solide</content>
+	<height value=50 type=pixel>
+	<parent name="solid_creator_body_model_maker">
+	<width value=9/20 type=scale>
+    <texture alignment=fit>
+	<x value=1/4 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+<gui_object name="name_solid_creator_body_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=50 type=pixel>
+	<parent name="solid_creator_body_model_maker">
+	<width value=9/20 type=scale>
+	<x value=3/4 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+<gui_object name="validate_solid_creator_body_model_maker" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=40>Créer le solide</content>
+	<height value=50 type=pixel>
+	<parent name="solid_creator_body_model_maker">
+	<width value=3/10 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=bottom offset=15>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+
+// Footer
+
+<gui_object name="solid_creator_footer_model_maker" visible>
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=1/4 type=scale>
+	<width value=8/9 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=25>
+</gui_object>
+
+//***************************************************
+//
+//   Solid main
+//
+//*************************************************** 
+
+<gui_object name="solid_main_body_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+    <texture alignment=fit>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_model_maker" offset=15>
+</gui_object>
+<gui_object name="title_solid_main_body_model_maker" type="text">
+	<content font_size=75>Projet</content>
+	<height value=80 type=pixel>
+	<parent name="solid_main_body_model_maker">
+	<width value=9/10 type=scale>
+    <texture alignment=fit>
+	<x value=1/2 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+<gui_object name="view_solid_main_body_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=3/4 type=scale>
+	<parent name="solid_main_body_model_maker">
+	<width value=9/10 type=scale>
+    <texture alignment=fit>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=10>
+</gui_object>
+
+// Footer
+
+<gui_object name="solid_main_footer_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=1/4 type=scale>
+	<width value=8/9 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=25>
+</gui_object>
+<gui_object name="new_layer_solid_main_footer_model_maker" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Nouvelle couche</content>
+	<height value=1/3 type=scale>
+	<parent name="solid_main_footer_model_maker">
+	<width value=1/5 type=scale>
+	<x value=0 type=scale>
+	<y attach=top>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+
+// Navigation
+
+<gui_object name="solid_main_navigation_model_maker" type="scroller">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=3/20 type=scale>
+	<x attach=left offset=25>
+	<y attach=bottom attached_object="header_model_maker" offset=15>
+</gui_object>
+
+//***************************************************
+//
+//   2D Plane
+//
+//*************************************************** 
+
+<gui_object name="plane_2d_body_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+    <texture alignment=fit>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_model_maker" offset=15>
+</gui_object>
+
+// Footer
+
+<gui_object name="plane_2d_footer_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=1/4 type=scale>
+	<width value=8/9 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=25>
+</gui_object>
+<gui_object name="plane_2d_add_point" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Ajouter un point (E)</content>
+	<height value=1/3 type=scale>
+	<parent name="plane_2d_footer_model_maker">
+	<width value=1/5 type=scale>
+	<x value=0 type=scale>
+	<y attach=top>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>

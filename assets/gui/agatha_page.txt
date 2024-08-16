@@ -38,9 +38,9 @@
 	<x value=0 type=scale>
 	<y attach=top>
 
-	<when event="overflighted">
-		<cursor type=pointing_hand_cursor>
-	</when>
+//	<when event="overflighted">
+//		<cursor type=pointing_hand_cursor>
+//	</when>
 </gui_object>
 <gui_object name="help_footer_open_pattern" type="text">
 	<border bottom=1 left=1 right=1 top=1>
@@ -151,7 +151,49 @@
 <gui_object name="pattern_project_file_text" type="text_input">
 	<height value=1 type=scale>
 	<parent name="pattern_project_file">
+	<width value=1 type=scale>
+	<x value=0>
+	<y value=0>
+</gui_object>
+
+//***************************************************
+//
+//   REPLICA PROJECT MAIN
+//
+//***************************************************
+
+<gui_object name="replica_project_main">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>
+<gui_object name="replica_project_main_title" type="text">
+	<content font_size=75>Réplique</content>
+	<height value=100 type=pixel>
+	<parent name="replica_project_main">
 	<width value=9/10 type=scale>
 	<x value=1/2 type=object_scale>
 	<y attach=top offset=11>
+</gui_object>
+
+// Footer
+
+<gui_object name="replica_project_main_footer">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=1/4 type=scale>
+	<width value=8/9 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=25>
+</gui_object>
+
+// Navigation
+
+<gui_object name="replica_project_main_navigation" type="scroller">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=3/20 type=scale>
+	<x attach=left offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
 </gui_object>

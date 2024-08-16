@@ -39,12 +39,16 @@ namespace scls {
         // Full fill the navigations buttons with empty shared pointers
         std::shared_ptr<GUI_Text> empty_shared_ptr;
         a_navigation_buttons["agatha"] = empty_shared_ptr;
+        a_navigation_buttons["model_maker"] = empty_shared_ptr;
     }
 
     // Check navigations buttons
     void SCLS_Workspace_Hub_Page::check_navigation_buttons() {
         if(a_navigation_buttons["agatha"].get() != 0 && a_navigation_buttons["agatha"].get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
             a_should_display_agatha = true;
+        }
+        else if(a_navigation_buttons["model_maker"].get() != 0 && a_navigation_buttons["model_maker"].get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            a_should_display_model_maker = true;
         }
     }
 
@@ -74,6 +78,7 @@ namespace scls {
     void SCLS_Workspace_Hub_Page::update_event() {
         GUI_Page::update_event();
         a_should_display_agatha = false;
+        a_should_display_model_maker = false;
         check_navigation_buttons();
     }
 
@@ -82,6 +87,10 @@ namespace scls {
         if(a_hub_page.get()->should_display_agatha()) {
             hide_all_pages_2d();
             display_page_2d(a_agatha_page.get()->name());
+        }
+        else if(a_hub_page.get()->should_display_model_maker()) {
+            hide_all_pages_2d();
+            display_page_2d(a_model_maker_page.get()->name());
         }
     }
 
@@ -105,6 +114,16 @@ namespace scls {
 
             // Return the good object
             std::shared_ptr<Object> to_return = agatha;
+            return to_return;
+        }
+        else if(object_type == "model_maker") {
+            std::shared_ptr<SCLS_Workspace_Model_Maker_Page> model_maker = *new_page_2d<SCLS_Workspace_Model_Maker_Page>(object_name);
+
+            // Get the special page
+            a_model_maker_page = model_maker;
+
+            // Return the good object
+            std::shared_ptr<Object> to_return = model_maker;
             return to_return;
         }
         return Window::__create_loaded_object_from_type(object_name, object_type);

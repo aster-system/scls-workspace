@@ -27,6 +27,7 @@
 #define SCLS_WORKSPACE
 
 #include "scls_workspace_agatha.h"
+#include "scls_workspace_model_maker.h"
 
 // The namespace "scls" is used to simplify the all.
 namespace scls {
@@ -55,6 +56,7 @@ namespace scls {
 
         // Getters and setters
         inline bool should_display_agatha() const {return a_should_display_agatha;};
+        inline bool should_display_model_maker() const {return a_should_display_model_maker;};
 
         //*********
         //
@@ -82,6 +84,8 @@ namespace scls {
 
         // If the agatha page should be displayer
         bool a_should_display_agatha = false;
+        // If the model maker page should be displayer
+        bool a_should_display_model_maker = false;
 	};
 
 	class SCLS_Workspace_Window : public Window {
@@ -115,6 +119,8 @@ namespace scls {
         std::shared_ptr<SCLS_Workspace_Agatha_Page> a_agatha_page;
         // Hub page
         std::shared_ptr<SCLS_Workspace_Hub_Page> a_hub_page;
+        // Model maker page
+        std::shared_ptr<SCLS_Workspace_Model_Maker_Page> a_model_maker_page;
 	};
 
     // Use the SCLS Worspace

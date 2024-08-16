@@ -89,6 +89,22 @@ namespace scls {
             a_pattern_project_title = *parent->new_object<GUI_Text>(object_name);
             return a_pattern_project_title;
         }
+        else if(object_name == "replica_project_main") {
+            a_replica_project_main_body = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_project_main_body;
+        }
+        else if(object_name == "replica_project_main_footer") {
+            a_replica_project_main_footer = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_project_main_footer;
+        }
+        else if(object_name == "replica_project_main_navigation") {
+            a_replica_project_main_navigation = *parent->new_object<GUI_Scroller>(object_name);
+            return a_replica_project_main_navigation;
+        }
+        else if(object_name == "replica_project_main_title") {
+            a_replica_project_title = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_project_title;
+        }
         return GUI_Page::__create_loaded_object_from_type(object_name, object_type, parent);
     };
 
@@ -138,6 +154,32 @@ namespace scls {
         else a_pattern_project_file_text_input.get()->set_text(currently_displayed_pattern_project_file()->base_text());
     }
 
+    // Display the open replica page
+    void SCLS_Workspace_Agatha_Page::display_replica_open() {
+        hide_all();
+        if(a_file_explorer_body.get() != 0) a_file_explorer_body.get()->set_visible(true);
+        if(a_help_footer.get() != 0) a_help_footer.get()->set_visible(true);
+        if(a_help_navigation.get() != 0) a_help_navigation.get()->set_visible(true);
+
+        // Set the current state
+        a_current_state.current_file_chosen = SCLS_WORKSPACE_AGATHA_OPEN_REPLICA;
+        a_current_state.current_page = SCLS_WORKSPACE_AGATHA_FILE_EXPLORER_PAGE;
+        a_file_explorer_body.get()->set_current_user_document_directory();
+    }
+
+    // Display the project replica page
+    void SCLS_Workspace_Agatha_Page::display_replica_project() {
+        hide_all();
+        if(a_replica_project_main_body.get() != 0) a_replica_project_main_body.get()->set_visible(true);
+        if(a_replica_project_main_footer.get() != 0) a_replica_project_main_footer.get()->set_visible(true);
+        if(a_replica_project_main_navigation.get() != 0) a_replica_project_main_navigation.get()->set_visible(true);
+
+        // Add the needed datas
+        a_current_state.current_page = SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_MAIN_PAGE;
+        if(currently_displayed_replica_project() == 0) a_replica_project_title.get()->set_text("Pas de projets disponibles");
+        else a_replica_project_title.get()->set_text("Projet : \"" + currently_displayed_replica_project()->name() + "\"");
+    }
+
     // Hide all the agatha part
     void SCLS_Workspace_Agatha_Page::hide_all() {
         // Hide all the bodies
@@ -145,14 +187,17 @@ namespace scls {
         if(a_help_body.get() != 0) a_help_body.get()->set_visible(false);
         if(a_pattern_project_file_body.get() != 0) a_pattern_project_file_body.get()->set_visible(false);
         if(a_pattern_project_main_body.get() != 0) a_pattern_project_main_body.get()->set_visible(false);
+        if(a_replica_project_main_body.get() != 0) a_replica_project_main_body.get()->set_visible(false);
 
         // Hide all the footers
         if(a_help_footer.get() != 0) a_help_footer.get()->set_visible(false);
         if(a_pattern_project_main_footer.get() != 0) a_pattern_project_main_footer.get()->set_visible(false);
+        if(a_replica_project_main_footer.get() != 0) a_replica_project_main_footer.get()->set_visible(false);
 
         // Hide all the navigations
         if(a_help_navigation.get() != 0) a_help_navigation.get()->set_visible(false);
         if(a_pattern_project_main_navigation.get() != 0) a_pattern_project_main_navigation.get()->set_visible(false);
+        if(a_replica_project_main_navigation.get() != 0) a_replica_project_main_navigation.get()->set_visible(false);
     }
 
     //*********
@@ -167,6 +212,9 @@ namespace scls {
         if(a_pattern_open_button.get() != 0 && a_pattern_open_button.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
             display_open_pattern();
         }
+        else if(a_replica_open_button.get() != 0 && a_replica_open_button.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            display_replica_open();
+        }
     }
 
     // Check the events for the file explorer
@@ -177,10 +225,16 @@ namespace scls {
 
             // Display the good page
             if(a_current_state.current_file_chosen == SCLS_WORKSPACE_AGATHA_OPEN_PATTERN) {
-                // Load the project
+                // Load the pattern project
                 std::shared_ptr<Pattern_Project> project_loaded = load_pattern_project(chose_file);
                 a_current_state.currently_displayed_pattern_project = project_loaded;
                 display_pattern_project();
+            }
+            else if(a_current_state.current_file_chosen == SCLS_WORKSPACE_AGATHA_OPEN_REPLICA) {
+                // Load the replica project
+                std::shared_ptr<Replica_Project> project_loaded = load_replica_project(chose_file);
+                a_current_state.currently_displayed_replica_project = project_loaded;
+                display_replica_project();
             }
         }
     }
@@ -237,6 +291,8 @@ namespace scls {
         std::shared_ptr<Pattern_Project> to_return;
 
         // Check some assert
+        std::filesystem::path pattern_path = std::filesystem::path(path);
+        path = pattern_path.generic_string();
         if(!std::filesystem::exists(path) || std::filesystem::is_directory(path)) return to_return;
 
         // Load the project
@@ -295,5 +351,31 @@ namespace scls {
         a_current_state.pattern_project_navigation_files.clear();
         a_current_state.pattern_project_navigation_buttons.clear();
         a_pattern_project_main_navigation.get()->reset();
+    }
+
+    //*********
+    //
+    // Replica handling
+    //
+    //*********
+
+    // Loads an existing replica and returns it
+    std::shared_ptr<Replica_Project> SCLS_Workspace_Agatha_Page::load_replica_project(std::string path) {
+        std::shared_ptr<Replica_Project> to_return;
+
+        // Check some assert
+        if(!std::filesystem::exists(path) || std::filesystem::is_directory(path)) return to_return;
+
+        // Get the pattern
+        std::filesystem::path pattern_path = std::filesystem::path(Replica_Project::replica_attached_pattern_from_path_sda_0_2(path));
+        std::string pattern_name = pattern_path.generic_string();
+        std::shared_ptr<Pattern_Project> pattern_to_use = loaded_pattern_by_path(pattern_name);
+        // Load the patter if necessary
+        if(pattern_to_use.get() == 0) pattern_to_use = load_pattern_project(pattern_name);
+        if(pattern_to_use.get() == 0) return to_return;
+
+        // Load the project
+        to_return.reset(Replica_Project::load_sda_0_2(path, pattern_to_use));
+        return to_return;
     }
 }
