@@ -102,8 +102,10 @@ namespace scls {
 	//*********
 
 	// Draw a line on an image
-	void __draw_line_in_image(Image* texture, model_maker::Point* point_1, model_maker::Point* point_2, unsigned short  line_width, Color line_color);
+	void __draw_line_in_image(Image* texture, model_maker::Point* point_1, model_maker::Point* point_2, unsigned short line_width, Color line_color, double multiplier);
+	inline void __draw_line_in_image(Image* texture, model_maker::Point* point_1, model_maker::Point* point_2, unsigned short line_width, Color line_color){__draw_line_in_image(texture, point_1, point_2, line_width, line_color, 1.0);};
 	inline void __draw_line_in_image(std::shared_ptr<Image> texture, model_maker::Point* point_1, model_maker::Point* point_2, unsigned short line_width, Color line_color){__draw_line_in_image(texture.get(), point_1, point_2, line_width, line_color);};
+	inline void __draw_line_in_image(std::shared_ptr<Image> texture, model_maker::Point* point_1, model_maker::Point* point_2, unsigned short line_width, Color line_color, double multiplier){__draw_line_in_image(texture.get(), point_1, point_2, line_width, line_color, multiplier);};
 	// Draw a point on an image
 	void __draw_point_in_image(Image* texture, model_maker::Point* point_to_draw, unsigned short point_width, Color point_color, double multiplicator);
 	inline void __draw_point_in_image(Image* texture, model_maker::Point* point_to_draw, unsigned short point_width, Color point_color){__draw_point_in_image(texture, point_to_draw, point_width, point_color, 1);};
@@ -125,7 +127,7 @@ namespace scls {
         SCLS_Workspace_Model_Maker_Page(_Window_Advanced_Struct* window_struct, std::string name);
 
         // Function called after an XML loading
-        virtual void after_xml_loading() {GUI_Page::after_xml_loading();display_solid_creator();load_navigation_layer_creator();};
+        virtual void after_xml_loading() {GUI_Page::after_xml_loading();display_solid_creator();load_navigation_layer_creator();load_top_connection_layer_main();};
         // Load an object in a page from XML
         virtual std::shared_ptr<GUI_Object> __create_loaded_object_from_type(std::string object_name, std::string object_type, GUI_Object* parent);
 
@@ -181,15 +183,25 @@ namespace scls {
         void apply_layer_modification();
         // Creates a new solid
         std::shared_ptr<__Model_Maker_Solid> create_solid();
+        // Generate the solid
+        std::shared_ptr<model_maker::Solid> generate_solid();
         // Loads the navigation of the layer creator page
         void load_navigation_layer_creator();
         // Loads the navigation of the solid page
         void load_navigation_solid();
+        // Loads the top connection navigation of the layer main page
+        void load_top_connection_layer_main();
         // Unloads the navigation of the solid page
         void unload_navigation_solid() {a_layer_by_navigation_buttons_solid.clear();a_navigation_buttons_solid.clear();a_solid_main_navigation.get()->reset();};
 
         // Adds a new layer to the solid
         void add_layer_solid();
+        // Displays the gear page in the layer creator
+        void display_layer_creator_gear();
+        // Displays the regular polygon page in the layer creator
+        void display_layer_creator_regular_polygon();
+        // Hides all the page of the layer creator
+        void hide_all_layer_creator();
         // Update the view of the solid main
         void update_solid_view();
 
@@ -202,6 +214,7 @@ namespace scls {
         inline std::string name_layer_creator_body() const {return a_name_layer_creator_body.get()->text();};
         inline std::string name_solid_creator_body() const {return a_name_solid_creator_body.get()->text();};
         inline unsigned int side_regular_polygon_layer_creator_body() const {try{return string_to_double(a_side_regular_polygon_layer_creator_body.get()->text());}catch(std::invalid_argument){return 0;}};
+        inline unsigned int teeth_gear_layer_creator_body() const {try{return string_to_double(a_teeth_gear_layer_creator_body.get()->text());}catch(std::invalid_argument){return 0;}};
 
         //*********
         //
@@ -266,8 +279,6 @@ namespace scls {
             // Layer handling
             // Currently used layer
             std::shared_ptr<__Model_Maker_Layer> current_layer;
-            // Currently chosen layer type for creation
-            unsigned short current_layer_creator_type = SCLS_WORKSPACE_MODEL_MAKER_LAYER_REGULAR_POLYGON;
 
             // Solid handling
             // Every loaded solids in the software
@@ -293,21 +304,30 @@ namespace scls {
         //
         //*********
 
+        // Name of the regular polygon page of layer creator
+        #define SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR std::string("gear_button_layer_navigation_model_maker")
+        #define SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR std::string("regular_polygon_button_layer_navigation_model_maker")
+        #define SCLS_WORKSPACE_MODEL_MAKER_SAME_SHAPE_TOP_CONNECTION_LAYER_MAIN std::string("same_shape_button_top_connection_layer_main_model_maker")
+
         // Bodies / footers / navigation
+        // Body of the layer type gear of layer creator part
+        std::shared_ptr<GUI_Object> a_gear_layer_creator_body;
         // Body of the layer creator part
         std::shared_ptr<GUI_Object> a_layer_creator_body;
         // Footer of the layer creator part
         std::shared_ptr<GUI_Object> a_layer_creator_footer;
         // Navigation of the layer creator part
-        std::shared_ptr<GUI_Scroller> a_layer_creator_navigation;
-        // Body of the layer type of layer creator part
-        std::shared_ptr<GUI_Object> a_regular_polygon_layer_creator_body;
+        std::shared_ptr<GUI_Scroller_Choice> a_layer_creator_navigation;
         // Body of the layer main part
         std::shared_ptr<GUI_Object> a_layer_main_body;
+        // Navigation of the top connection of the layer main part
+        std::shared_ptr<GUI_Scroller_Choice> a_layer_main_top_connection_navigation;
         // Body of the page 2D part
         std::shared_ptr<GUI_Object> a_page_2d_body;
         // Footer of the page 2D part
         std::shared_ptr<GUI_Object> a_page_2d_footer;
+        // Body of the layer type of layer creator part
+        std::shared_ptr<GUI_Object> a_regular_polygon_layer_creator_body;
         // Body of the solid creator part
         std::shared_ptr<GUI_Object> a_solid_creator_body;
         // Footer of the solid creator part
@@ -330,6 +350,8 @@ namespace scls {
         std::shared_ptr<GUI_Text> a_validate_solid_creator_body;
 
         // Informational
+        // Gear teeth
+        std::shared_ptr<GUI_Text_Input> a_teeth_gear_layer_creator_body;
         // Height value of the main layer
         std::shared_ptr<GUI_Text_Input> a_height_layer_main_body;
         // Length value of the main layer

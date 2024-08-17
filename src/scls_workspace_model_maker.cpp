@@ -153,12 +153,12 @@ namespace scls {
 	//*********
 
 	// Draw a line on an image
-	void __draw_line_in_image(Image* texture, model_maker::Point* point_1, model_maker::Point* point_2, unsigned short line_width, Color line_color) {
+	void __draw_line_in_image(Image* texture, model_maker::Point* point_1, model_maker::Point* point_2, unsigned short line_width, Color line_color, double multiplier) {
 	    // Get the X and Y of the first point
-	    double x_1 = static_cast<double>((point_1->x() + 0.5) * texture->width()) - static_cast<double>(line_width) / 2.0;
-	    double x_2 = static_cast<double>((point_2->x() + 0.5) * texture->width()) - static_cast<double>(line_width) / 2.0;
-	    double y_1 = static_cast<double>(texture->height() - (point_1->z() + 0.5) * texture->height()) - static_cast<double>(line_width) / 2.0;
-	    double y_2 = static_cast<double>(texture->height() - (point_2->z() + 0.5) * texture->height()) - static_cast<double>(line_width) / 2.0;
+	    double x_1 = static_cast<double>((point_1->absolute_x() * multiplier + 0.5) * texture->width()) - static_cast<double>(line_width) / 2.0;
+	    double x_2 = static_cast<double>((point_2->absolute_x() * multiplier + 0.5) * texture->width()) - static_cast<double>(line_width) / 2.0;
+	    double y_1 = static_cast<double>(texture->height() - (point_1->absolute_z() * multiplier + 0.5) * texture->height()) - static_cast<double>(line_width) / 2.0;
+	    double y_2 = static_cast<double>(texture->height() - (point_2->absolute_z() * multiplier + 0.5) * texture->height()) - static_cast<double>(line_width) / 2.0;
 
 	    // Draw the line
 	    texture->draw_line(x_1, y_1, x_2, y_2, line_color, line_width);
@@ -182,7 +182,11 @@ namespace scls {
 
     // Create an object from a type
     std::shared_ptr<GUI_Object> SCLS_Workspace_Model_Maker_Page::__create_loaded_object_from_type(std::string object_name, std::string object_type, GUI_Object* parent) {
-        if(object_name == "height_layer_main_body_model_maker") {
+        if(object_name == "gear_layer_creator_body_model_maker") {
+            a_gear_layer_creator_body = *parent->new_object<GUI_Object>(object_name);
+            return a_gear_layer_creator_body;
+        }
+        else if(object_name == "height_layer_main_body_model_maker") {
             a_height_layer_main_body = *parent->new_object<GUI_Text_Input>(object_name);
             return a_height_layer_main_body;
         }
@@ -191,12 +195,16 @@ namespace scls {
             return a_layer_creator_body;
         }
         else if(object_name == "layer_creator_navigation_model_maker") {
-            a_layer_creator_navigation = *parent->new_object<GUI_Scroller>(object_name);
+            a_layer_creator_navigation = *parent->new_object<GUI_Scroller_Choice>(object_name);
             return a_layer_creator_navigation;
         }
         else if(object_name == "layer_creator_footer_model_maker") {
             a_layer_creator_footer = *parent->new_object<GUI_Object>(object_name);
             return a_layer_creator_footer;
+        }
+        else if(object_name == "top_connection_layer_main_body_model_maker") {
+            a_layer_main_top_connection_navigation = *parent->new_object<GUI_Scroller_Choice>(object_name);
+            return a_layer_main_top_connection_navigation;
         }
         else if(object_name == "regulay_polygon_layer_creator_body_model_maker") {
             a_regular_polygon_layer_creator_body = *parent->new_object<GUI_Object>(object_name);
@@ -266,6 +274,10 @@ namespace scls {
         else if(object_name == "solid_main_navigation_model_maker") {
             a_solid_main_navigation = *parent->new_object<GUI_Scroller>(object_name);
             return a_solid_main_navigation;
+        }
+        else if(object_name == "teeth_gear_layer_creator_body_model_maker") {
+            a_teeth_gear_layer_creator_body = *parent->new_object<GUI_Text_Input>(object_name);
+            return a_teeth_gear_layer_creator_body;
         }
         else if(object_name == "title_layer_main_body_model_maker") {
             a_title_layer_main_body = *parent->new_object<GUI_Text>(object_name);
@@ -342,6 +354,11 @@ namespace scls {
         if(a_layer_creator_footer.get() != 0) a_layer_creator_footer.get()->set_visible(true);
         if(a_layer_creator_navigation.get() != 0) a_layer_creator_navigation.get()->set_visible(true);
         a_current_state.current_page = SCLS_WORKSPACE_MODEL_MAKER_LAYER_CREATOR;
+
+        // Setup the page
+        a_layer_creator_navigation.get()->select_object(SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR);
+        display_layer_creator_regular_polygon();
+        a_name_layer_creator_body.get()->set_text("");
     }
 
     // Display the layer main
@@ -405,6 +422,8 @@ namespace scls {
         if(a_solid_main_navigation.get() != 0) a_solid_main_navigation.get()->set_visible(true);
         a_current_state.current_page = SCLS_WORKSPACE_MODEL_MAKER_SOLID_MAIN;
 
+        generate_solid();
+
         // Setup the page
         load_navigation_solid();
         if(a_title_solid_main_body.get() != 0) {
@@ -426,10 +445,15 @@ namespace scls {
 
     // Adds a new layer to the model maker project
     void SCLS_Workspace_Model_Maker_Page::add_layer_solid() {
-        if(a_current_state.current_layer_creator_type == SCLS_WORKSPACE_MODEL_MAKER_LAYER_REGULAR_POLYGON) {
+        if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR) {
             // Create a regular polygon
             unsigned int side_count = side_regular_polygon_layer_creator_body();
             current_solid()->add_layer(name_layer_creator_body(), model_maker::regular_polygon_points(side_count));
+        }
+        else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR) {
+            // Create a gear
+            unsigned int teeth_count = teeth_gear_layer_creator_body();
+            current_solid()->add_layer(name_layer_creator_body(), __gear_solid(teeth_count));
         }
     }
 
@@ -463,13 +487,63 @@ namespace scls {
         return to_return;
     }
 
+    // Displays the gear page in the layer creator
+    void SCLS_Workspace_Model_Maker_Page::display_layer_creator_gear() {
+        hide_all_layer_creator();
+        a_gear_layer_creator_body.get()->set_visible(true);
+        a_teeth_gear_layer_creator_body.get()->set_text("");
+    }
+
+    // Displays the regular polygon page in the layer creator
+    void SCLS_Workspace_Model_Maker_Page::display_layer_creator_regular_polygon() {
+        hide_all_layer_creator();
+        a_regular_polygon_layer_creator_body.get()->set_visible(true);
+        a_side_regular_polygon_layer_creator_body.get()->set_text("");
+    }
+
+    // Generate the solid
+    std::shared_ptr<model_maker::Solid> SCLS_Workspace_Model_Maker_Page::generate_solid() {
+        std::shared_ptr<model_maker::Solid> solid;
+        if(current_solid() != 0 && current_solid()->layers().size() > 0) {
+            // Create the solid
+            solid = std::make_shared<model_maker::Solid>();
+
+            for(int i = 0;i<static_cast<int>(current_solid()->layers().size());i++) {
+                // Create the needed face
+                std::shared_ptr<model_maker::Face> current_face = current_solid()->layers()[i].get()->layer_face;
+                current_face.get()->convex_triangulation();
+                solid.get()->add_face(current_solid()->layers()[i].get()->name, current_face, solid);
+            }
+            solid.get()->binary_stl_complete().get()->save("form.stl");
+        }
+        return solid;
+    }
+
+    // Hide all the page of the layer creator
+    void SCLS_Workspace_Model_Maker_Page::hide_all_layer_creator() {
+        a_gear_layer_creator_body.get()->set_visible(false);
+        a_regular_polygon_layer_creator_body.get()->set_visible(false);
+    }
+
     // Loads the navigation of the layer creator page
     void SCLS_Workspace_Model_Maker_Page::load_navigation_layer_creator() {
         std::shared_ptr<GUI_Text> current_button;
         std::shared_ptr<GUI_Text> last_button;
 
+        // Create the "gear" solid button
+        current_button = *a_layer_creator_navigation.get()->new_object_in_scroller<GUI_Text>(SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR);
+        current_button.get()->set_border_width_in_pixel(1);
+        current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
+        current_button.get()->set_height_in_pixel(40);
+        current_button.get()->set_text(to_utf_8_code_point("Engrenage"));
+        current_button.get()->set_width_in_scale(Fraction(1));
+        if(last_button.get() == 0) current_button.get()->attach_bottom_in_parent();
+        else current_button.get()->attach_top_of_object_in_parent(last_button);
+        a_navigation_buttons_solid.push_back(current_button);
+        last_button = current_button;
+
         // Create the "regular polygon" solid button
-        current_button = *a_layer_creator_navigation.get()->new_object_in_scroller<GUI_Text>("regular_polygon_button_layer_navigation_model_maker");
+        current_button = *a_layer_creator_navigation.get()->new_object_in_scroller<GUI_Text>(SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR);
         current_button.get()->set_border_width_in_pixel(1);
         current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
         current_button.get()->set_height_in_pixel(40);
@@ -478,6 +552,7 @@ namespace scls {
         if(last_button.get() == 0) current_button.get()->attach_bottom_in_parent();
         else current_button.get()->attach_top_of_object_in_parent(last_button);
         a_navigation_buttons_solid.push_back(current_button);
+        last_button = current_button;
 
         a_layer_creator_navigation.get()->check_scroller();
     }
@@ -522,17 +597,46 @@ namespace scls {
         a_solid_main_navigation.get()->check_scroller();
     }
 
+    // Loads the top connection navigation of the layer main page
+    void SCLS_Workspace_Model_Maker_Page::load_top_connection_layer_main() {
+        std::shared_ptr<GUI_Text> current_button;
+        std::shared_ptr<GUI_Text> last_button;
+
+        // Create the "gear" solid button
+        current_button = *a_layer_main_top_connection_navigation.get()->new_object_in_scroller<GUI_Text>(SCLS_WORKSPACE_MODEL_MAKER_SAME_SHAPE_TOP_CONNECTION_LAYER_MAIN);
+        current_button.get()->set_border_width_in_pixel(1);
+        current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
+        current_button.get()->set_height_in_pixel(40);
+        current_button.get()->set_text(to_utf_8_code_point("Dupliquer la forme"));
+        current_button.get()->set_width_in_scale(Fraction(1));
+        if(last_button.get() == 0) current_button.get()->attach_bottom_in_parent();
+        else current_button.get()->attach_top_of_object_in_parent(last_button);
+        a_navigation_buttons_solid.push_back(current_button);
+        last_button = current_button;
+
+        a_layer_main_top_connection_navigation.get()->check_scroller();
+    }
+
     // Update the view of the solid main
     void SCLS_Workspace_Model_Maker_Page::update_solid_view() {
         // Create the image for the new texture
         std::shared_ptr<Image> new_image = std::make_shared<Image>(500, 500, Color(255, 255, 255));
+        Color lines_color = Color(0, 255, 0);
+        unsigned int lines_width = 6;
         Color point_color = Color(0, 255, 0);
         unsigned int point_width = 15;
 
         // Draw each layers
         for(int i = 0;i<static_cast<int>(current_solid()->layers().size());i++) {
-            // Draw each points of the layer
             std::shared_ptr<__Model_Maker_Layer> current_layer = current_solid()->layers()[i];
+
+            // Draw each lines of the layer
+            for(int j = 0;j<static_cast<int>(current_layer.get()->points.size()) - 1;j++) {
+                __draw_line_in_image(new_image, current_layer.get()->points[j].get(), current_layer.get()->points[j + 1].get(), lines_width, lines_color, 0.8);
+            }
+            if(static_cast<int>(current_layer.get()->points.size()) > 1)__draw_line_in_image(new_image, current_layer.get()->points[static_cast<int>(current_layer.get()->points.size()) - 1].get(), current_layer.get()->points[0].get(), lines_width, lines_color, 0.8);
+
+            // Draw each points of the layer
             for(int j = 0;j<static_cast<int>(current_layer.get()->points.size());j++) {
                 __draw_point_in_image(new_image, current_layer.get()->points[j], point_width, point_color, 0.8);
             }
@@ -553,9 +657,25 @@ namespace scls {
         // Check if the layer creation is validate
         if(a_validate_layer_creator_body.get() != 0 && a_validate_layer_creator_body.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
             // A layer should be created
-            if(name_layer_creator_body() != "" && side_regular_polygon_layer_creator_body() > 2) {
-                add_layer_solid();
-                display_solid_main();
+            if(name_layer_creator_body() != "") {
+                if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR && side_regular_polygon_layer_creator_body() > 2) {
+                    add_layer_solid();
+                    display_solid_main();
+                }
+                else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR && teeth_gear_layer_creator_body() > 3) {
+                    add_layer_solid();
+                    display_solid_main();
+                }
+            }
+        }
+
+        // Check the layer type
+        if(a_layer_creator_navigation.get()->choice_modified()) {
+            if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR) {
+                display_layer_creator_regular_polygon();
+            }
+            else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR) {
+                display_layer_creator_gear();
             }
         }
     }
@@ -686,8 +806,8 @@ namespace scls {
 
         // Draw the current lines
         Color current_lines_color = Color(0, 255, 0);
-        unsigned int current_lines_width = 2;
-        for(int i = 0;i<static_cast<int>(a_current_state.current_page_2d_points.size() - 1);i++) {
+        unsigned int current_lines_width = 5;
+        for(int i = 0;i<static_cast<int>(a_current_state.current_page_2d_points.size()) - 1;i++) {
             __draw_line_in_image(new_texture, a_current_state.current_page_2d_points[i].get(), a_current_state.current_page_2d_points[i + 1].get(), current_lines_width, current_lines_color);
         }
 

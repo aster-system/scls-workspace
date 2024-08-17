@@ -65,6 +65,34 @@
 	</when>
 </gui_object>
 
+// Gear layer
+
+<gui_object name="gear_layer_creator_body_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=2/3 type=scale>
+	<parent name="layer_creator_body_model_maker">
+	<width value=17/20 type=scale>
+    <texture alignment=fit>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom attached_object="name_title_layer_creator_body_model_maker" offset=30>
+</gui_object>
+<gui_object name="title_teeth_gear_layer_creator_body_model_maker" type="text">
+	<content font_size=40>Nombre de dents</content>
+	<height value=50 type=pixel>
+	<parent name="gear_layer_creator_body_model_maker">
+	<width value=3/10 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+<gui_object name="teeth_gear_layer_creator_body_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=50 type=pixel>
+	<parent name="gear_layer_creator_body_model_maker">
+	<width value=9/20 type=scale>
+	<x value=3/4 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+
 // Regular polygon layer
 
 <gui_object name="regulay_polygon_layer_creator_body_model_maker">
@@ -253,6 +281,29 @@
 	<x value=4/5 type=object_scale>
 	<y attach=bottom attached_object="title_x_layer_main_body_model_maker" offset=15>
 </gui_object>
+
+// Top connection navigation
+
+<gui_object name="title_top_connection_layer_main_body_model_maker" type="text">
+	<content font_size=35>Connection sur la couche :</content>
+	<height value=40 type=pixel>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/3 type=scale>
+    <texture alignment=fit>
+	<x value=3/10 type=object_scale>
+	<y attach=bottom attached_object="title_length_layer_main_body_model_maker" offset=15>
+</gui_object>
+<gui_object name="top_connection_layer_main_body_model_maker" type="scroller">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=1/3 type=scale>
+	<parent name="layer_main_body_model_maker">
+	<width value=1/3 type=scale>
+    <texture alignment=fit>
+	<x value=3/10 type=object_scale>
+	<y attach=bottom attached_object="title_top_connection_layer_main_body_model_maker" offset=15>
+</gui_object>
+
+
 
 //***************************************************
 //
