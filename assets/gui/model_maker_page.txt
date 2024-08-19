@@ -93,6 +93,47 @@
 	<y attach=top offset=15>
 </gui_object>
 
+// Other shape layer
+
+<gui_object name="other_shape_layer_creator_body_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=2/3 type=scale>
+	<parent name="layer_creator_body_model_maker">
+	<width value=17/20 type=scale>
+    <texture alignment=fit>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom attached_object="name_title_layer_creator_body_model_maker" offset=30>
+</gui_object>
+<gui_object name="title_other_shape_layer_creator_body_model_maker" type="text">
+	<content font_size=40>Autre forme</content>
+	<height value=50 type=pixel>
+	<parent name="other_shape_layer_creator_body_model_maker">
+	<width value=3/10 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+<gui_object name="selection_other_shape_layer_creator_body_model_maker" type="scroller_choice">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=3/4 type=scale>
+	<parent name="other_shape_layer_creator_body_model_maker">
+	<width value=9/20 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=bottom attached_object="title_other_shape_layer_creator_body_model_maker" offset=15>
+</gui_object>
+<gui_object name="new_other_shape_layer_creator_body_model_maker" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=40>Nouvelle forme</content>
+	<height value=50 type=pixel>
+	<parent name="other_shape_layer_creator_body_model_maker">
+	<width value=3/10 type=scale>
+	<x value=3/4 type=object_scale>
+	<y attach=top offset=15>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+
 // Regular polygon layer
 
 <gui_object name="regulay_polygon_layer_creator_body_model_maker">
@@ -428,11 +469,11 @@
 
 //***************************************************
 //
-//   2D Plane
+//   2D Shape
 //
 //*************************************************** 
 
-<gui_object name="plane_2d_body_model_maker">
+<gui_object name="shape_2d_body_model_maker">
 	<border bottom=1 left=1 right=1 top=1>
 	<height value=13/20 type=scale>
 	<width value=4/5 type=scale>
@@ -443,21 +484,66 @@
 
 // Footer
 
-<gui_object name="plane_2d_footer_model_maker">
+<gui_object name="shape_2d_footer_model_maker">
 	<border bottom=1 left=1 right=1 top=1>
 	<height value=1/4 type=scale>
 	<width value=8/9 type=scale>
 	<x value=1/2 type=object_scale>
 	<y attach=bottom offset=25>
 </gui_object>
-<gui_object name="plane_2d_add_point" type="text">
+<gui_object name="validate_shape_2d_footer_model_maker" type="text">
 	<border bottom=1 left=1 right=1 top=1>
-	<content font_size=30>Ajouter un point (E)</content>
+	<content font_size=30>Valider la forme</content>
 	<height value=1/3 type=scale>
-	<parent name="plane_2d_footer_model_maker">
+	<parent name="shape_2d_footer_model_maker">
 	<width value=1/5 type=scale>
-	<x value=0 type=scale>
+	<x attach=right>
 	<y attach=top>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+
+//***************************************************
+//
+//   2D Shape creator
+//
+//***************************************************
+
+<gui_object name="shape_2d_creator_body_model_maker">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+    <texture alignment=fit>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_model_maker" offset=15>
+</gui_object>
+<gui_object name="name_title_shape_2d_creator_body_model_maker" type="text">
+	<content font_size=40>Nom de la forme</content>
+	<height value=50 type=pixel>
+	<parent name="shape_2d_creator_body_model_maker">
+	<width value=9/20 type=scale>
+    <texture alignment=fit>
+	<x value=1/4 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+<gui_object name="name_shape_2d_creator_body_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=50 type=pixel>
+	<parent name="shape_2d_creator_body_model_maker">
+	<width value=9/20 type=scale>
+	<x value=3/4 type=object_scale>
+	<y attach=top offset=15>
+</gui_object>
+<gui_object name="validate_shape_2d_creator_body_model_maker" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=40>Créer la forme</content>
+	<height value=50 type=pixel>
+	<parent name="shape_2d_creator_body_model_maker">
+	<width value=3/10 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=bottom offset=15>
 
 	<when event="overflighted">
 		<cursor type=pointing_hand_cursor>
