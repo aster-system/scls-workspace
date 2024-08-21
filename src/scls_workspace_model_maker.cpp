@@ -493,8 +493,7 @@ namespace scls {
         else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR) {
             // Create an other shape
             std::string shape_name = name_shape_2d_layer_creator_body();
-            std::cout << "L " << shape_name << std::endl;
-            // current_solid()->add_layer(name_layer_creator_body(), __gear_solid(teeth_count));
+            if(chosen_shape_2d() != 0) current_solid()->add_layer(name_layer_creator_body(), chosen_shape_2d()->to_polygon());
         }
     }
 
@@ -554,7 +553,8 @@ namespace scls {
         for(int i = 0;i<static_cast<int>(a_loaded_shape_2d.size());i++) {
             // Create the button
             int real_i = (static_cast<int>(a_loaded_shape_2d.size()) - (i + 1));
-            current_button = *a_selection_other_shape_layer_creator_body.get()->new_object_in_scroller<GUI_Text>(SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR + "-button" + std::to_string(real_i));
+            std::string selection_name = SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR + "-button" + std::to_string(real_i);
+            current_button = *a_selection_other_shape_layer_creator_body.get()->new_object_in_scroller<GUI_Text>(selection_name);
             current_button.get()->set_border_width_in_pixel(1);
             current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
             current_button.get()->set_height_in_pixel(40);
@@ -563,6 +563,7 @@ namespace scls {
             if(last_button.get() == 0) current_button.get()->attach_bottom_in_parent();
             else current_button.get()->attach_top_of_object_in_parent(last_button);
             last_button = current_button;
+            a_current_state.loaded_shape_2d_by_selection[selection_name] = a_loaded_shape_2d[i];
         }
         a_selection_other_shape_layer_creator_body.get()->check_scroller();
     }
@@ -785,7 +786,7 @@ namespace scls {
                 }
                 else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR && name_shape_2d_layer_creator_body() != "") {
                     add_layer_solid();
-                    //display_solid_main();
+                    display_solid_main();
                 }
             }
         }

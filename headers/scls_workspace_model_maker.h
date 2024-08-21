@@ -51,6 +51,17 @@ namespace scls {
 	    // Constructor of the struct
 	    __Model_Maker_Shape(std::string shape_name) : name(shape_name) {};
 
+	    // Returns the shape into a polygon
+	    std::shared_ptr<model_maker::Polygon> to_polygon() {
+	        std::shared_ptr<model_maker::Polygon> to_return = std::make_shared<model_maker::Polygon>();
+
+	        // Add the necessary points
+            std::vector<model_maker::Point>& points_to_pass = to_return.get()->points;
+            for(int i = 0;i<static_cast<int>(points.size());i++) {points_to_pass.push_back(*points[i].get());}
+
+	        return to_return;
+	    };
+
 	    // Name of the shape
 	    std::string name;
         // Every points in the shape
@@ -212,7 +223,7 @@ namespace scls {
         // Loads the top connection navigation of the layer main page
         void load_top_connection_layer_main();
         // Unloads the navigation of the other shape layer creator page
-        void unload_selection_other_shape_layer_creator() {a_selection_other_shape_layer_creator_body.get()->reset();};
+        void unload_selection_other_shape_layer_creator() {a_selection_other_shape_layer_creator_body.get()->reset();a_current_state.loaded_shape_2d_by_selection.clear();};
 
         // Adds a new layer to the solid
         void add_layer_solid();
@@ -243,8 +254,14 @@ namespace scls {
         // Creates a new shape 2D
         std::shared_ptr<__Model_Maker_Shape> create_shape_2d();
 
+        // Returns the chosen shape 2D
+         __Model_Maker_Shape* chosen_shape_2d() {try{return a_current_state.loaded_shape_2d_by_selection[name_shape_2d_layer_creator_body()].get();}catch(std::range_error){return 0;}};
         // Returns the currently selected shape 2D
         __Model_Maker_Shape* current_shape_2d() {return a_current_state.current_shape_2d.get();};
+        // Returns a 2D shape by its name
+        __Model_Maker_Shape* shape_2d_by_name(std::string shape_name) {for(int i = 0;i<static_cast<int>(a_loaded_shape_2d.size());i++){if(a_loaded_shape_2d[i].get()->name == shape_name) return a_loaded_shape_2d[i].get(); } return 0;};
+        // Returns a 2D shape by its name
+        std::shared_ptr<__Model_Maker_Shape> shape_2d_shared_ptr_by_name(std::string shape_name) {for(int i = 0;i<static_cast<int>(a_loaded_shape_2d.size());i++){if(a_loaded_shape_2d[i].get()->name == shape_name) return a_loaded_shape_2d[i]; } return std::shared_ptr<__Model_Maker_Shape>();};
 
         // Getters and setter
         inline std::string name_shape_2d_creator_body() const {if(a_name_shape_2d_creator_body.get() == 0) return ""; return a_name_shape_2d_creator_body.get()->text();};
@@ -337,6 +354,8 @@ namespace scls {
             // Shape 2D handling
             // Currently used shape 2D
             std::shared_ptr<__Model_Maker_Shape> current_shape_2d;
+            // Loaded shape 2D by selection
+            std::map<std::string, std::shared_ptr<__Model_Maker_Shape>> loaded_shape_2d_by_selection;
 
             // Solid handling
             // Every loaded solids in the software
