@@ -119,6 +119,10 @@ namespace scls {
         to_return.get()->min_x *= multiplier;
         to_return.get()->min_z *= multiplier;
 
+        // Add the inner hole
+        std::shared_ptr<model_maker::Polygon> inner_points = model_maker::regular_polygon_points(20, 0, 0.2);
+        to_return.get()->exclusion_points.push_back(inner_points.get()->points);
+
         return to_return;
 	}
 
@@ -135,6 +139,15 @@ namespace scls {
     void __Model_Maker_Solid::add_layer(std::string layer_name, std::shared_ptr<model_maker::Polygon> layer_polygon) {
         std::shared_ptr<__Model_Maker_Layer> to_add = std::make_shared<__Model_Maker_Layer>();
         to_add.get()->name = layer_name;
+
+        // Add the exclusion points
+        if(layer_polygon.get()->exclusion_points.size() > 0) {
+            for(int i = 0;i<static_cast<int>(layer_polygon.get()->exclusion_points[0].size());i++) {
+                std::shared_ptr<model_maker::Point> current_point = std::make_shared<model_maker::Point>(layer_polygon.get()->exclusion_points[0][i]);
+                current_point.get()->set_parent(to_add.get()->layer_face);
+                to_add.get()->layer_face.get()->exclusion_points().push_back(current_point);
+            }
+        }
 
         // Add the points
         for(int i = 0;i<static_cast<int>(layer_polygon.get()->points.size());i++) {
@@ -155,10 +168,10 @@ namespace scls {
 	// Draw a line on an image
 	void __draw_line_in_image(Image* texture, model_maker::Point* point_1, model_maker::Point* point_2, unsigned short line_width, Color line_color, double multiplier) {
 	    // Get the X and Y of the first point
-	    double x_1 = static_cast<double>((point_1->absolute_x() * multiplier + 0.5) * texture->width()) - static_cast<double>(line_width) / 2.0;
-	    double x_2 = static_cast<double>((point_2->absolute_x() * multiplier + 0.5) * texture->width()) - static_cast<double>(line_width) / 2.0;
-	    double y_1 = static_cast<double>(texture->height() - (point_1->absolute_z() * multiplier + 0.5) * texture->height()) - static_cast<double>(line_width) / 2.0;
-	    double y_2 = static_cast<double>(texture->height() - (point_2->absolute_z() * multiplier + 0.5) * texture->height()) - static_cast<double>(line_width) / 2.0;
+	    double x_1 = static_cast<double>((point_1->absolute_x() * multiplier + 0.5) * texture->width());
+	    double x_2 = static_cast<double>((point_2->absolute_x() * multiplier + 0.5) * texture->width());
+	    double y_1 = static_cast<double>(texture->height() - (point_1->absolute_z() * multiplier + 0.5) * texture->height());
+	    double y_2 = static_cast<double>(texture->height() - (point_2->absolute_z() * multiplier + 0.5) * texture->height());
 
 	    // Draw the line
 	    texture->draw_line(x_1, y_1, x_2, y_2, line_color, line_width);
@@ -173,6 +186,82 @@ namespace scls {
 	    // Draw the point
 	    texture->fill_rect(x, y, point_width, point_width, point_color);
 	}
+
+	// Draw a set of points on an image
+    void __draw_points_in_image(Image* texture, const std::vector<std::shared_ptr<model_maker::Point>>& shape_to_draw, unsigned int point_width, Color point_color, unsigned int line_width, Color line_color) {
+        // Draw the current lines
+        Color current_lines_color = Color(0, 255, 0);
+        unsigned int current_lines_width = 5;
+        for(int i = 0;i<static_cast<int>(shape_to_draw.size()) - 1;i++) {
+            __draw_line_in_image(texture, shape_to_draw.at(i).get(), shape_to_draw.at(i + 1).get(), line_width, line_color);
+        }
+        if(static_cast<int>(shape_to_draw.size()) > 1) __draw_line_in_image(texture, shape_to_draw.at(shape_to_draw.size() - 1).get(), shape_to_draw.at(0).get(), line_width, line_color);
+
+        // Draw the current points
+        Color current_points_color = Color(0, 255, 0);
+        unsigned int current_points_width = 7;
+        for(int i = 0;i<static_cast<int>(shape_to_draw.size());i++) {
+            __draw_point_in_image(texture, shape_to_draw.at(i).get(), point_width, point_color);
+        }
+    }
+    void __draw_points_in_image(Image* texture, const std::vector<model_maker::Point>& shape_to_draw, unsigned int point_width, Color point_color, unsigned int line_width, Color line_color) {
+        // Draw the current lines
+        Color current_lines_color = Color(0, 255, 0);
+        unsigned int current_lines_width = 5;
+        for(int i = 0;i<static_cast<int>(shape_to_draw.size()) - 1;i++) {
+            __draw_line_in_image(texture, shape_to_draw.at(i), shape_to_draw.at(i + 1), line_width, line_color);
+        }
+        if(static_cast<int>(shape_to_draw.size()) > 1) __draw_line_in_image(texture, shape_to_draw.at(shape_to_draw.size() - 1), shape_to_draw.at(0), line_width, line_color);
+
+        // Draw the current points
+        Color current_points_color = Color(0, 255, 0);
+        unsigned int current_points_width = 7;
+        for(int i = 0;i<static_cast<int>(shape_to_draw.size());i++) {
+            __draw_point_in_image(texture, shape_to_draw.at(i), point_width, point_color);
+        }
+    }
+
+    // Draw a face on an image
+    void __draw_face_in_image(Image* texture, model_maker::Face* face_to_draw) {
+        // Draw the current exclusion points
+        __draw_points_in_image(texture, face_to_draw->exclusion_points(), 7, Color(255, 0, 0), 5, Color(255, 0, 0));
+
+        // Draw the current points
+        __draw_points_in_image(texture, face_to_draw->points(), 7, Color(0, 255, 0), 5, Color(0, 255, 0));
+    }
+
+    // Draw a polygon on an image
+    void __draw_polygon_in_image(Image* texture, model_maker::Polygon* polygon_to_draw) {
+        // Draw the current exclusion points
+        for(int i = 0;i<static_cast<int>(polygon_to_draw->exclusion_points.size());i++) __draw_points_in_image(texture, polygon_to_draw->exclusion_points[i], 7, Color(255, 0, 0), 5, Color(255, 0, 0));
+
+        // Draw the current points
+        __draw_points_in_image(texture, polygon_to_draw->points, 7, Color(0, 255, 0), 5, Color(0, 255, 0));
+    }
+
+	// Draw a shape 2D on an image
+    void __draw_shape_2d_in_image(Image* texture, __Model_Maker_Shape* shape_to_draw) {
+        // Draw the current exclusion points
+        __draw_points_in_image(texture, shape_to_draw->exclusion_points, 7, Color(255, 0, 0), 5, Color(255, 0, 0));
+
+        // Draw the current points
+        __draw_points_in_image(texture, shape_to_draw->points, 7, Color(0, 255, 0), 5, Color(0, 255, 0));
+    }
+
+    // Draw a set of triangles on an image
+    void __draw_triangles_in_image(Image* texture, const std::vector<std::shared_ptr<model_maker::Point>>& shape_to_draw, unsigned int point_width, Color point_color, unsigned int line_width, Color line_color) {
+        // Draw the current lines
+        for(int i = 0;i<static_cast<int>(shape_to_draw.size()) - 2;i+=3) {
+            __draw_line_in_image(texture, shape_to_draw.at(i), shape_to_draw.at(i + 1), line_width, line_color);
+            __draw_line_in_image(texture, shape_to_draw.at(i + 1), shape_to_draw.at(i + 2), line_width, line_color);
+            __draw_line_in_image(texture, shape_to_draw.at(i), shape_to_draw.at(i + 2), line_width, line_color);
+        }
+
+        // Draw the current points
+        for(int i = 0;i<static_cast<int>(shape_to_draw.size());i++) {
+            __draw_point_in_image(texture, shape_to_draw.at(i), point_width, point_color);
+        }
+    }
 
 	// SCLS_Workspace_Model_Maker_Page constructor
     SCLS_Workspace_Model_Maker_Page::SCLS_Workspace_Model_Maker_Page(_Window_Advanced_Struct* window_struct, std::string name) : GUI_Page(window_struct, name) {
@@ -488,7 +577,11 @@ namespace scls {
         else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR) {
             // Create a gear
             unsigned int teeth_count = teeth_gear_layer_creator_body();
-            current_solid()->add_layer(name_layer_creator_body(), __gear_solid(teeth_count));
+            std::shared_ptr<model_maker::Polygon> gear = __gear_solid(teeth_count);
+            std::shared_ptr<scls::Image> img = std::make_shared<scls::Image>(500, 500, scls::Color(255, 255, 255));
+            __draw_polygon_in_image(img.get(), gear.get());
+            img.get()->save_png("tests/test.png");
+            current_solid()->add_layer(name_layer_creator_body(), gear);
         }
         else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR) {
             // Create an other shape
@@ -582,6 +675,20 @@ namespace scls {
         return to_return;
     }
 
+    // Update the texture 2D
+    void SCLS_Workspace_Model_Maker_Page::update_texture_2d() {
+        // Create the texture
+        std::shared_ptr<Image> new_texture = std::make_shared<Image>(a_current_state.current_page_2d_texture.get());
+        __draw_shape_2d_in_image(new_texture, current_shape_2d());
+
+        // Copy the texture
+        a_shape_2d_body.get()->texture()->set_image(new_texture);
+        new_texture.get()->save_png("tests/test.png");
+
+        // Reset the state if necessary
+        a_current_state.current_page_2d_texture_changed = false;
+    }
+
     //*********
     //
     // Model maker solid handling
@@ -605,7 +712,10 @@ namespace scls {
             for(int i = 0;i<static_cast<int>(current_solid()->layers().size());i++) {
                 // Create the needed face
                 std::shared_ptr<model_maker::Face> current_face = current_solid()->layers()[i].get()->layer_face;
-                current_face.get()->convex_triangulation();
+
+                // Triangulate the face
+                current_face.get()->triangulate();
+
                 solid.get()->add_face(current_solid()->layers()[i].get()->name, current_face, solid);
 
                 // Apply the top connection
@@ -613,7 +723,7 @@ namespace scls {
                     // The top is the same shape as the bottom
                     double height = current_solid()->layers()[i].get()->layer_face.get()->y() + current_solid()->layers()[i].get()->layer_face.get()->scale_y();
                     std::shared_ptr<model_maker::Face> new_face = current_solid()->layers()[i].get()->layer_face.get()->copy_with_new_points();
-                    new_face.get()->convex_triangulation();
+                    new_face.get()->triangulate();
                     new_face.get()->set_y(height);
                     solid.get()->add_face(current_solid()->layers()[i].get()->name + "-top", new_face, solid);
                     solid.get()->fill_faces_point_by_point(current_face, new_face, solid);
@@ -747,17 +857,7 @@ namespace scls {
         // Draw each layers
         for(int i = 0;i<static_cast<int>(current_solid()->layers().size());i++) {
             std::shared_ptr<__Model_Maker_Layer> current_layer = current_solid()->layers()[i];
-
-            // Draw each lines of the layer
-            for(int j = 0;j<static_cast<int>(current_layer.get()->points.size()) - 1;j++) {
-                __draw_line_in_image(new_image, current_layer.get()->points[j].get(), current_layer.get()->points[j + 1].get(), lines_width, lines_color, 0.8);
-            }
-            if(static_cast<int>(current_layer.get()->points.size()) > 1)__draw_line_in_image(new_image, current_layer.get()->points[static_cast<int>(current_layer.get()->points.size()) - 1].get(), current_layer.get()->points[0].get(), lines_width, lines_color, 0.8);
-
-            // Draw each points of the layer
-            for(int j = 0;j<static_cast<int>(current_layer.get()->points.size());j++) {
-                __draw_point_in_image(new_image, current_layer.get()->points[j], point_width, point_color, 0.8);
-            }
+            __draw_layer_in_image(new_image, current_layer);
         }
 
         // Set the new texture
@@ -837,6 +937,10 @@ namespace scls {
             moved = true;
         }
 
+        // Check the type of point
+        if(window_struct()->key_pressed_during_this_frame("b")) a_current_state.current_shape_2d_point_type = SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D_POINT;
+        if(window_struct()->key_pressed_during_this_frame("n")) a_current_state.current_shape_2d_point_type = SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D_EXCLUSION_POINT;
+
         // Check to register a point
         if(window_struct()->key_pressed_during_this_frame("e")) {
             // Create the point
@@ -846,7 +950,7 @@ namespace scls {
             // Setup the point
             new_point.get()->set_x(base_x);
             new_point.get()->set_z(base_z);
-            current_shape_2d()->points.push_back(new_point);
+            add_point_current_shape_2d(new_point);
             a_current_state.current_page_2d_texture_changed = true;
             reset_page_2d_current_point();
             // Move the point to the last position
@@ -956,32 +1060,6 @@ namespace scls {
         if(a_current_state.current_page == SCLS_WORKSPACE_MODEL_MAKER_SOLID_MAIN || a_current_state.current_page == SCLS_WORKSPACE_MODEL_MAKER_LAYER_MAIN) check_solid_navigation();
     }
 
-    // Update the texture 2D
-    void SCLS_Workspace_Model_Maker_Page::update_texture_2d() {
-        // Create the texture
-        std::shared_ptr<Image> new_texture = std::make_shared<Image>(a_current_state.current_page_2d_texture.get());
-
-        // Draw the current lines
-        Color current_lines_color = Color(0, 255, 0);
-        unsigned int current_lines_width = 5;
-        for(int i = 0;i<static_cast<int>(current_shape_2d()->points.size()) - 1;i++) {
-            __draw_line_in_image(new_texture, current_shape_2d()->points[i].get(), current_shape_2d()->points[i + 1].get(), current_lines_width, current_lines_color);
-        }
-
-        // Draw the current points
-        Color current_points_color = Color(0, 255, 0);
-        unsigned int current_points_width = 7;
-        for(int i = 0;i<static_cast<int>(current_shape_2d()->points.size());i++) {
-            __draw_point_in_image(new_texture, current_shape_2d()->points[i].get(), current_points_width, current_points_color);
-        }
-
-        // Copy the texture
-        a_shape_2d_body.get()->texture()->set_image(new_texture);
-
-        // Reset the state if necessary
-        a_current_state.current_page_2d_texture_changed = false;
-    }
-
     // Update the base of the texture 2D
     void SCLS_Workspace_Model_Maker_Page::update_texture_2d_base() {
         // Create the texture
@@ -998,7 +1076,11 @@ namespace scls {
             new_height *= resize_ratio;
             new_width *= resize_ratio;
             // Resize the image
-            a_current_state.current_page_2d_texture = unmodified_image.get()->resize_adaptative(new_width, new_height);
+            unmodified_image = unmodified_image.get()->resize_adaptative(new_width, new_height);
+            // Paste the good image
+            a_current_state.current_page_2d_texture = std::make_shared<Image>(max_size, max_size, Color(255, 255, 255));
+            if(new_width > new_height) a_current_state.current_page_2d_texture.get()->paste(unmodified_image.get(), 0, max_size / 2.0 - new_height / 2.0);
+            else a_current_state.current_page_2d_texture.get()->paste(unmodified_image.get(), max_size / 2.0 - new_width / 2.0, 0);
         }
         else a_current_state.current_page_2d_texture = std::make_shared<Image>(1, 1, Color(255, 255, 255));
     }

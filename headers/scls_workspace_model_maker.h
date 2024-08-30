@@ -55,6 +55,11 @@ namespace scls {
 	    std::shared_ptr<model_maker::Polygon> to_polygon() {
 	        std::shared_ptr<model_maker::Polygon> to_return = std::make_shared<model_maker::Polygon>();
 
+	        // Add the necessary exclusion points
+	        to_return.get()->exclusion_points.push_back(std::vector<model_maker::Point>());
+	        std::vector<model_maker::Point>& exclusion_points_to_pass = to_return.get()->exclusion_points[0];
+            for(int i = 0;i<static_cast<int>(exclusion_points.size());i++) {exclusion_points_to_pass.push_back(*exclusion_points[i].get());}
+
 	        // Add the necessary points
             std::vector<model_maker::Point>& points_to_pass = to_return.get()->points;
             for(int i = 0;i<static_cast<int>(points.size());i++) {points_to_pass.push_back(*points[i].get());}
@@ -64,6 +69,9 @@ namespace scls {
 
 	    // Name of the shape
 	    std::string name;
+
+	    // Every points of the exclusion of the shape
+        std::vector<std::shared_ptr<model_maker::Point>> exclusion_points;
         // Every points in the shape
         std::vector<std::shared_ptr<model_maker::Point>> points;
 	};
@@ -132,15 +140,35 @@ namespace scls {
 
 	// Draw a line on an image
 	void __draw_line_in_image(Image* texture, model_maker::Point* point_1, model_maker::Point* point_2, unsigned short line_width, Color line_color, double multiplier);
+	inline void __draw_line_in_image(Image* texture, model_maker::Point point_1, model_maker::Point point_2, unsigned short line_width, Color line_color){__draw_line_in_image(texture, &point_1, &point_2, line_width, line_color, 1.0);};
+	inline void __draw_line_in_image(Image* texture, std::shared_ptr<model_maker::Point> point_1, std::shared_ptr<model_maker::Point> point_2, unsigned short line_width, Color line_color){__draw_line_in_image(texture, point_1.get(), point_2.get(), line_width, line_color, 1.0);};
 	inline void __draw_line_in_image(Image* texture, model_maker::Point* point_1, model_maker::Point* point_2, unsigned short line_width, Color line_color){__draw_line_in_image(texture, point_1, point_2, line_width, line_color, 1.0);};
 	inline void __draw_line_in_image(std::shared_ptr<Image> texture, model_maker::Point* point_1, model_maker::Point* point_2, unsigned short line_width, Color line_color){__draw_line_in_image(texture.get(), point_1, point_2, line_width, line_color);};
 	inline void __draw_line_in_image(std::shared_ptr<Image> texture, model_maker::Point* point_1, model_maker::Point* point_2, unsigned short line_width, Color line_color, double multiplier){__draw_line_in_image(texture.get(), point_1, point_2, line_width, line_color, multiplier);};
 	// Draw a point on an image
 	void __draw_point_in_image(Image* texture, model_maker::Point* point_to_draw, unsigned short point_width, Color point_color, double multiplicator);
+	inline void __draw_point_in_image(Image* texture, model_maker::Point point_to_draw, unsigned short point_width, Color point_color){__draw_point_in_image(texture, &point_to_draw, point_width, point_color, 1);};
+	inline void __draw_point_in_image(Image* texture, std::shared_ptr<model_maker::Point> point_to_draw, unsigned short point_width, Color point_color){__draw_point_in_image(texture, point_to_draw.get(), point_width, point_color, 1);};
 	inline void __draw_point_in_image(Image* texture, model_maker::Point* point_to_draw, unsigned short point_width, Color point_color){__draw_point_in_image(texture, point_to_draw, point_width, point_color, 1);};
 	inline void __draw_point_in_image(std::shared_ptr<Image> texture, model_maker::Point* point_to_draw, unsigned short point_width, Color point_color){__draw_point_in_image(texture.get(), point_to_draw, point_width, point_color, 1);};
 	inline void __draw_point_in_image(std::shared_ptr<Image> texture, std::shared_ptr<model_maker::Point> point_to_draw, unsigned short point_width, Color point_color){__draw_point_in_image(texture.get(), point_to_draw.get(), point_width, point_color, 1);}
 	inline void __draw_point_in_image(std::shared_ptr<Image> texture, std::shared_ptr<model_maker::Point> point_to_draw, unsigned short point_width, Color point_color, double multiplicator){__draw_point_in_image(texture.get(), point_to_draw.get(), point_width, point_color, multiplicator);};
+    // Draw a set of points on an image
+    void __draw_points_in_image(Image* texture, const std::vector<std::shared_ptr<model_maker::Point>>& shape_to_draw, unsigned int point_width, Color point_color, unsigned int line_width, Color line_color);
+    // Draw a face on an image
+    void __draw_face_in_image(Image* texture, model_maker::Face* face_to_draw);
+    // Draw a layer on an image
+    inline void __draw_layer_in_image(Image* texture, __Model_Maker_Layer* layer_to_draw){__draw_face_in_image(texture, layer_to_draw->layer_face.get());};
+    inline void __draw_layer_in_image(Image* texture, std::shared_ptr<__Model_Maker_Layer> layer_to_draw){__draw_layer_in_image(texture, layer_to_draw.get());};
+    inline void __draw_layer_in_image(std::shared_ptr<Image> texture, std::shared_ptr<__Model_Maker_Layer> layer_to_draw){__draw_layer_in_image(texture.get(), layer_to_draw.get());};
+    inline void __draw_layer_in_image(std::shared_ptr<Image> texture, __Model_Maker_Layer* layer_to_draw){__draw_layer_in_image(texture.get(), layer_to_draw);};
+    // Draw a shape 2D on an image
+    void __draw_shape_2d_in_image(Image* texture, __Model_Maker_Shape* shape_to_draw);
+    inline void __draw_shape_2d_in_image(Image* texture, std::shared_ptr<__Model_Maker_Shape> shape_to_draw){__draw_shape_2d_in_image(texture, shape_to_draw.get());};
+    inline void __draw_shape_2d_in_image(std::shared_ptr<Image> texture, __Model_Maker_Shape* shape_to_draw){__draw_shape_2d_in_image(texture.get(), shape_to_draw);};
+    inline void __draw_shape_2d_in_image(std::shared_ptr<Image> texture, std::shared_ptr<__Model_Maker_Shape> shape_to_draw){__draw_shape_2d_in_image(texture.get(), shape_to_draw.get());};
+    // Draw a set of triangles on an image
+    void __draw_triangles_in_image(Image* texture, const std::vector<std::shared_ptr<model_maker::Point>>& shape_to_draw, unsigned int point_width, Color point_color, unsigned int line_width, Color line_color);
 
 	class SCLS_Workspace_Model_Maker_Page : public GUI_Page {
 	    // Class representating the agatha part page of SCLS Workspace
@@ -251,6 +279,15 @@ namespace scls {
         //
         //*********
 
+        // Define each possible shape 2D point type
+        #define SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D_EXCLUSION_POINT 1
+        #define SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D_POINT 0
+
+        // Adds a point to the current shape 2D
+        inline void add_point_current_shape_2d(std::shared_ptr<model_maker::Point> new_point) {
+            if(a_current_state.current_shape_2d_point_type == SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D_POINT) current_shape_2d()->points.push_back(new_point);
+            else if(a_current_state.current_shape_2d_point_type == SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D_EXCLUSION_POINT) current_shape_2d()->exclusion_points.push_back(new_point);
+        };
         // Creates a new shape 2D
         std::shared_ptr<__Model_Maker_Shape> create_shape_2d();
 
@@ -326,9 +363,6 @@ namespace scls {
             #define SCLS_WORKSPACE_MODEL_MAKER_SOLID_CREATOR 2
             #define SCLS_WORKSPACE_MODEL_MAKER_SOLID_MAIN 3
             // Define each possible file chosen
-            // Define each possible layer type
-            #define SCLS_WORKSPACE_MODEL_MAKER_LAYER_REGULAR_POLYGON 0
-            // Empty for now
 
             // Current file chosen in Model Maker
             unsigned short current_file_chosen = 0;
@@ -352,6 +386,8 @@ namespace scls {
             std::shared_ptr<__Model_Maker_Layer> current_layer;
 
             // Shape 2D handling
+            // Currently used shape 2D point type
+            unsigned int current_shape_2d_point_type = SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D_POINT;
             // Currently used shape 2D
             std::shared_ptr<__Model_Maker_Shape> current_shape_2d;
             // Loaded shape 2D by selection
