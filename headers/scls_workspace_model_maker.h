@@ -202,6 +202,8 @@ namespace scls {
         void display_shape_2d();
         // Display the shape 2D creator
         void display_shape_2d_creator();
+        // Display the shape 2D point edition
+        void display_shape_2d_point_edition();
         // Display the solid creator
         void display_solid_creator();
         // Display the main solid page
@@ -290,7 +292,13 @@ namespace scls {
         };
         // Creates a new shape 2D
         std::shared_ptr<__Model_Maker_Shape> create_shape_2d();
+        // Load each navigation buttons in the shape 2D page
+        void load_navigation_shape_2d(bool reset_navigation = true);
+        // Unload each navigation buttons in the shape 2D page
+        void unload_navigation_shape_2d() {a_loaded_shape_2d_point_by_button.clear();a_navigation_buttons_shape_2d.clear();a_shape_2d_navigation.get()->reset();};
 
+        // Returns the currently selected point of the shape 2D
+        inline model_maker::Point* current_shape_2d_point() const {return a_current_state.current_shape_2d_point.get();};
         // Returns the chosen shape 2D
          __Model_Maker_Shape* chosen_shape_2d() {try{return a_current_state.loaded_shape_2d_by_selection[name_shape_2d_layer_creator_body()].get();}catch(std::range_error){return 0;}};
         // Returns the currently selected shape 2D
@@ -302,6 +310,8 @@ namespace scls {
 
         // Getters and setter
         inline std::string name_shape_2d_creator_body() const {if(a_name_shape_2d_creator_body.get() == 0) return ""; return a_name_shape_2d_creator_body.get()->text();};
+        inline double point_edition_x_shape_2d_main_body() const {try{return string_to_double(a_point_edition_x_shape_2d_main_body.get()->text());}catch(std::invalid_argument){return 0;}};
+        inline double point_edition_z_shape_2d_main_body() const {try{return string_to_double(a_point_edition_z_shape_2d_main_body.get()->text());}catch(std::invalid_argument){return 0;}};
 
         //*********
         //
@@ -343,6 +353,16 @@ namespace scls {
             a_current_state.current_page_2d_point = std::make_shared<model_maker::Point>();
             a_current_state.current_page_2d_point.get()->set_x(0);
             a_current_state.current_page_2d_point.get()->set_z(0);
+            move_shape_2d_current_point();
+        };
+        // Move the current shape 2D point
+        inline void move_shape_2d_current_point() {
+            if(a_shape_2d_body.get() == 0) return;
+
+            // Move the object
+            glm::vec4 texture_final_rect = a_shape_2d_body.get()->texture_rect();
+            page_2d_current_point_object()->set_x_in_pixel((0.5 + page_2d_current_point()->x() * texture_final_rect[2]) * static_cast<double>(a_shape_2d_body.get()->width_in_pixel()) - (static_cast<double>(page_2d_current_point_object()->width_in_pixel()) / 2.0));
+            page_2d_current_point_object()->set_y_in_pixel((0.5 + page_2d_current_point()->z() * texture_final_rect[3]) * static_cast<double>(a_shape_2d_body.get()->height_in_pixel()) - (static_cast<double>(page_2d_current_point_object()->height_in_pixel()) / 2.0));
         };
 
 	private:
@@ -390,6 +410,8 @@ namespace scls {
             unsigned int current_shape_2d_point_type = SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D_POINT;
             // Currently used shape 2D
             std::shared_ptr<__Model_Maker_Shape> current_shape_2d;
+            // Currently handled shape 2D point
+            std::shared_ptr<model_maker::Point> current_shape_2d_point;
             // Loaded shape 2D by selection
             std::map<std::string, std::shared_ptr<__Model_Maker_Shape>> loaded_shape_2d_by_selection;
 
@@ -408,6 +430,10 @@ namespace scls {
 
         // Each loaded shape 2D
         std::vector<std::shared_ptr<__Model_Maker_Shape>> a_loaded_shape_2d = std::vector<std::shared_ptr<__Model_Maker_Shape>>();
+        // Loaded shape 2D point by buttons
+        std::map<GUI_Text*, std::shared_ptr<model_maker::Point>> a_loaded_shape_2d_point_by_button;
+        // Each navigations button in the shape 2D navigation
+        std::vector<std::shared_ptr<GUI_Text>> a_navigation_buttons_shape_2d = std::vector<std::shared_ptr<GUI_Text>>();
 
         //*********
         //
@@ -447,6 +473,8 @@ namespace scls {
         std::shared_ptr<GUI_Scroller_Choice> a_layer_main_top_connection_navigation;
         // Body of the layer type other shape of layer creator part
         std::shared_ptr<GUI_Object> a_other_shape_layer_creator_body;
+        // Point edition part of the footer of the page shape 2D part
+        std::shared_ptr<GUI_Object> a_point_edition_shape_2d_footer;
         // Body of the layer type of layer creator part
         std::shared_ptr<GUI_Object> a_regular_polygon_layer_creator_body;
         // Navigation of the other shape layer creator part
@@ -457,6 +485,8 @@ namespace scls {
         std::shared_ptr<GUI_Object> a_shape_2d_creator_body;
         // Footer of the page shape 2D part
         std::shared_ptr<GUI_Object> a_shape_2d_footer;
+        // Navigation of the page shape 2D part
+        std::shared_ptr<GUI_Scroller> a_shape_2d_navigation;
         // Body of the solid creator part
         std::shared_ptr<GUI_Object> a_solid_creator_body;
         // Footer of the solid creator part
@@ -493,6 +523,8 @@ namespace scls {
         std::shared_ptr<GUI_Text_Input> a_teeth_gear_layer_creator_body;
         // Title of the main layer
         std::shared_ptr<GUI_Text> a_title_layer_main_body;
+        // Title of the point edition part of the footer of the page shape 2D part
+        std::shared_ptr<GUI_Text> a_title_point_edition_shape_2d_footer;
         // Title of the main solid
         std::shared_ptr<GUI_Text> a_title_solid_main_body;
         // View of the main solid
@@ -513,6 +545,10 @@ namespace scls {
         std::shared_ptr<GUI_Text_Input> a_name_shape_2d_creator_body;
         // Name of a model maker project
         std::shared_ptr<GUI_Text_Input> a_name_solid_creator_body;
+        // X value of the point in the shape 2D
+        std::shared_ptr<GUI_Text_Input> a_point_edition_x_shape_2d_main_body;
+        // Z value of the point in the shape 2D
+        std::shared_ptr<GUI_Text_Input> a_point_edition_z_shape_2d_main_body;
 	};
 }
 

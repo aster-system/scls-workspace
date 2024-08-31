@@ -323,6 +323,30 @@ namespace scls {
             a_other_shape_layer_creator_body = *parent->new_object<GUI_Object>(object_name);
             return a_other_shape_layer_creator_body;
         }
+        else if(object_name == "point_edition_shape_2d_footer_model_maker") {
+            a_point_edition_shape_2d_footer = *parent->new_object<GUI_Object>(object_name);
+            return a_point_edition_shape_2d_footer;
+        }
+        else if(object_name == "point_edition_x_shape_2d_footer_model_maker") {
+            a_point_edition_x_shape_2d_main_body = *parent->new_object<GUI_Text_Input>(object_name);
+            return a_point_edition_x_shape_2d_main_body;
+        }
+        else if(object_name == "point_edition_z_shape_2d_footer_model_maker") {
+            a_point_edition_z_shape_2d_main_body = *parent->new_object<GUI_Text_Input>(object_name);
+            return a_point_edition_z_shape_2d_main_body;
+        }
+        else if(object_name == "regulay_polygon_layer_creator_body_model_maker") {
+            a_regular_polygon_layer_creator_body = *parent->new_object<GUI_Object>(object_name);
+            return a_regular_polygon_layer_creator_body;
+        }
+        else if(object_name == "selection_other_shape_layer_creator_body_model_maker") {
+            a_selection_other_shape_layer_creator_body = *parent->new_object<GUI_Scroller_Choice>(object_name);
+            return a_selection_other_shape_layer_creator_body;
+        }
+        else if(object_name == "shape_2d_creator_body_model_maker") {
+            a_shape_2d_creator_body = *parent->new_object<GUI_Object>(object_name);
+            return a_shape_2d_creator_body;
+        }
         else if(object_name == "shape_2d_body_model_maker") {
             a_shape_2d_body = *parent->new_object<GUI_Object>(object_name);
 
@@ -340,17 +364,9 @@ namespace scls {
             a_shape_2d_footer = *parent->new_object<GUI_Object>(object_name);
             return a_shape_2d_footer;
         }
-        else if(object_name == "regulay_polygon_layer_creator_body_model_maker") {
-            a_regular_polygon_layer_creator_body = *parent->new_object<GUI_Object>(object_name);
-            return a_regular_polygon_layer_creator_body;
-        }
-        else if(object_name == "selection_other_shape_layer_creator_body_model_maker") {
-            a_selection_other_shape_layer_creator_body = *parent->new_object<GUI_Scroller_Choice>(object_name);
-            return a_selection_other_shape_layer_creator_body;
-        }
-        else if(object_name == "shape_2d_creator_body_model_maker") {
-            a_shape_2d_creator_body = *parent->new_object<GUI_Object>(object_name);
-            return a_shape_2d_creator_body;
+        else if(object_name == "shape_2d_navigation_model_maker") {
+            a_shape_2d_navigation = *parent->new_object<GUI_Scroller>(object_name);
+            return a_shape_2d_navigation;
         }
         else if(object_name == "side_regulay_polygon_layer_creator_body_model_maker") {
             a_side_regular_polygon_layer_creator_body = *parent->new_object<GUI_Text_Input>(object_name);
@@ -383,6 +399,10 @@ namespace scls {
         else if(object_name == "title_layer_main_body_model_maker") {
             a_title_layer_main_body = *parent->new_object<GUI_Text>(object_name);
             return a_title_layer_main_body;
+        }
+        else if(object_name == "point_edition_title_shape_2d_footer_model_maker") {
+            a_title_point_edition_shape_2d_footer = *parent->new_object<GUI_Text>(object_name);
+            return a_title_point_edition_shape_2d_footer;
         }
         else if(object_name == "title_solid_main_body_model_maker") {
             a_title_solid_main_body = *parent->new_object<GUI_Text>(object_name);
@@ -449,6 +469,7 @@ namespace scls {
 
         // Hide all the navigations
         if(a_layer_creator_navigation.get() != 0) a_layer_creator_navigation.get()->set_visible(false);
+        if(a_shape_2d_navigation.get() != 0) a_shape_2d_navigation.get()->set_visible(false);
         if(a_solid_main_navigation.get() != 0) a_solid_main_navigation.get()->set_visible(false);
 
         // Reset the layer
@@ -510,13 +531,14 @@ namespace scls {
     // Display the page 2D
     void SCLS_Workspace_Model_Maker_Page::display_shape_2d() {
         hide_all();
-        if(a_layer_creator_navigation.get() != 0) a_layer_creator_navigation.get()->set_visible(true);
         if(a_shape_2d_body.get() != 0) a_shape_2d_body.get()->set_visible(true);
         if(a_shape_2d_footer.get() != 0) a_shape_2d_footer.get()->set_visible(true);
+        if(a_shape_2d_navigation.get() != 0) a_shape_2d_navigation.get()->set_visible(true);
         a_current_state.current_page = SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D;
 
         // Load the texture
-        if(page_2d_current_point() == 0) reset_page_2d_current_point();
+        load_navigation_shape_2d();
+        reset_page_2d_current_point();
         update_texture_2d_base();
         update_texture_2d();
     }
@@ -528,6 +550,24 @@ namespace scls {
         if(a_layer_creator_footer.get() != 0) a_layer_creator_footer.get()->set_visible(true);
         if(a_layer_creator_navigation.get() != 0) a_layer_creator_navigation.get()->set_visible(true);
         a_current_state.current_page = SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D_CREATOR;
+    }
+
+    // Display the shape 2D point edition
+    void SCLS_Workspace_Model_Maker_Page::display_shape_2d_point_edition() {
+        a_point_edition_shape_2d_footer.get()->set_visible(true);
+
+        // Change the GUI as needed
+        if(current_shape_2d_point() == 0) {
+            a_title_point_edition_shape_2d_footer.get()->set_text(scls::to_utf_8("Pas de point sélectionné"));
+            a_point_edition_x_shape_2d_main_body.get()->set_text("0");
+            a_point_edition_z_shape_2d_main_body.get()->set_text("0");
+        }
+        else {
+            unsigned int point_id = current_shape_2d_point()->id();
+            a_title_point_edition_shape_2d_footer.get()->set_text("Point " + std::to_string(point_id));
+            a_point_edition_x_shape_2d_main_body.get()->set_text(format_number_to_text(current_shape_2d_point()->x()));
+            a_point_edition_z_shape_2d_main_body.get()->set_text(format_number_to_text(current_shape_2d_point()->z()));
+        }
     }
 
     // Display the solid creator
@@ -675,6 +715,68 @@ namespace scls {
         return to_return;
     }
 
+    // Load each navigation buttons in the shape 2D page
+    void SCLS_Workspace_Model_Maker_Page::load_navigation_shape_2d(bool reset_navigation) {
+        if(reset_navigation) {
+            unload_navigation_shape_2d();
+
+            // Create each buttons
+            for(int i = 0;i<static_cast<int>(current_shape_2d()->points.size());i++) {
+                unsigned int real_i = static_cast<int>(current_shape_2d()->points.size()) - (i + 1);
+                unsigned int point_id = current_shape_2d()->points[real_i].get()->id();
+                std::shared_ptr<GUI_Text> current_button = *a_shape_2d_navigation.get()->new_object_in_scroller<GUI_Text>("shape_2d_navigation_model_maker_buttons_" + std::to_string(point_id));
+                current_button.get()->set_border_width_in_pixel(1);
+                current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
+                current_button.get()->set_height_in_pixel(40);
+                current_button.get()->set_text("Point " + std::to_string(point_id));
+                current_button.get()->set_width_in_scale(Fraction(1));
+
+                a_loaded_shape_2d_point_by_button[current_button.get()] = current_shape_2d()->points[real_i];
+                a_navigation_buttons_shape_2d.push_back(current_button);
+            }
+
+            // Create the "home shape" solid button
+            std::shared_ptr<GUI_Text> current_button = *a_shape_2d_navigation.get()->new_object_in_scroller<GUI_Text>("shape_2d_navigation_model_maker_buttons_home");
+            current_button.get()->set_border_width_in_pixel(1);
+            current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
+            current_button.get()->set_height_in_pixel(40);
+            current_button.get()->set_text(to_utf_8_code_point("Accueil de la forme"));
+            current_button.get()->set_width_in_scale(Fraction(1));
+            a_navigation_buttons_shape_2d.push_back(current_button);
+
+            std::reverse(a_navigation_buttons_shape_2d.begin(), a_navigation_buttons_shape_2d.end());
+        }
+        else {
+            // Create needed buttons
+            while(a_navigation_buttons_shape_2d.size() <= current_shape_2d()->points.size()) {
+                unsigned int real_i = a_navigation_buttons_shape_2d.size() - 1;
+                unsigned int point_id = current_shape_2d()->points[real_i].get()->id();
+                std::shared_ptr<GUI_Text> current_button = *a_shape_2d_navigation.get()->new_object_in_scroller<GUI_Text>("shape_2d_navigation_model_maker_buttons_" + std::to_string(point_id));
+                current_button.get()->set_border_width_in_pixel(1);
+                current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
+                current_button.get()->set_height_in_pixel(40);
+                current_button.get()->set_text("Point " + std::to_string(point_id));
+                current_button.get()->set_width_in_scale(Fraction(1));
+
+                a_loaded_shape_2d_point_by_button[current_button.get()] = current_shape_2d()->points[real_i];
+                a_navigation_buttons_shape_2d.push_back(current_button);
+            }
+        }
+
+        // Place the buttons
+        std::shared_ptr<GUI_Text> current_button;
+        std::shared_ptr<GUI_Text> last_button;
+        for(int i = 0;i<static_cast<int>(a_navigation_buttons_shape_2d.size());i++) {
+            unsigned int real_i = static_cast<int>(a_navigation_buttons_shape_2d.size()) - (i + 1);
+            current_button = a_navigation_buttons_shape_2d[real_i];
+            if(last_button.get() == 0) current_button.get()->attach_bottom_in_parent();
+            else current_button.get()->attach_top_of_object_in_parent(last_button);
+            last_button = current_button;
+        }
+
+        a_shape_2d_navigation.get()->check_scroller();
+    }
+
     // Update the texture 2D
     void SCLS_Workspace_Model_Maker_Page::update_texture_2d() {
         // Create the texture
@@ -683,7 +785,6 @@ namespace scls {
 
         // Copy the texture
         a_shape_2d_body.get()->texture()->set_image(new_texture);
-        new_texture.get()->save_png("tests/test.png");
 
         // Reset the state if necessary
         a_current_state.current_page_2d_texture_changed = false;
@@ -952,20 +1053,16 @@ namespace scls {
             new_point.get()->set_z(base_z);
             add_point_current_shape_2d(new_point);
             a_current_state.current_page_2d_texture_changed = true;
+            load_navigation_shape_2d(false);
             reset_page_2d_current_point();
             // Move the point to the last position
+            moved = true;
             page_2d_current_point()->set_x(base_x);
             page_2d_current_point()->set_z(base_z);
-            moved = true;
         }
 
         // Move the object if necessary
-        if(moved) {
-            glm::vec4 texture_final_rect = a_shape_2d_body.get()->texture_rect();
-            // Move the object
-            page_2d_current_point_object()->set_x_in_pixel((0.5 + page_2d_current_point()->x() * texture_final_rect[2]) * static_cast<double>(a_shape_2d_body.get()->width_in_pixel()) - (static_cast<double>(page_2d_current_point_object()->width_in_pixel()) / 2.0));
-            page_2d_current_point_object()->set_y_in_pixel((0.5 + page_2d_current_point()->z() * texture_final_rect[3]) * static_cast<double>(a_shape_2d_body.get()->height_in_pixel()) - (static_cast<double>(page_2d_current_point_object()->height_in_pixel()) / 2.0));
-        }
+        if(moved) move_shape_2d_current_point();
     }
 
     // Check the shape 2D events
@@ -975,6 +1072,31 @@ namespace scls {
             display_layer_creator();
             display_layer_creator_other_shape();
         }
+
+        // Check if a point is clicked
+        for(int i = 0;i<static_cast<int>(a_navigation_buttons_shape_2d.size());i++) {
+            if(a_navigation_buttons_shape_2d[i].get() != 0 && a_navigation_buttons_shape_2d[i].get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+                if(i == 0) {
+
+                }
+                else {
+                    a_current_state.current_shape_2d_point = a_loaded_shape_2d_point_by_button[a_navigation_buttons_shape_2d[i].get()];
+                    display_shape_2d_point_edition();
+                }
+            }
+        }
+
+        // Check if the selected point is modified
+        bool texture_changed = false;
+        if(a_point_edition_x_shape_2d_main_body.get()->input_during_this_frame()) {
+            current_shape_2d_point()->set_x(point_edition_x_shape_2d_main_body());
+            texture_changed = true;
+        }
+        if(a_point_edition_z_shape_2d_main_body.get()->input_during_this_frame()) {
+            current_shape_2d_point()->set_z(point_edition_z_shape_2d_main_body());
+            texture_changed = true;
+        }
+        if(texture_changed) update_texture_2d();
     }
 
     // Check the shape 2D creator events
@@ -1040,14 +1162,12 @@ namespace scls {
         if(a_current_state.current_page == SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D) check_page_2d_current_point_movement();
 
         // Change the page 2D texture if necessary
-        if(a_current_state.current_page_2d_texture_changed) {
-            update_texture_2d();
-        }
+        if(a_current_state.current_page_2d_texture_changed) {update_texture_2d();}
 
         // Check the shade 2D
         if(a_current_state.current_page == SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D) check_shape_2d();
 
-        // Chech the shape 2D creator
+        // Check the shape 2D creator
         if(a_current_state.current_page == SCLS_WORKSPACE_MODEL_MAKER_SHAPE_2D_CREATOR) check_shape_2d_creator();
 
         // Check the solid creator

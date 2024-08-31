@@ -504,6 +504,64 @@
 		<cursor type=pointing_hand_cursor>
 	</when>
 </gui_object>
+// Point edition
+<gui_object name="point_edition_shape_2d_footer_model_maker">
+	<height value=1 type=scale>
+	<parent name="shape_2d_footer_model_maker">
+	<width value=1/2 type=scale>
+	<x value=0 type=scale>
+	<y value=1/2 type=object_scale>
+</gui_object>
+<gui_object name="point_edition_title_shape_2d_footer_model_maker" type="text">
+	<content>Pas de point sélectionné</content>
+	<height value=1/4 type=scale>
+	<parent name="point_edition_shape_2d_footer_model_maker">
+	<width value=1/2 type=scale>
+	<x value=0 type=scale>
+	<y attach=top>
+</gui_object>
+<gui_object name="point_edition_title_x_shape_2d_footer_model_maker" type="text">
+	<content>X :</content>
+	<height value=30 type=pixel>
+	<parent name="point_edition_shape_2d_footer_model_maker">
+	<width value=1/4 type=scale>
+	<x value=0 type=scale>
+	<y attach=bottom attached_object="point_edition_title_shape_2d_footer_model_maker">
+</gui_object>
+<gui_object name="point_edition_x_shape_2d_footer_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=30 type=pixel>
+	<parent name="point_edition_shape_2d_footer_model_maker">
+	<width value=1/4 type=scale>
+	<x value=1/4 type=scale>
+	<y attach=bottom attached_object="point_edition_title_shape_2d_footer_model_maker">
+</gui_object>
+<gui_object name="point_edition_title_z_shape_2d_footer_model_maker" type="text">
+	<content>Z :</content>
+	<height value=30 type=pixel>
+	<parent name="point_edition_shape_2d_footer_model_maker">
+	<width value=1/4 type=scale>
+	<x value=1/2 type=scale>
+	<y attach=bottom attached_object="point_edition_title_shape_2d_footer_model_maker">
+</gui_object>
+<gui_object name="point_edition_z_shape_2d_footer_model_maker" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=30 type=pixel>
+	<parent name="point_edition_shape_2d_footer_model_maker">
+	<width value=1/4 type=scale>
+	<x value=3/4 type=scale>
+	<y attach=bottom attached_object="point_edition_title_shape_2d_footer_model_maker">
+</gui_object>
+
+// Navigation
+
+<gui_object name="shape_2d_navigation_model_maker" type="scroller">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=3/20 type=scale>
+	<x attach=left offset=25>
+	<y attach=bottom attached_object="header_model_maker" offset=15>
+</gui_object>
 
 //***************************************************
 //
