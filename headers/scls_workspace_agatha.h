@@ -88,6 +88,8 @@ namespace scls {
         void check_pattern_project_main_events();
         // Check the events for the pattern project navigation page
         void check_pattern_project_navigation_events();
+        // Check the events for the replica project navigation page
+        void check_replica_project_navigation_events();
 
         // Update the events of the page
         virtual void update_event();
@@ -125,6 +127,10 @@ namespace scls {
 
         // Loads an existing replica and returns it
         std::shared_ptr<Replica_Project> load_replica_project(std::string path);
+        // Loads the button to navigate in the project
+        void load_replica_project_navigation();
+        // Unoads the button to navigate in the project
+        void unload_replica_project_navigation(){a_replica_project_navigation_buttons.clear();a_replica_project_main_navigation.get()->reset();};
 
 	private:
 
@@ -172,6 +178,15 @@ namespace scls {
             // Currently displayed pattern project
             std::shared_ptr<Replica_Project> currently_displayed_replica_project;
         } a_current_state;
+
+        //*********
+        //
+        // Replica handling
+        //
+        //*********
+
+        // Buttons in the replica project navigation
+        std::vector<std::shared_ptr<GUI_Text>> a_replica_project_navigation_buttons = std::vector<std::shared_ptr<GUI_Text>>();
 
 	    //*********
         //

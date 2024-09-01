@@ -175,6 +175,7 @@ namespace scls {
         if(a_replica_project_main_navigation.get() != 0) a_replica_project_main_navigation.get()->set_visible(true);
 
         // Add the needed datas
+        load_replica_project_navigation();
         a_current_state.current_page = SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_MAIN_PAGE;
         if(currently_displayed_replica_project() == 0) a_replica_project_title.get()->set_text("Pas de projets disponibles");
         else a_replica_project_title.get()->set_text("Projet : \"" + currently_displayed_replica_project()->name() + "\"");
@@ -278,6 +279,9 @@ namespace scls {
 
         // Pattern project navigation
         if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_PATTERN_PROJECT_MAIN_PAGE || a_current_state.current_page == SCLS_WORKSPACE_AGATHA_PATTERN_PROJECT_FILE_PAGE) check_pattern_project_navigation_events();
+
+        // Replica project navigation
+        if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_MAIN_PAGE) check_replica_project_navigation_events();
     }
 
     //*********
@@ -377,5 +381,64 @@ namespace scls {
         // Load the project
         to_return.reset(Replica_Project::load_sda_0_2(path, pattern_to_use));
         return to_return;
+    }
+
+    // Loads the button to navigate in the project
+    void SCLS_Workspace_Agatha_Page::load_replica_project_navigation() {
+        unload_replica_project_navigation();
+
+        // Load each navigation buttons
+        if(currently_displayed_replica_project() != 0) {
+            // Create the first home button
+            std::shared_ptr<GUI_Text> home_button = *a_replica_project_main_navigation.get()->new_object<GUI_Text>("replica_project_home_button");
+            home_button.get()->set_font_size(40);
+            home_button.get()->set_height_in_pixel(50);
+            home_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
+            home_button.get()->set_text(to_utf_8_code_point("Accueil de la réplique"));
+            home_button.get()->set_texture_alignment(Alignment_Texture::T_Fit);
+            home_button.get()->set_width_in_scale(1);
+            home_button.get()->set_x_in_scale(0);
+            home_button.get()->set_y_in_scale(0);
+            a_replica_project_navigation_buttons.push_back(home_button);
+
+            // Create the buttons
+            std::shared_ptr<std::vector<Replica_File*>> replicas = currently_displayed_replica_project()->replica_files_sorted_by_path();
+            for(int i = 0;i<static_cast<int>(replicas.get()->size());i++) {
+                // Create the button
+                home_button = *a_replica_project_main_navigation.get()->new_object<GUI_Text>("replica_project_button_" + std::to_string(i));
+                home_button.get()->set_font_size(40);
+                home_button.get()->set_height_in_pixel(50);
+                home_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
+                home_button.get()->set_text(replicas.get()->at(i)->internal_path);
+                home_button.get()->set_width_in_scale(1);
+                home_button.get()->set_x_in_scale(0);
+                a_replica_project_navigation_buttons.push_back(home_button);
+            }
+
+            // Place the buttons
+            std::shared_ptr<GUI_Text> last_button = a_replica_project_navigation_buttons[a_replica_project_navigation_buttons.size() - 1];
+            last_button.get()->attach_bottom_in_parent();
+            for(int i = 1;i<static_cast<int>(a_replica_project_navigation_buttons.size());i++) {
+                unsigned int current_i = a_replica_project_navigation_buttons.size() - (i + 1);
+                a_replica_project_navigation_buttons[current_i].get()->attach_top_of_object_in_parent(last_button);
+                last_button = a_replica_project_navigation_buttons[current_i];
+            }
+
+            // Finalize the creation
+            a_replica_project_main_navigation.get()->check_scroller();
+        }
+    }
+
+    // Check the events for the replica project navigation page
+    void SCLS_Workspace_Agatha_Page::check_replica_project_navigation_events() {
+        for(int i = 0;i<static_cast<int>(a_replica_project_navigation_buttons.size());i++) {
+            if(a_replica_project_navigation_buttons[i].get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+                if(i == 0) {
+                    // Show the home of the replica project
+                    display_replica_project();
+                }
+                std::cout << "R " << i << std::endl;
+            }
+        }
     }
 }
