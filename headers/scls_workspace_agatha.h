@@ -66,6 +66,10 @@ namespace scls {
         void display_pattern_project();
         // Display the project pattern file page
         void display_pattern_project_file();
+        // Display the project file dition page
+        void display_replica_file_edition();
+        // Display the project replica global variable page
+        void display_replica_global_variable();
         // Display the open replica page
         void display_replica_open();
         // Display the project replica page
@@ -88,6 +92,10 @@ namespace scls {
         void check_pattern_project_main_events();
         // Check the events for the pattern project navigation page
         void check_pattern_project_navigation_events();
+        // Check the events for the replica project page
+        void check_replica_project_events();
+        // Check the events for the replica project footer page
+        void check_replica_project_footer_events();
         // Check the events for the replica project navigation page
         void check_replica_project_navigation_events();
 
@@ -125,12 +133,23 @@ namespace scls {
         //
         //*********
 
+        // Returns the name of the currently displayed replica global variable
+        inline std::string currently_displayed_replica_global_variable() const {return a_current_state.currently_displayed_replica_global_variable;};
+        // Returns the currently displayed replica file
+        inline Replica_File* currently_displayed_replica_file() {return a_current_state.currently_displayed_replica_file.get();};
+
         // Loads an existing replica and returns it
         std::shared_ptr<Replica_Project> load_replica_project(std::string path);
+        // Loads the global variables buttons to navigate in the project
+        void load_global_variables_project_navigation();
         // Loads the button to navigate in the project
         void load_replica_project_navigation();
+        // Save the current replica project
+        void save_replica_project();
+        // Unloads the global variables buttons to navigate in the project
+        void unload_global_variables_project_navigation(){a_replica_project_global_variables_navigation_buttons.clear();a_replica_project_global_variables_body.get()->reset();};
         // Unoads the button to navigate in the project
-        void unload_replica_project_navigation(){a_replica_project_navigation_buttons.clear();a_replica_project_main_navigation.get()->reset();};
+        void unload_replica_project_navigation(){a_replica_file_by_replica_project_navigation_buttons.clear();a_replica_project_navigation_buttons.clear();a_replica_project_main_navigation.get()->reset();};
 
 	private:
 
@@ -157,6 +176,8 @@ namespace scls {
             #define SCLS_WORKSPACE_AGATHA_PATTERN_PROJECT_FILE_PAGE 3
             #define SCLS_WORKSPACE_AGATHA_PATTERN_PROJECT_MAIN_PAGE 2
             #define SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_MAIN_PAGE 4
+            #define SCLS_WORKSPACE_AGATHA_REPLICA_FILE_EDITION_PAGE 5
+            #define SCLS_WORKSPACE_AGATHA_REPLICA_GLOBAL_VARIABLE_PAGE 6
             // Define each possible file chosen
             #define SCLS_WORKSPACE_AGATHA_OPEN_PATTERN 0
             #define SCLS_WORKSPACE_AGATHA_OPEN_REPLICA 1
@@ -177,6 +198,11 @@ namespace scls {
 
             // Currently displayed pattern project
             std::shared_ptr<Replica_Project> currently_displayed_replica_project;
+
+            // Currently displayed replica file
+            std::shared_ptr<Replica_File> currently_displayed_replica_file = 0;
+            // Name of the currently displayed replica global variable
+            std::string currently_displayed_replica_global_variable = "";
         } a_current_state;
 
         //*********
@@ -185,6 +211,11 @@ namespace scls {
         //
         //*********
 
+        // Buttons in the replica project navigation for the global variables
+        std::vector<std::shared_ptr<GUI_Text>> a_replica_project_global_variables_navigation_buttons = std::vector<std::shared_ptr<GUI_Text>>();
+
+        // Replica file by buttons in the replica project navigation
+        std::map<GUI_Text*, std::shared_ptr<Replica_File>> a_replica_file_by_replica_project_navigation_buttons = std::map<GUI_Text*, std::shared_ptr<Replica_File>>();
         // Buttons in the replica project navigation
         std::vector<std::shared_ptr<GUI_Text>> a_replica_project_navigation_buttons = std::vector<std::shared_ptr<GUI_Text>>();
 
@@ -212,6 +243,12 @@ namespace scls {
         std::shared_ptr<GUI_Object> a_pattern_project_main_footer;
         // Navigation of the pattern project part
         std::shared_ptr<GUI_Scroller> a_pattern_project_main_navigation;
+        // Body of the replica file edition part
+        std::shared_ptr<GUI_Object> a_replica_file_edition_body;
+        // Body of the replica global variable edition part
+        std::shared_ptr<GUI_Object> a_replica_global_variable_edition_body;
+        // Body of the replica global variables part
+        std::shared_ptr<GUI_Scroller> a_replica_project_global_variables_body;
         // Body of the replica project part
         std::shared_ptr<GUI_Object> a_replica_project_main_body;
         // Footer of the replica project part
@@ -225,6 +262,10 @@ namespace scls {
         std::shared_ptr<GUI_Text_Input> a_pattern_project_file_text_input;
         // Title of the pattern project body
         std::shared_ptr<GUI_Text> a_pattern_project_title;
+        // Text input of the replica file edition body
+        std::shared_ptr<GUI_Text_Input> a_replica_file_edition_text_input;
+        // Text input of the replica global variable edition body
+        std::shared_ptr<GUI_Text_Input> a_replica_global_variable_edition_text_input;
         // Title of the replica project body
         std::shared_ptr<GUI_Text> a_replica_project_title;
 
@@ -234,6 +275,8 @@ namespace scls {
         std::shared_ptr<GUI_Text> a_pattern_open_button;
         // Button to open a replica
         std::shared_ptr<GUI_Text> a_replica_open_button;
+        // Button to save a replica project
+        std::shared_ptr<GUI_Text> a_replica_project_save_button;
 	};
 }
 
