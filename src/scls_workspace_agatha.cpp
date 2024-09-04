@@ -93,13 +93,33 @@ namespace scls {
             a_pattern_project_title = *parent->new_object<GUI_Text>(object_name);
             return a_pattern_project_title;
         }
-        else if(object_name == "replica_file_edition_agatha") {
-            a_replica_file_edition_body = *parent->new_object<GUI_Object>(object_name);
-            return a_replica_file_edition_body;
+        else if(object_name == "replica_text_file_edition_agatha") {
+            a_replica_text_file_edition_body = *parent->new_object<GUI_Object>(object_name);
+            return a_replica_text_file_edition_body;
         }
         else if(object_name == "replica_global_variable_edition_agatha") {
             a_replica_global_variable_edition_body = *parent->new_object<GUI_Object>(object_name);
             return a_replica_global_variable_edition_body;
+        }
+        else if(object_name == "replica_project_export_main_footer") {
+            a_replica_export_button = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_export_button;
+        }
+        else if(object_name == "replica_project_export_path") {
+            a_replica_project_export_path = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_project_export_path;
+        }
+        else if(object_name == "replica_project_export_path_change") {
+            a_replica_project_export_path_change_button = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_project_export_path_change_button;
+        }
+        else if(object_name == "replica_project_export") {
+            a_replica_project_export_body = *parent->new_object<GUI_Object>(object_name);
+            return a_replica_project_export_body;
+        }
+        else if(object_name == "replica_project_export_title") {
+            a_replica_project_export_title = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_project_export_title;
         }
         else if(object_name == "replica_project_main") {
             a_replica_project_main_body = *parent->new_object<GUI_Text>(object_name);
@@ -121,9 +141,13 @@ namespace scls {
             a_replica_project_save_button = *parent->new_object<GUI_Text>(object_name);
             return a_replica_project_save_button;
         }
-        else if(object_name == "text_replica_file_edition_agatha") {
-            a_replica_file_edition_text_input = *parent->new_object<GUI_Text_Input>(object_name);
-            return a_replica_file_edition_text_input;
+        else if(object_name == "validate_replica_project_export") {
+            a_replica_project_validate_export_button = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_project_validate_export_button;
+        }
+        else if(object_name == "replica_text_file_edition_input_agatha") {
+            a_replica_text_file_edition_text_input = *parent->new_object<GUI_Text_Input>(object_name);
+            return a_replica_text_file_edition_text_input;
         }
         else if(object_name == "text_replica_global_variable_edition_agatha") {
             a_replica_global_variable_edition_text_input = *parent->new_object<GUI_Text_Input>(object_name);
@@ -181,18 +205,18 @@ namespace scls {
     // Display the project file dition page
     void SCLS_Workspace_Agatha_Page::display_replica_file_edition() {
         hide_all();
-        if(a_replica_file_edition_body.get() != 0) a_replica_file_edition_body.get()->set_visible(true);
+        if(a_replica_text_file_edition_body.get() != 0) a_replica_text_file_edition_body.get()->set_visible(true);
         if(a_replica_project_main_footer.get() != 0) a_replica_project_main_footer.get()->set_visible(true);
         if(a_replica_project_main_navigation.get() != 0) a_replica_project_main_navigation.get()->set_visible(true);
 
         // Add the needed datas
         a_current_state.current_page = SCLS_WORKSPACE_AGATHA_REPLICA_FILE_EDITION_PAGE;
-        if(a_replica_file_edition_text_input.get() != 0) {
+        if(a_replica_text_file_edition_text_input.get() != 0) {
             if(currently_displayed_replica_file() == 0) {
-                a_replica_file_edition_text_input.get()->set_text("Pas de fichiers à afficher");
+                a_replica_text_file_edition_text_input.get()->set_text("Pas de fichiers à afficher");
             }
             else {
-                a_replica_file_edition_text_input.get()->set_text(currently_displayed_replica_file()->content_out_pattern);
+                a_replica_text_file_edition_text_input.get()->set_text(currently_displayed_replica_file()->content_out_pattern);
             }
         }
     }
@@ -237,6 +261,34 @@ namespace scls {
         else a_replica_project_title.get()->set_text("Projet : \"" + currently_displayed_replica_project()->name() + "\"");
     }
 
+    // Display the project replica export page
+    void SCLS_Workspace_Agatha_Page::display_replica_project_export() {
+        hide_all();
+        if(a_replica_project_export_body.get() != 0) a_replica_project_export_body.get()->set_visible(true);
+        if(a_replica_project_main_footer.get() != 0) a_replica_project_main_footer.get()->set_visible(true);
+        if(a_replica_project_main_navigation.get() != 0) a_replica_project_main_navigation.get()->set_visible(true);
+
+        // Add the needed datas
+        a_current_state.current_page = SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_EXPORT_PAGE;
+        if(currently_displayed_replica_project() == 0) a_replica_project_export_title.get()->set_text("Pas de projets à exporter");
+        else a_replica_project_export_title.get()->set_text("Exporter \"" + currently_displayed_replica_project()->name() + "\"");
+        if(currently_displayed_export_path() == "") {a_replica_project_export_path.get()->set_text(to_utf_8_code_point("Veuillez choisir un chemin d'accés"));}
+        else { a_replica_project_export_path.get()->set_text(to_utf_8_code_point("Chemin d'accés : " + currently_displayed_export_path())); }
+    }
+
+    // Display the project replica export path change page
+    void SCLS_Workspace_Agatha_Page::display_replica_project_export_path_change() {
+        hide_all();
+        if(a_file_explorer_body.get() != 0) a_file_explorer_body.get()->set_visible(true);
+        if(a_help_footer.get() != 0) a_help_footer.get()->set_visible(true);
+        if(a_help_navigation.get() != 0) a_help_navigation.get()->set_visible(true);
+
+        // Set the current state
+        a_current_state.current_file_chosen = SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_EXPORT_PATH;
+        a_current_state.current_page = SCLS_WORKSPACE_AGATHA_FILE_EXPLORER_PAGE;
+        a_file_explorer_body.get()->set_current_user_document_directory();
+    }
+
     // Hide all the agatha part
     void SCLS_Workspace_Agatha_Page::hide_all() {
         // Hide all the bodies
@@ -244,8 +296,9 @@ namespace scls {
         if(a_help_body.get() != 0) a_help_body.get()->set_visible(false);
         if(a_pattern_project_file_body.get() != 0) a_pattern_project_file_body.get()->set_visible(false);
         if(a_pattern_project_main_body.get() != 0) a_pattern_project_main_body.get()->set_visible(false);
-        if(a_replica_file_edition_body.get() != 0) a_replica_file_edition_body.get()->set_visible(false);
+        if(a_replica_text_file_edition_body.get() != 0) a_replica_text_file_edition_body.get()->set_visible(false);
         if(a_replica_global_variable_edition_body.get() != 0) a_replica_global_variable_edition_body.get()->set_visible(false);
+        if(a_replica_project_export_body.get() != 0) a_replica_project_export_body.get()->set_visible(false);
         if(a_replica_project_main_body.get() != 0) a_replica_project_main_body.get()->set_visible(false);
 
         // Hide all the footers
@@ -301,6 +354,11 @@ namespace scls {
                 a_current_state.currently_displayed_replica_project = project_loaded;
                 display_replica_project();
             }
+            else if(a_current_state.current_file_chosen == SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_EXPORT_PATH) {
+                // Change the replica project export path
+                a_current_state.currently_displayed_export_path = chose_file;
+                display_replica_project_export();
+            }
         }
     }
 
@@ -342,11 +400,31 @@ namespace scls {
         }
     }
 
+    // Check the events for the replica project export page
+    void SCLS_Workspace_Agatha_Page::check_replica_project_export_events() {
+        if(a_replica_project_export_path_change_button.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            // Change the path of the project
+            display_replica_project_export_path_change();
+        }
+
+        if(a_replica_project_validate_export_button.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            if(currently_displayed_export_path() != "") {
+                // Export the project
+                export_replica_project();
+            }
+        }
+    }
+
     // Check the events for the replica project footer page
     void SCLS_Workspace_Agatha_Page::check_replica_project_footer_events() {
         if(a_replica_project_save_button.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
             // Save the replica project
             save_replica_project();
+        }
+
+        if(a_replica_export_button.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            // Export the replica project
+            display_replica_project_export();
         }
     }
 
@@ -380,13 +458,17 @@ namespace scls {
         // Pattern project navigation
         if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_PATTERN_PROJECT_MAIN_PAGE || a_current_state.current_page == SCLS_WORKSPACE_AGATHA_PATTERN_PROJECT_FILE_PAGE) check_pattern_project_navigation_events();
 
+        // Replica project export main
+        if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_EXPORT_PAGE) check_replica_project_export_events();
+
         // Replica project main
         if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_MAIN_PAGE) check_replica_project_events();
 
         // Replica project navigation
         if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_MAIN_PAGE ||
            a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_EDITION_PAGE ||
-           a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_GLOBAL_VARIABLE_PAGE) check_replica_project_navigation_events();
+           a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_GLOBAL_VARIABLE_PAGE ||
+           a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_EXPORT_PAGE) check_replica_project_navigation_events();
 
         // Replica project footer
         if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_MAIN_PAGE ||
@@ -474,6 +556,16 @@ namespace scls {
     // Replica handling
     //
     //*********
+
+    // Exports the current replica project
+    void SCLS_Workspace_Agatha_Page::export_replica_project() {
+        // Export the project
+        currently_displayed_replica_project()->export_project(currently_displayed_export_path(), window_struct()->text_image_generator());
+
+        // Reset export datas
+        a_current_state.currently_displayed_export_path = "";
+        display_replica_project();
+    }
 
     // Loads the global variables buttons to navigate in the project
     void SCLS_Workspace_Agatha_Page::load_global_variables_project_navigation() {

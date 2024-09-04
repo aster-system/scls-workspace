@@ -74,6 +74,10 @@ namespace scls {
         void display_replica_open();
         // Display the project replica page
         void display_replica_project();
+        // Display the project replica export page
+        void display_replica_project_export();
+        // Display the project replica export path change page
+        void display_replica_project_export_path_change();
 
         // Hide all the agatha part
         void hide_all();
@@ -94,6 +98,8 @@ namespace scls {
         void check_pattern_project_navigation_events();
         // Check the events for the replica project page
         void check_replica_project_events();
+        // Check the events for the replica project export page
+        void check_replica_project_export_events();
         // Check the events for the replica project footer page
         void check_replica_project_footer_events();
         // Check the events for the replica project navigation page
@@ -133,11 +139,15 @@ namespace scls {
         //
         //*********
 
+        // Returns the currently displayed export path
+        inline std::string currently_displayed_export_path() const {return a_current_state.currently_displayed_export_path;};
         // Returns the name of the currently displayed replica global variable
         inline std::string currently_displayed_replica_global_variable() const {return a_current_state.currently_displayed_replica_global_variable;};
         // Returns the currently displayed replica file
         inline Replica_File* currently_displayed_replica_file() {return a_current_state.currently_displayed_replica_file.get();};
 
+        // Exports the current replica project
+        void export_replica_project();
         // Loads an existing replica and returns it
         std::shared_ptr<Replica_Project> load_replica_project(std::string path);
         // Loads the global variables buttons to navigate in the project
@@ -178,9 +188,11 @@ namespace scls {
             #define SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_MAIN_PAGE 4
             #define SCLS_WORKSPACE_AGATHA_REPLICA_FILE_EDITION_PAGE 5
             #define SCLS_WORKSPACE_AGATHA_REPLICA_GLOBAL_VARIABLE_PAGE 6
+            #define SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_EXPORT_PAGE 7
             // Define each possible file chosen
             #define SCLS_WORKSPACE_AGATHA_OPEN_PATTERN 0
             #define SCLS_WORKSPACE_AGATHA_OPEN_REPLICA 1
+            #define SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_EXPORT_PATH 2
 
             // Current file chosen in Agatha
             unsigned short current_file_chosen = SCLS_WORKSPACE_AGATHA_OPEN_PATTERN;
@@ -199,10 +211,12 @@ namespace scls {
             // Currently displayed pattern project
             std::shared_ptr<Replica_Project> currently_displayed_replica_project;
 
-            // Currently displayed replica file
-            std::shared_ptr<Replica_File> currently_displayed_replica_file = 0;
+            // Currently chosen export path
+            std::string currently_displayed_export_path = "";
             // Name of the currently displayed replica global variable
             std::string currently_displayed_replica_global_variable = "";
+            // Currently displayed replica file
+            std::shared_ptr<Replica_File> currently_displayed_replica_file = 0;
         } a_current_state;
 
         //*********
@@ -244,9 +258,11 @@ namespace scls {
         // Navigation of the pattern project part
         std::shared_ptr<GUI_Scroller> a_pattern_project_main_navigation;
         // Body of the replica file edition part
-        std::shared_ptr<GUI_Object> a_replica_file_edition_body;
+        std::shared_ptr<GUI_Object> a_replica_text_file_edition_body;
         // Body of the replica global variable edition part
         std::shared_ptr<GUI_Object> a_replica_global_variable_edition_body;
+        // Body of the replica project export part
+        std::shared_ptr<GUI_Object> a_replica_project_export_body;
         // Body of the replica global variables part
         std::shared_ptr<GUI_Scroller> a_replica_project_global_variables_body;
         // Body of the replica project part
@@ -263,9 +279,13 @@ namespace scls {
         // Title of the pattern project body
         std::shared_ptr<GUI_Text> a_pattern_project_title;
         // Text input of the replica file edition body
-        std::shared_ptr<GUI_Text_Input> a_replica_file_edition_text_input;
+        std::shared_ptr<GUI_Text_Input> a_replica_text_file_edition_text_input;
         // Text input of the replica global variable edition body
         std::shared_ptr<GUI_Text_Input> a_replica_global_variable_edition_text_input;
+        // Path of the replica project export body
+        std::shared_ptr<GUI_Text> a_replica_project_export_path;
+        // Title of the replica project export body
+        std::shared_ptr<GUI_Text> a_replica_project_export_title;
         // Title of the replica project body
         std::shared_ptr<GUI_Text> a_replica_project_title;
 
@@ -273,10 +293,16 @@ namespace scls {
 
         // Button to open a pattern
         std::shared_ptr<GUI_Text> a_pattern_open_button;
+        // Button to export a replica
+        std::shared_ptr<GUI_Text> a_replica_export_button;
         // Button to open a replica
         std::shared_ptr<GUI_Text> a_replica_open_button;
+        // Button to change a path in an export of a replica project
+        std::shared_ptr<GUI_Text> a_replica_project_export_path_change_button;
         // Button to save a replica project
         std::shared_ptr<GUI_Text> a_replica_project_save_button;
+        // Button to validate an export of a replica project
+        std::shared_ptr<GUI_Text> a_replica_project_validate_export_button;
 	};
 }
 
