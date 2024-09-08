@@ -124,6 +124,20 @@
 	<x value=1/2 type=object_scale>
 	<y attach=bottom offset=25>
 </gui_object>
+<gui_object name="agatha_pattern_project_main_footer_save" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Sauvegarder</content>
+	<height value=1/3 type=scale>
+	<parent name="pattern_project_main_footer">
+	<texture alignment=fit>
+	<width value=1/5 type=scale>
+	<x value=0/5 type=scale>
+	<y attach=top>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
 
 // Navigation
 
@@ -303,23 +317,80 @@
 
 //***************************************************
 //
-//   REPLICA TEXT FILE EDITION
+//   REPLICA FILE EDITION
 //
 //***************************************************
 
-<gui_object name="replica_text_file_edition_agatha">
+<gui_object name="agatha_replica_file_edition">
 	<border bottom=1 left=1 right=1 top=1>
 	<height value=13/20 type=scale>
 	<width value=4/5 type=scale>
 	<x attach=right offset=25>
 	<y attach=bottom attached_object="header_agatha" offset=15>
 </gui_object>
-<gui_object name="replica_text_file_edition_input_agatha" type="text_input">
-	<height value=1 type=scale>
-	<parent name="replica_text_file_edition_agatha">
-	<width value=1 type=scale>
+<gui_object name="agatha_replica_file_edition_title" type="text">
+	<content font_size=75>Fichier réplique</content>
+	<height value=100 type=pixel>
+	<parent name="agatha_replica_file_edition">
+	<width value=9/10 type=scale>
 	<x value=1/2 type=object_scale>
-	<xy value=1/2 type=object_scale>
+	<y attach=top offset=11>
+</gui_object>
+// Variable handling
+<gui_object name="agatha_replica_file_edition_variable_title" type="text">
+	<content font_size=75>Variables</content>
+	<height value=100 type=pixel>
+	<parent name="agatha_replica_file_edition">
+	<width value=9/20 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_edition_title" offset=10>
+</gui_object>
+<gui_object name="agatha_replica_file_edition_variable" type="scroller">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=3/5 type=scale>
+	<parent name="agatha_replica_file_edition">
+	<width value=9/20 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_edition_variable_title" offset=10>
+</gui_object>
+
+//***************************************************
+//
+//   REPLICA FILE VARIABLE EDITION
+//
+//***************************************************
+
+<gui_object name="agatha_replica_file_variable_edition">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>
+<gui_object name="agatha_replica_file_variable_edition_title" type="text">
+	<content font_size=75>Fichier réplique</content>
+	<height value=100 type=pixel>
+	<parent name="agatha_replica_file_variable_edition">
+	<width value=9/10 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=top offset=11>
+</gui_object>
+// Content handling
+<gui_object name="agatha_replica_file_variable_edition_content_title" type="text">
+	<content font_size=75>Texte</content>
+	<height value=100 type=pixel>
+	<parent name="agatha_replica_file_variable_edition">
+	<width value=9/20 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_variable_edition_title" offset=10>
+</gui_object>
+<gui_object name="agatha_replica_file_variable_edition_content" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=1/5 type=scale>
+	<parent name="agatha_replica_file_variable_edition">
+	<width value=9/10 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_variable_edition_content_title" offset=10>
 </gui_object>
 
 //***************************************************
@@ -338,6 +409,27 @@
 <gui_object name="text_replica_global_variable_edition_agatha" type="text_input">
 	<height value=1 type=scale>
 	<parent name="replica_global_variable_edition_agatha">
+	<width value=1 type=scale>
+	<x value=1/2 type=object_scale>
+	<xy value=1/2 type=object_scale>
+</gui_object>
+
+//***************************************************
+//
+//   REPLICA TEXT FILE EDITION
+//
+//***************************************************
+
+<gui_object name="replica_text_file_edition_agatha">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>
+<gui_object name="replica_text_file_edition_input_agatha" type="text_input">
+	<height value=1 type=scale>
+	<parent name="replica_text_file_edition_agatha">
 	<width value=1 type=scale>
 	<x value=1/2 type=object_scale>
 	<xy value=1/2 type=object_scale>

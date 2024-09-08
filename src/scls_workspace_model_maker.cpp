@@ -264,10 +264,7 @@ namespace scls {
     }
 
 	// SCLS_Workspace_Model_Maker_Page constructor
-    SCLS_Workspace_Model_Maker_Page::SCLS_Workspace_Model_Maker_Page(_Window_Advanced_Struct* window_struct, std::string name) : GUI_Page(window_struct, name) {
-        std::shared_ptr<model_maker::Solid> gear = model_maker::polygon_3d(__gear_solid(16));
-        gear.get()->binary_stl_complete().get()->save("form.stl");
-    };
+    SCLS_Workspace_Model_Maker_Page::SCLS_Workspace_Model_Maker_Page(_Window_Advanced_Struct* window_struct, std::string name) : GUI_Page(window_struct, name) {};
 
     // Create an object from a type
     std::shared_ptr<GUI_Object> SCLS_Workspace_Model_Maker_Page::__create_loaded_object_from_type(std::string object_name, std::string object_type, GUI_Object* parent) {
