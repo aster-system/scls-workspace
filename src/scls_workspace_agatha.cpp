@@ -41,7 +41,11 @@ namespace scls {
 
     // Create an object from a type
     std::shared_ptr<GUI_Object> SCLS_Workspace_Agatha_Page::__create_loaded_object_from_type(std::string object_name, std::string object_type, GUI_Object* parent) {
-        if(object_name == "agatha_pattern_project_main_footer_save") {
+        if(object_name == "agatha_pattern_project_main_footer_replica") {
+            a_pattern_project_main_footer_replica = *parent->new_object<GUI_Scroller>(object_name);
+            return a_pattern_project_main_footer_replica;
+        }
+        else if(object_name == "agatha_pattern_project_main_footer_save") {
             a_pattern_project_main_footer_save = *parent->new_object<GUI_Text>(object_name);
             return a_pattern_project_main_footer_save;
         }
@@ -68,6 +72,10 @@ namespace scls {
         else if(object_name == "agatha_replica_file_variable_edition_title") {
             a_replica_file_variable_edition_title = *parent->new_object<GUI_Text>(object_name);
             return a_replica_file_variable_edition_title;
+        }
+        else if(object_name == "agatha_replica_project_main_footer_pattern") {
+            a_replica_project_pattern_button = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_project_pattern_button;
         }
         else if(object_name == "file_explorer") {
             a_file_explorer_body = *parent->new_object<GUI_File_Explorer>(object_name);
@@ -530,6 +538,12 @@ namespace scls {
             // Export the replica project
             display_replica_project_export();
         }
+
+        if(a_replica_project_pattern_button.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            // Open the pattern of the replica project
+            a_current_state.currently_displayed_pattern_project = currently_displayed_replica_project()->attached_pattern_shared_ptr();
+            display_pattern_project();
+        }
     }
 
     // Check the events for the replica project navigation page
@@ -663,6 +677,42 @@ namespace scls {
 
             // Finalize the creation
             a_pattern_project_main_navigation.get()->check_scroller();
+        }
+    }
+
+    // Loads the buttons in the pattern project replicas
+    void SCLS_Workspace_Agatha_Page::load_pattern_project_replica() {
+        unload_pattern_project_replica();
+
+        if(currently_displayed_pattern_project() != 0) {
+            // Create the buttons
+            std::shared_ptr<GUI_Text> home_button;
+            std::vector<std::shared_ptr<Replica_Project>> replicas; // = currently_displayed_pattern_project()->patterns();
+            for(int i = 0;i<static_cast<int>(replicas.size());i++) {
+                // Create the button
+                home_button = *a_pattern_project_main_footer_replica.get()->new_object<GUI_Text>("pattern_project_replica_button_" + std::to_string(i));
+                home_button.get()->set_font_size(40);
+                home_button.get()->set_height_in_pixel(50);
+                home_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
+                // home_button.get()->set_text(patterns[i].get()->name().to_std_string());
+                home_button.get()->set_texture_alignment(Alignment_Texture::T_Fit);
+                home_button.get()->set_width_in_scale(1);
+                home_button.get()->set_x_in_scale(0);
+                // a_current_state.pattern_project_navigation_buttons.push_back(home_button);
+                // a_current_state.pattern_project_navigation_files.push_back(patterns[i]);
+            }
+
+            /*// Place the buttons
+            std::shared_ptr<GUI_Text> last_button = a_current_state.pattern_project_navigation_buttons[a_current_state.pattern_project_navigation_buttons.size() - 1];
+            last_button.get()->attach_bottom_in_parent();
+            for(int i = 1;i<static_cast<int>(a_current_state.pattern_project_navigation_buttons.size());i++) {
+                unsigned int current_i = a_current_state.pattern_project_navigation_buttons.size() - (i + 1);
+                a_current_state.pattern_project_navigation_buttons[current_i].get()->attach_top_of_object_in_parent(last_button);
+                last_button = a_current_state.pattern_project_navigation_buttons[current_i];
+            } //*/
+
+            // Finalize the creation
+            a_pattern_project_main_footer_replica.get()->check_scroller();
         }
     }
 

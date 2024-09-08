@@ -140,8 +140,12 @@ namespace scls {
         std::shared_ptr<Pattern_Project> load_pattern_project(std::string path);
         // Loads the buttons in the pattern project navigation
         void load_pattern_project_navigation();
+        // Loads the buttons in the pattern project replicas
+        void load_pattern_project_replica();
         // Unloads the buttons in the pattern project navigation
         void unload_pattern_project_navigation();
+        // Unloads the buttons in the pattern project replicas
+        void unload_pattern_project_replica(){a_pattern_project_main_footer_replica.get()->reset();};
 
         // Saves the current pattern project
         void save_pattern_project();
@@ -284,6 +288,8 @@ namespace scls {
         std::shared_ptr<GUI_Object> a_pattern_project_main_body;
         // Footer of the pattern project part
         std::shared_ptr<GUI_Object> a_pattern_project_main_footer;
+        // Replica container of the pattern project footer part
+        std::shared_ptr<GUI_Scroller> a_pattern_project_main_footer_replica;
         // Navigation of the pattern project part
         std::shared_ptr<GUI_Scroller> a_pattern_project_main_navigation;
         // Body of the replica file edition part
@@ -342,6 +348,8 @@ namespace scls {
         std::shared_ptr<GUI_Text> a_replica_open_button;
         // Button to change a path in an export of a replica project
         std::shared_ptr<GUI_Text> a_replica_project_export_path_change_button;
+        // Pattern button of the replica footer
+        std::shared_ptr<GUI_Text> a_replica_project_pattern_button;
         // Button to save a replica project
         std::shared_ptr<GUI_Text> a_replica_project_save_button;
         // Button to validate an export of a replica project
