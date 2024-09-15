@@ -38,9 +38,9 @@
 	<x value=0 type=scale>
 	<y attach=top>
 
-//	<when event="overflighted">
-//		<cursor type=pointing_hand_cursor>
-//	</when>
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
 </gui_object>
 <gui_object name="help_footer_open_pattern" type="text">
 	<border bottom=1 left=1 right=1 top=1>
@@ -95,6 +95,82 @@
 
 //***************************************************
 //
+//   PATTERN PROJECT CREATOR
+//
+//***************************************************
+
+<gui_object name="agatha_pattern_project_creator_body">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>
+<gui_object name="agatha_pattern_project_creator_body_title" type="text">
+	<content font_size=75>Créer un projet</content>
+	<height value=100 type=pixel>
+	<parent name="agatha_pattern_project_creator_body">
+	<width value=9/10 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=top offset=11>
+</gui_object>
+<gui_object name="agatha_pattern_project_creator_name_title" type="text">
+	<content font_size=35>Nom du projet</content>
+	<height value=40 type=pixel>
+	<parent name="agatha_pattern_project_creator_body">
+	<texture alignment=fit>
+	<width value=2/5 type=scale>
+	<x value=2/5 type=object_scale>
+	<y attach=bottom attached_object="agatha_pattern_project_creator_body_title" offset=10>
+</gui_object>
+<gui_object name="agatha_pattern_project_creator_name" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=40 type=pixel>
+	<parent name="agatha_pattern_project_creator_body">
+	<texture alignment=fit>
+	<width value=1/5 type=scale>
+	<x value=4/5 type=object_scale>
+	<y attach=bottom attached_object="agatha_pattern_project_creator_body_title" offset=10>
+</gui_object>
+<gui_object name="agatha_pattern_project_creator_path" type="text">
+	<content font_size=35>Chemin d'accés</content>
+	<height value=40 type=pixel>
+	<parent name="agatha_pattern_project_creator_body">
+	<texture alignment=fit>
+	<width value=2/5 type=scale>
+	<x value=2/5 type=object_scale>
+	<y attach=bottom attached_object="agatha_pattern_project_creator_name_title" offset=10>
+</gui_object>
+<gui_object name="agatha_pattern_project_creator_path_change" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=35>Changer le chemin d'accés</content>
+	<height value=40 type=pixel>
+	<parent name="agatha_pattern_project_creator_body">
+	<texture alignment=fit>
+	<width value=1/5 type=scale>
+	<x value=4/5 type=object_scale>
+	<y attach=bottom attached_object="agatha_pattern_project_creator_name_title" offset=10>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="agatha_pattern_project_creator_validate" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Valider la création</content>
+	<height value=1/8 type=scale>
+	<parent name="agatha_pattern_project_creator_body">
+	<width value=1/6 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=15>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+
+//***************************************************
+//
 //   PATTERN PROJECT MAIN
 //
 //***************************************************
@@ -124,15 +200,43 @@
 	<x value=1/2 type=object_scale>
 	<y attach=bottom offset=25>
 </gui_object>
-<gui_object name="agatha_pattern_project_main_footer_save" type="text">
+<gui_object name="agatha_pattern_project_main_footer_new_pattern_file" type="text">
 	<border bottom=1 left=1 right=1 top=1>
-	<content font_size=30>Sauvegarder</content>
-	<height value=1/3 type=scale>
+	<content font_size=40>Nouveau fichier modèle</content>
+	<height value=40 type=pixel>
 	<parent name="pattern_project_main_footer">
 	<texture alignment=fit>
 	<width value=1/5 type=scale>
 	<x value=0/5 type=scale>
 	<y attach=top>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="agatha_pattern_project_main_footer_new_replica" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=40>Nouvelle réplique</content>
+	<height value=40 type=pixel>
+	<parent name="pattern_project_main_footer">
+	<texture alignment=fit>
+	<width value=1/5 type=scale>
+	<x value=1/5 type=scale>
+	<y attach=top>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="agatha_pattern_project_main_footer_save" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=40>Sauvegarder</content>
+	<height value=40 type=pixel>
+	<parent name="pattern_project_main_footer">
+	<texture alignment=fit>
+	<width value=1/5 type=scale>
+	<x value=0/5 type=scale>
+	<y attach=bottom>
 
 	<when event="overflighted">
 		<cursor type=pointing_hand_cursor>
@@ -186,6 +290,135 @@
 	<width value=1 type=scale>
 	<x value=0>
 	<y value=0>
+</gui_object>
+
+//***************************************************
+//
+//   PATTERN PROJECT FILE CREATOR
+//
+//***************************************************
+
+<gui_object name="agatha_pattern_project_file_creator_body">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>
+<gui_object name="agatha_pattern_project_file_creator_title" type="text">
+	<content font_size=75>Créer un fichier modèle</content>
+	<height value=100 type=pixel>
+	<parent name="agatha_pattern_project_file_creator_body">
+	<width value=9/10 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=top offset=11>
+</gui_object>
+<gui_object name="agatha_pattern_project_file_creator_name_title" type="text">
+	<content font_size=35>Nom du fichier</content>
+	<height value=40 type=pixel>
+	<parent name="agatha_pattern_project_file_creator_body">
+	<texture alignment=fit>
+	<width value=2/5 type=scale>
+	<x value=2/5 type=object_scale>
+	<y attach=bottom attached_object="agatha_pattern_project_file_creator_title" offset=10>
+</gui_object>
+<gui_object name="agatha_pattern_project_file_creator_name" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=40 type=pixel>
+	<parent name="agatha_pattern_project_file_creator_body">
+	<texture alignment=fit>
+	<width value=1/5 type=scale>
+	<x value=4/5 type=object_scale>
+	<y attach=bottom attached_object="agatha_pattern_project_file_creator_title" offset=10>
+</gui_object>
+<gui_object name="agatha_pattern_project_file_creator_validate" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Valider la création</content>
+	<height value=1/8 type=scale>
+	<parent name="agatha_pattern_project_file_creator_body">
+	<width value=1/6 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=15>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+
+//***************************************************
+//
+//   REPLICA PROJECT CREATOR
+//
+//***************************************************
+
+<gui_object name="agatha_replica_project_creator_body">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>
+<gui_object name="agatha_replica_project_creator_body_title" type="text">
+	<content font_size=75>Créer une réplique</content>
+	<height value=100 type=pixel>
+	<parent name="agatha_replica_project_creator_body">
+	<width value=9/10 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=top offset=11>
+</gui_object>
+<gui_object name="agatha_replica_project_creator_name_title" type="text">
+	<content font_size=35>Nom de la réplique</content>
+	<height value=40 type=pixel>
+	<parent name="agatha_replica_project_creator_body">
+	<texture alignment=fit>
+	<width value=2/5 type=scale>
+	<x value=2/5 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_project_creator_body_title" offset=10>
+</gui_object>
+<gui_object name="agatha_replica_project_creator_name" type="text_input">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=40 type=pixel>
+	<parent name="agatha_replica_project_creator_body">
+	<texture alignment=fit>
+	<width value=1/5 type=scale>
+	<x value=4/5 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_project_creator_body_title" offset=10>
+</gui_object>
+<gui_object name="agatha_replica_project_creator_path" type="text">
+	<content font_size=35>Chemin d'accés</content>
+	<height value=40 type=pixel>
+	<parent name="agatha_replica_project_creator_body">
+	<texture alignment=fit>
+	<width value=2/5 type=scale>
+	<x value=2/5 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_project_creator_name_title" offset=10>
+</gui_object>
+<gui_object name="agatha_replica_project_creator_path_change" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=35>Changer le chemin d'accés</content>
+	<height value=40 type=pixel>
+	<parent name="agatha_replica_project_creator_body">
+	<texture alignment=fit>
+	<width value=1/5 type=scale>
+	<x value=4/5 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_project_creator_name_title" offset=10>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="agatha_replica_project_creator_validate" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Valider la création</content>
+	<height value=1/8 type=scale>
+	<parent name="agatha_replica_project_creator_body">
+	<width value=1/6 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=15>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
 </gui_object>
 
 //***************************************************
