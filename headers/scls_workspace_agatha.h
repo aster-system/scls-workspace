@@ -72,6 +72,8 @@ namespace scls {
         void display_pattern_project_file();
         // Display the project pattern file cretor page
         void display_pattern_project_file_creator();
+        // Display the replica project file creator page
+        void display_replica_file_creator();
         // Display the project file edition page
         void display_replica_file_edition();
         // Display the project file variable edition page
@@ -118,6 +120,8 @@ namespace scls {
         void check_pattern_project_main_events();
         // Check the events for the pattern project navigation page
         void check_pattern_project_navigation_events();
+        // Check the events for the replica file creation page
+        void check_replica_file_creator_events();
         // Check the events for the replica file edition page
         void check_replica_file_edition_events();
         // Check the events for the replica project creator page
@@ -186,6 +190,8 @@ namespace scls {
 
         // Returns the currently displayed export path
         inline std::string currently_displayed_export_path() const {return a_current_state.currently_displayed_export_path;};
+        // Returns the currently displayed replica file creator name
+        inline std::string currently_displayed_replica_file_creator_name() const {return a_replica_file_creator_name.get()->text();};
         // Returns the currently displayed replica project creator name
         inline std::string currently_displayed_replica_project_creator_name() const {return a_replica_project_creator_name.get()->text();};
         // Returns the currently displayed replica project creator path
@@ -202,6 +208,8 @@ namespace scls {
         // Unloads the button for the variable in a replica file project
         void unload_replica_file_edition_variable(){a_replica_file_edition_variable_by_buttons.clear();a_replica_file_edition_variable_buttons.clear();a_replica_file_edition_variable.get()->reset();};
 
+        // Creates a new replica file and returns it
+        std::shared_ptr<Replica_File> create_replica_file();
         // Exports the current replica project
         void export_replica_project();
         // Returns a loaded replica by its path
@@ -215,13 +223,17 @@ namespace scls {
         std::shared_ptr<Replica_Project> load_replica_project(std::string path);
         // Loads the global variables buttons to navigate in the project
         void load_global_variables_project_navigation();
+        // Loads the button to navigate in the replica file creator
+        void load_replica_file_creator_navigation();
         // Loads the button to navigate in the project
         void load_replica_project_navigation();
         // Save the current replica project
         void save_replica_project();
         // Unloads the global variables buttons to navigate in the project
         void unload_global_variables_project_navigation(){a_replica_project_global_variables_navigation_buttons.clear();a_replica_project_global_variables_body.get()->reset();};
-        // Unoads the button to navigate in the project
+        // Unloads the button to navigate in the replica file creator
+        void unload_replica_file_creator_navigation(){a_replica_file_creator_navigation.get()->reset();};
+        // Unloads the button to navigate in the project
         void unload_replica_project_navigation(){a_replica_file_by_replica_project_navigation_buttons.clear();a_replica_project_navigation_buttons.clear();a_replica_project_main_navigation.get()->reset();};
 
 	private:
@@ -242,6 +254,7 @@ namespace scls {
             #define SCLS_WORKSPACE_AGATHA_PATTERN_PROJECT_FILE_CREATOR_PAGE 11
             #define SCLS_WORKSPACE_AGATHA_PATTERN_PROJECT_MAIN_PAGE 2
             #define SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_MAIN_PAGE 4
+            #define SCLS_WORKSPACE_AGATHA_REPLICA_FILE_CREATOR_PAGE 13
             #define SCLS_WORKSPACE_AGATHA_REPLICA_FILE_EDITION_PAGE 5
             #define SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_EDITION_PAGE 9
             #define SCLS_WORKSPACE_AGATHA_REPLICA_GLOBAL_VARIABLE_PAGE 6
@@ -350,6 +363,10 @@ namespace scls {
         std::shared_ptr<GUI_Scroller> a_pattern_project_main_footer_replica;
         // Navigation of the pattern project part
         std::shared_ptr<GUI_Scroller> a_pattern_project_main_navigation;
+        // Body of the replica file creator part
+        std::shared_ptr<GUI_Object> a_replica_file_creator_body;
+        // Navigation of the replica file creator part
+        std::shared_ptr<GUI_Scroller_Choice> a_replica_file_creator_navigation;
         // Body of the replica file edition part
         std::shared_ptr<GUI_Object> a_replica_file_edition_body;
         // Body of the replica file edition variable part
@@ -385,6 +402,8 @@ namespace scls {
         std::shared_ptr<GUI_Text_Input> a_pattern_project_file_text_input;
         // Title of the pattern project body
         std::shared_ptr<GUI_Text> a_pattern_project_title;
+        // Name of the replica file creator
+        std::shared_ptr<GUI_Text_Input> a_replica_file_creator_name;
         // Title of the replica file edition body
         std::shared_ptr<GUI_Text> a_replica_file_edition_title;
         // Content of the replica file variable edition body
@@ -426,6 +445,8 @@ namespace scls {
         std::shared_ptr<GUI_Text> a_pattern_project_main_footer_save;
         // Button to export a replica
         std::shared_ptr<GUI_Text> a_replica_export_button;
+        // Button to validate the creation of a replica file
+        std::shared_ptr<GUI_Text> a_replica_file_creator_validate;
         // Button to open a replica
         std::shared_ptr<GUI_Text> a_replica_open_button;
         // Button to change a path in an creator of a replica project
@@ -434,6 +455,8 @@ namespace scls {
         std::shared_ptr<GUI_Text> a_replica_project_creator_validate;
         // Button to change a path in an export of a replica project
         std::shared_ptr<GUI_Text> a_replica_project_export_path_change_button;
+        // Button to add a replica file to a replica project
+        std::shared_ptr<GUI_Text> a_replica_project_footer_new_replica_file_button;
         // Pattern button of the replica footer
         std::shared_ptr<GUI_Text> a_replica_project_pattern_button;
         // Button to save a replica project

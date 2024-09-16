@@ -481,98 +481,65 @@
 
 //***************************************************
 //
-//   REPLICA PROJECT MAIN
+//   REPLICA PROJECT FILE CREATOR
 //
 //***************************************************
 
-<gui_object name="replica_project_main">
+<gui_object name="agatha_replica_file_creator">
 	<border bottom=1 left=1 right=1 top=1>
 	<height value=13/20 type=scale>
 	<width value=4/5 type=scale>
 	<x attach=right offset=25>
 	<y attach=bottom attached_object="header_agatha" offset=15>
 </gui_object>
-<gui_object name="replica_project_main_title" type="text">
-	<content font_size=75>Réplique</content>
+<gui_object name="agatha_replica_file_creator_title" type="text">
+	<content font_size=75>Nouveau fichier réplique</content>
 	<height value=100 type=pixel>
-	<parent name="replica_project_main">
+	<parent name="agatha_replica_file_creator">
 	<width value=9/10 type=scale>
 	<x value=1/2 type=object_scale>
 	<y attach=top offset=11>
 </gui_object>
-// Global variable handler
-<gui_object name="title_global_variable_replica_project_main" type="text">
-	<content font_size=75>Variables globales</content>
-	<height value=100 type=pixel>
-	<parent name="replica_project_main">
-	<width value=9/10 type=scale>
-	<x value=1/2 type=object_scale>
-	<y attach=bottom attached_object="replica_project_main_title" offset=10>
+<gui_object name="agatha_replica_file_creator_name_title" type="text">
+	<content font_size=35>Nom du fichier</content>
+	<height value=40 type=pixel>
+	<parent name="agatha_replica_file_creator">
+	<texture alignment=fit>
+	<width value=2/5 type=scale>
+	<x value=2/5 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_creator_title" offset=10>
 </gui_object>
-<gui_object name="global_variable_replica_project_main" type="scroller">
+<gui_object name="agatha_replica_file_creator_name" type="text_input">
 	<border bottom=1 left=1 right=1 top=1>
-	<height value=3/5 type=scale>
-	<parent name="replica_project_main">
-	<width value=9/10 type=scale>
-	<x value=1/2 type=object_scale>
-	<y attach=bottom attached_object="title_global_variable_replica_project_main" offset=10>
-</gui_object>
-
-// Footer
-
-<gui_object name="replica_project_main_footer">
-	<border bottom=1 left=1 right=1 top=1>
-	<height value=1/4 type=scale>
-	<width value=8/9 type=scale>
-	<x value=1/2 type=object_scale>
-	<y attach=bottom offset=25>
-</gui_object>
-<gui_object name="replica_project_export_main_footer" type="text">
-	<border bottom=1 left=1 right=1 top=1>
-	<content font_size=30>Exporter</content>
-	<height value=1/3 type=scale>
-	<parent name="replica_project_main_footer">
+	<height value=40 type=pixel>
+	<parent name="agatha_replica_file_creator">
 	<texture alignment=fit>
 	<width value=1/5 type=scale>
-	<x attach=right>
-	<y attach=top>
-
-	<when event="overflighted">
-		<cursor type=pointing_hand_cursor>
-	</when>
+	<x value=4/5 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_creator_title" offset=10>
 </gui_object>
-<gui_object name="replica_project_save_main_footer" type="text">
+<gui_object name="agatha_replica_file_creator_validate" type="text">
 	<border bottom=1 left=1 right=1 top=1>
-	<content font_size=30>Sauvegarder</content>
-	<height value=1/3 type=scale>
-	<parent name="replica_project_main_footer">
+	<content font_size=30>Valider la création</content>
+	<height value=1/8 type=scale>
+	<parent name="agatha_replica_file_creator">
 	<texture alignment=fit>
-	<width value=1/5 type=scale>
-	<x value=0/5 type=scale>
-	<y attach=top>
-
-	<when event="overflighted">
-		<cursor type=pointing_hand_cursor>
-	</when>
-</gui_object>
-<gui_object name="agatha_replica_project_main_footer_pattern" type="text">
-	<border bottom=1 left=1 right=1 top=1>
-	<content font_size=30>Ouvrir le modèle</content>
-	<height value=1/3 type=scale>
-	<parent name="replica_project_main_footer">
-	<texture alignment=fit>
-	<width value=1/5 type=scale>
-	<x attach=left>
-	<y attach=bottom>
+	<width value=1/6 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=10>
 
 	<when event="overflighted">
 		<cursor type=pointing_hand_cursor>
 	</when>
 </gui_object>
 
-// Navigation
+//***************************************************
+//
+//   REPLICA PROJECT FILE CREATOR NAVIGATION
+//
+//***************************************************
 
-<gui_object name="replica_project_main_navigation" type="scroller">
+<gui_object name="agatha_replica_file_creator_navigation" type="scroller">
 	<border bottom=1 left=1 right=1 top=1>
 	<height value=13/20 type=scale>
 	<width value=3/20 type=scale>
@@ -582,7 +549,7 @@
 
 //***************************************************
 //
-//   REPLICA FILE EDITION
+//   REPLICA PROJECT FILE EDITION
 //
 //***************************************************
 
@@ -621,7 +588,7 @@
 
 //***************************************************
 //
-//   REPLICA FILE VARIABLE EDITION
+//   REPLICA PROJECT FILE VARIABLE EDITION
 //
 //***************************************************
 
@@ -660,7 +627,77 @@
 
 //***************************************************
 //
-//   REPLICA GLOBAL VARIABLE EDITION
+//   REPLICA PROJECT FOOTER
+//
+//***************************************************
+
+<gui_object name="replica_project_main_footer">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=1/4 type=scale>
+	<width value=8/9 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=25>
+</gui_object>
+<gui_object name="replica_project_export_main_footer" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Exporter</content>
+	<height value=1/3 type=scale>
+	<parent name="replica_project_main_footer">
+	<texture alignment=fit>
+	<width value=1/5 type=scale>
+	<x attach=right>
+	<y attach=top>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="agatha_replica_project_footer_new_replica_file" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Nouveau fichier réplique</content>
+	<height value=1/3 type=scale>
+	<parent name="replica_project_main_footer">
+	<texture alignment=fit>
+	<width value=1/5 type=scale>
+	<x value=1/5 type=scale>
+	<y attach=top>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="replica_project_save_main_footer" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Sauvegarder</content>
+	<height value=1/3 type=scale>
+	<parent name="replica_project_main_footer">
+	<texture alignment=fit>
+	<width value=1/5 type=scale>
+	<x value=0/5 type=scale>
+	<y attach=top>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="agatha_replica_project_main_footer_pattern" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Ouvrir le modèle</content>
+	<height value=1/3 type=scale>
+	<parent name="replica_project_main_footer">
+	<texture alignment=fit>
+	<width value=1/5 type=scale>
+	<x attach=left>
+	<y attach=bottom>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+
+//***************************************************
+//
+//   REPLICA PROJECT GLOBAL VARIABLE EDITION
 //
 //***************************************************
 
@@ -677,6 +714,55 @@
 	<width value=1 type=scale>
 	<x value=1/2 type=object_scale>
 	<xy value=1/2 type=object_scale>
+</gui_object>
+
+//***************************************************
+//
+//   REPLICA PROJECT MAIN
+//
+//***************************************************
+
+<gui_object name="replica_project_main">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>
+<gui_object name="replica_project_main_title" type="text">
+	<content font_size=75>Réplique</content>
+	<height value=100 type=pixel>
+	<parent name="replica_project_main">
+	<width value=9/10 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=top offset=11>
+</gui_object>
+// Global variable handler
+<gui_object name="title_global_variable_replica_project_main" type="text">
+	<content font_size=75>Variables globales</content>
+	<height value=100 type=pixel>
+	<parent name="replica_project_main">
+	<width value=9/10 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom attached_object="replica_project_main_title" offset=10>
+</gui_object>
+<gui_object name="global_variable_replica_project_main" type="scroller">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=3/5 type=scale>
+	<parent name="replica_project_main">
+	<width value=9/10 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom attached_object="title_global_variable_replica_project_main" offset=10>
+</gui_object>
+
+// Navigation
+
+<gui_object name="replica_project_main_navigation" type="scroller">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=3/20 type=scale>
+	<x attach=left offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
 </gui_object>
 
 //***************************************************
