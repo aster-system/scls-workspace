@@ -232,7 +232,7 @@ namespace scls {
         // Unloads the global variables buttons to navigate in the project
         void unload_global_variables_project_navigation(){a_replica_project_global_variables_navigation_buttons.clear();a_replica_project_global_variables_body.get()->reset();};
         // Unloads the button to navigate in the replica file creator
-        void unload_replica_file_creator_navigation(){a_replica_file_creator_navigation.get()->reset();};
+        void unload_replica_file_creator_navigation(){a_replica_file_creator_navigation_buttons_with_pattern.clear();a_replica_file_creator_navigation_buttons.clear();a_replica_file_creator_navigation.get()->reset();};
         // Unloads the button to navigate in the project
         void unload_replica_project_navigation(){a_replica_file_by_replica_project_navigation_buttons.clear();a_replica_project_navigation_buttons.clear();a_replica_project_main_navigation.get()->reset();};
 
@@ -330,6 +330,9 @@ namespace scls {
 
         // Replica file by buttons in the replica project navigation
         std::map<GUI_Text*, std::shared_ptr<Replica_File>> a_replica_file_by_replica_project_navigation_buttons = std::map<GUI_Text*, std::shared_ptr<Replica_File>>();
+        // Buttons in the replica file creator navigation
+        std::vector<std::shared_ptr<GUI_Text>> a_replica_file_creator_navigation_buttons = std::vector<std::shared_ptr<GUI_Text>>();
+        std::map<std::string, std::shared_ptr<scls::Text_Pattern>> a_replica_file_creator_navigation_buttons_with_pattern = std::map<std::string, std::shared_ptr<scls::Text_Pattern>>();
         // Buttons in the replica project navigation
         std::vector<std::shared_ptr<GUI_Text>> a_replica_project_navigation_buttons = std::vector<std::shared_ptr<GUI_Text>>();
 

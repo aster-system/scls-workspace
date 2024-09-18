@@ -1078,7 +1078,14 @@ namespace scls {
 
     // Creates a new replica file and returns it
     std::shared_ptr<Replica_File> SCLS_Workspace_Agatha_Page::create_replica_file() {
-        std::shared_ptr<Replica_File> created_file = currently_displayed_replica_project()->new_replica_file(currently_displayed_replica_file_creator_name(), 0);
+        // Get the needed pattern
+        std::shared_ptr<scls::Text_Pattern> used_pattern;
+        if(!a_replica_file_creator_navigation.get()->contains_selected_object("replica_file_creator_navigation_0")) {
+            used_pattern = a_replica_file_creator_navigation_buttons_with_pattern[a_replica_file_creator_navigation.get()->currently_selected_objects()[0]];
+        }
+
+        // Create the file
+        std::shared_ptr<Replica_File> created_file = currently_displayed_replica_project()->new_replica_file(currently_displayed_replica_file_creator_name(), used_pattern.get());
 
         return created_file;
     }
@@ -1133,6 +1140,51 @@ namespace scls {
     // Loads the button to navigate in the replica file creator
     void SCLS_Workspace_Agatha_Page::load_replica_file_creator_navigation() {
         unload_replica_file_creator_navigation();
+
+        // Load each global variables
+        if(currently_displayed_replica_project()->attached_pattern() != 0) {
+            // Create the buttons
+            std::vector<std::shared_ptr<Text_Pattern>>& patterns = currently_displayed_replica_project()->attached_pattern()->patterns();
+            std::shared_ptr<GUI_Text> home_button = *a_replica_file_creator_navigation.get()->new_object<GUI_Text>("replica_file_creator_navigation_0");
+            home_button.get()->set_font_size(40);
+            home_button.get()->set_height_in_pixel(50);
+            home_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
+            home_button.get()->set_text(scls::to_utf_8_code_point("Sans modèle"));
+            home_button.get()->set_texture_alignment(Alignment_Texture::T_Fit);
+            home_button.get()->set_width_in_scale(1);
+            home_button.get()->set_x_in_scale(0);
+            home_button.get()->set_y_in_scale(0);
+            a_replica_file_creator_navigation_buttons.push_back(home_button);
+
+            for(int i = 0;i<static_cast<int>(patterns.size());i++) {
+                // Create the button
+                std::string button_name = "replica_file_creator_navigation_" + std::to_string(1 + i);
+                home_button = *a_replica_file_creator_navigation.get()->new_object<GUI_Text>(button_name);
+                home_button.get()->set_font_size(40);
+                home_button.get()->set_height_in_pixel(50);
+                home_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
+                home_button.get()->set_text(patterns[i].get()->name());
+                home_button.get()->set_width_in_scale(1);
+                home_button.get()->set_x_in_scale(0);
+                a_replica_file_creator_navigation_buttons.push_back(home_button);
+                a_replica_file_creator_navigation_buttons_with_pattern[button_name] = patterns[i];
+            }
+
+            if(a_replica_file_creator_navigation_buttons.size() > 0) {
+                // Place the buttons
+                std::shared_ptr<GUI_Text> last_button = a_replica_file_creator_navigation_buttons[a_replica_file_creator_navigation_buttons.size() - 1];
+                last_button.get()->attach_bottom_in_parent();
+                for(int i = 1;i<static_cast<int>(a_replica_file_creator_navigation_buttons.size());i++) {
+                    std::shared_ptr<GUI_Text> current_button = a_replica_file_creator_navigation_buttons[a_replica_file_creator_navigation_buttons.size() - (i + 1)];
+                    current_button.get()->attach_top_of_object_in_parent(last_button);
+                    last_button = current_button;
+                }
+            }
+
+            // Finalize the creation
+            a_replica_file_creator_navigation.get()->check_scroller();
+            a_replica_file_creator_navigation.get()->select_object("replica_file_creator_navigation_0");
+        }
     }
 
     // Loads the button for the variable in a replica file project
@@ -1159,13 +1211,15 @@ namespace scls {
                 a_replica_file_edition_variable_by_buttons[current_button.get()] = current_variable;
             }
 
-            // Place the buttons
-            std::shared_ptr<GUI_Text> last_button = a_replica_file_edition_variable_buttons[a_replica_file_edition_variable_buttons.size() - 1];
-            last_button.get()->attach_bottom_in_parent();
-            for(int i = 1;i<static_cast<int>(a_replica_file_edition_variable_buttons.size());i++) {
-                unsigned int current_i = a_replica_file_edition_variable_buttons.size() - (i + 1);
-                a_replica_file_edition_variable_buttons[current_i].get()->attach_top_of_object_in_parent(last_button);
-                last_button = a_replica_file_edition_variable_buttons[current_i];
+            if(a_replica_file_edition_variable_buttons.size() > 0) {
+                // Place the buttons
+                std::shared_ptr<GUI_Text> last_button = a_replica_file_edition_variable_buttons[a_replica_file_edition_variable_buttons.size() - 1];
+                last_button.get()->attach_bottom_in_parent();
+                for(int i = 1;i<static_cast<int>(a_replica_file_edition_variable_buttons.size());i++) {
+                    unsigned int current_i = a_replica_file_edition_variable_buttons.size() - (i + 1);
+                    a_replica_file_edition_variable_buttons[current_i].get()->attach_top_of_object_in_parent(last_button);
+                    last_button = a_replica_file_edition_variable_buttons[current_i];
+                }
             }
 
             // Finalize the creation
