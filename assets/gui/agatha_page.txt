@@ -585,6 +585,101 @@
 	<x value=1/4 type=object_scale>
 	<y attach=bottom attached_object="agatha_replica_file_edition_variable_title" offset=10>
 </gui_object>
+<gui_object name="agatha_replica_file_edition_settings" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>Paramètres du fichier</content>
+	<height value=1/8 type=scale>
+	<parent name="agatha_replica_file_edition">
+	<texture alignment=fit>
+	<width value=9/20 type=scale>
+	<x value=3/4 type=object_scale>
+	<y attach=bottom offset=10>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+
+//***************************************************
+//
+//   REPLICA PROJECT FILE SETTING
+//
+//***************************************************
+
+<gui_object name="agatha_replica_file_settings">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>
+<gui_object name="agatha_replica_file_settings_back" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=50>Retour</content>
+	<height value=1/8 type=scale>
+	<parent name="agatha_replica_file_settings">
+	<texture alignment=fit>
+	<width value=1/4 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=bottom offset=10>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="agatha_replica_file_settings_delete" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=50>Supprimer le fichier</content>
+	<height value=1/8 type=scale>
+	<parent name="agatha_replica_file_settings">
+	<texture alignment=fit>
+	<width value=1/6 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=bottom offset=10>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+
+//***************************************************
+//
+//   REPLICA PROJECT FILE VARIABLE ELEMENT EDITION
+//
+//***************************************************
+
+<gui_object name="agatha_replica_file_variable_element_edition">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>
+<gui_object name="agatha_replica_file_variable_element_edition_title" type="text">
+	<content font_size=75>Variable</content>
+	<height value=100 type=pixel>
+	<parent name="agatha_replica_file_variable_element_edition">
+	<width value=9/10 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=top offset=11>
+</gui_object>
+// Variable handling
+<gui_object name="agatha_replica_file_variable_element_edition_variable_title" type="text">
+	<content font_size=75>Variables</content>
+	<height value=100 type=pixel>
+	<parent name="agatha_replica_file_variable_element_edition">
+	<width value=9/20 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_variable_element_edition_title" offset=10>
+</gui_object>
+<gui_object name="agatha_replica_file_variable_element_edition_variable" type="scroller">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=3/5 type=scale>
+	<parent name="agatha_replica_file_variable_element_edition">
+	<width value=9/20 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_variable_element_edition_variable_title" offset=10>
+</gui_object>
 
 //***************************************************
 //
@@ -623,6 +718,58 @@
 	<width value=9/10 type=scale>
 	<x value=1/2 type=object_scale>
 	<y attach=bottom attached_object="agatha_replica_file_variable_edition_content_title" offset=10>
+</gui_object>
+
+//***************************************************
+//
+//   REPLICA PROJECT FILE VARIABLE LIST EDITION
+//
+//***************************************************
+
+<gui_object name="agatha_replica_file_variable_list_edition">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=13/20 type=scale>
+	<width value=4/5 type=scale>
+	<x attach=right offset=25>
+	<y attach=bottom attached_object="header_agatha" offset=15>
+</gui_object>
+<gui_object name="agatha_replica_file_variable_list_edition_title" type="text">
+	<content font_size=75>Liste de variable</content>
+	<height value=100 type=pixel>
+	<parent name="agatha_replica_file_variable_list_edition">
+	<width value=9/10 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=top offset=11>
+</gui_object>
+// Variables handling
+<gui_object name="agatha_replica_file_variable_list_edition_elements_title" type="text">
+	<content font_size=75>Éléments</content>
+	<height value=100 type=pixel>
+	<parent name="agatha_replica_file_variable_list_edition">
+	<width value=9/20 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_variable_list_edition_title" offset=10>
+</gui_object>
+<gui_object name="agatha_replica_file_variable_list_edition_elements" type="scroller">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=3/5 type=scale>
+	<parent name="agatha_replica_file_variable_list_edition">
+	<width value=9/20 type=scale>
+	<x value=1/4 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_variable_list_edition_elements_title" offset=10>
+</gui_object>
+<gui_object name="agatha_replica_file_variable_list_edition_new_element" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=50>Nouvelle variable</content>
+	<height value=1/8 type=scale>
+	<parent name="agatha_replica_file_variable_list_edition">
+	<width value=9/20 type=scale>
+	<x value=3/4 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_variable_list_edition_elements_title" offset=10>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
 </gui_object>
 
 //***************************************************

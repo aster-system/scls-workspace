@@ -109,6 +109,10 @@ namespace scls {
             a_replica_file_edition_body = *parent->new_object<GUI_Object>(object_name);
             return a_replica_file_edition_body;
         }
+        else if(object_name == "agatha_replica_file_edition_settings") {
+            a_replica_file_edition_settings = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_file_edition_settings;
+        }
         else if(object_name == "agatha_replica_file_edition_title") {
             a_replica_file_edition_title = *parent->new_object<GUI_Text>(object_name);
             return a_replica_file_edition_title;
@@ -117,9 +121,45 @@ namespace scls {
             a_replica_file_edition_variable = *parent->new_object<GUI_Scroller>(object_name);
             return a_replica_file_edition_variable;
         }
+        else if(object_name == "agatha_replica_file_settings") {
+            a_replica_file_settings_body = *parent->new_object<GUI_Object>(object_name);
+            return a_replica_file_settings_body;
+        }
+        else if(object_name == "agatha_replica_file_settings_back") {
+            a_replica_file_settings_back = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_file_settings_back;
+        }
+        else if(object_name == "agatha_replica_file_settings_delete") {
+            a_replica_file_settings_delete = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_file_settings_delete;
+        }
+        else if(object_name == "agatha_replica_file_variable_element_edition_title") {
+            a_replica_file_variable_element_edition_title = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_file_variable_element_edition_title;
+        }
         else if(object_name == "agatha_replica_file_variable_edition") {
             a_replica_file_variable_edition = *parent->new_object<GUI_Object>(object_name);
             return a_replica_file_variable_edition;
+        }
+        else if(object_name == "agatha_replica_file_variable_element_edition") {
+            a_replica_file_variable_element_edition = *parent->new_object<GUI_Object>(object_name);
+            return a_replica_file_variable_element_edition;
+        }
+        else if(object_name == "agatha_replica_file_variable_element_edition_variable") {
+            a_replica_file_variable_element_edition_scroller = *parent->new_object<GUI_Scroller>(object_name);
+            return a_replica_file_variable_element_edition_scroller;
+        }
+        else if(object_name == "agatha_replica_file_variable_list_edition_new_element") {
+            a_replica_file_variable_element_create = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_file_variable_element_create;
+        }
+        else if(object_name == "agatha_replica_file_variable_list_edition") {
+            a_replica_file_variable_list_edition = *parent->new_object<GUI_Object>(object_name);
+            return a_replica_file_variable_list_edition;
+        }
+        else if(object_name == "agatha_replica_file_variable_list_edition_elements") {
+            a_replica_file_variable_list_edition_scroller = *parent->new_object<GUI_Scroller>(object_name);
+            return a_replica_file_variable_list_edition_scroller;
         }
         else if(object_name == "agatha_replica_file_variable_edition_content") {
             a_replica_file_variable_edition_content = *parent->new_object<GUI_Text_Input>(object_name);
@@ -128,6 +168,10 @@ namespace scls {
         else if(object_name == "agatha_replica_file_variable_edition_title") {
             a_replica_file_variable_edition_title = *parent->new_object<GUI_Text>(object_name);
             return a_replica_file_variable_edition_title;
+        }
+        else if(object_name == "agatha_replica_file_variable_list_edition_title") {
+            a_replica_file_variable_list_edition_title = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_file_variable_list_edition_title;
         }
         else if(object_name == "agatha_replica_project_footer_new_replica_file") {
             a_replica_project_footer_new_replica_file_button = *parent->new_object<GUI_Text>(object_name);
@@ -367,7 +411,7 @@ namespace scls {
     }
 
     // Display the project pattern file page
-    void SCLS_Workspace_Agatha_Page::display_pattern_project_file() {
+    void SCLS_Workspace_Agatha_Page::display_pattern_project_file(std::shared_ptr<Text_Pattern> chosen_pattern_file) {
         hide_all();
         if(a_pattern_project_file_body.get() != 0) a_pattern_project_file_body.get()->set_visible(true);
         if(a_pattern_project_main_footer.get() != 0) a_pattern_project_main_footer.get()->set_visible(true);
@@ -376,6 +420,7 @@ namespace scls {
         // Add the needed datas
         a_current_state.current_page = SCLS_WORKSPACE_AGATHA_PATTERN_PROJECT_FILE_PAGE;
         load_pattern_project_navigation(); load_pattern_project_replica();
+        a_current_state.currently_displayed_pattern_project_file = chosen_pattern_file;
         if(currently_displayed_pattern_project_file() == 0) a_pattern_project_file_text_input.get()->set_text("Pas de fichiers disponibles");
         else a_pattern_project_file_text_input.get()->set_text(currently_displayed_pattern_project_file()->base_text());
     }
@@ -428,6 +473,17 @@ namespace scls {
         load_replica_project_navigation();
     }
 
+    // Display the project file settings page
+    void SCLS_Workspace_Agatha_Page::display_replica_file_settings() {
+        hide_all();
+        if(a_replica_file_settings_body.get() != 0) a_replica_file_settings_body.get()->set_visible(true);
+        if(a_replica_project_main_footer.get() != 0) a_replica_project_main_footer.get()->set_visible(true);
+        if(a_replica_project_main_navigation.get() != 0) a_replica_project_main_navigation.get()->set_visible(true);
+
+        // Add the needed datas
+        a_current_state.current_page = SCLS_WORKSPACE_AGATHA_REPLICA_FILE_SETTINGS_PAGE;
+    }
+
     // Display the project file variable edition page
     void SCLS_Workspace_Agatha_Page::display_replica_file_variable_edition() {
         hide_all();
@@ -448,6 +504,35 @@ namespace scls {
             }
         }
         load_replica_project_navigation();
+    }
+
+    // Display the project file variable element edition page
+    void SCLS_Workspace_Agatha_Page::display_replica_file_variable_element_edition() {
+        hide_all();
+        if(a_replica_file_variable_element_edition.get() != 0) a_replica_file_variable_element_edition.get()->set_visible(true);
+        if(a_replica_project_main_footer.get() != 0) a_replica_project_main_footer.get()->set_visible(true);
+        if(a_replica_project_main_navigation.get() != 0) a_replica_project_main_navigation.get()->set_visible(true);
+
+        // Add the needed datas
+        a_current_state.current_page = SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_ELEMENT_EDITION_PAGE;
+        load_replica_file_variable_element_navigation();
+        // Create the good name
+        std::string current_name = currently_displayed_replica_file_variable_element()->parent_variable.get()->name;
+        if(current_name.size() > 2 && current_name[current_name.size() - 2] == '[' && current_name[current_name.size() - 1] == ']') current_name = current_name.substr(0, current_name.size() - 2);
+        a_replica_file_variable_element_edition_title.get()->set_text("Variable : " + current_name + "[" + std::to_string(currently_displayed_replica_file_variable_element()->element_number) + "]");
+    }
+
+    // Display the project file variable list edition page
+    void SCLS_Workspace_Agatha_Page::display_replica_file_variable_list_edition() {
+        hide_all();
+        if(a_replica_file_variable_list_edition.get() != 0) a_replica_file_variable_list_edition.get()->set_visible(true);
+        if(a_replica_project_main_footer.get() != 0) a_replica_project_main_footer.get()->set_visible(true);
+        if(a_replica_project_main_navigation.get() != 0) a_replica_project_main_navigation.get()->set_visible(true);
+
+        // Add the needed datas
+        a_current_state.current_page = SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_LIST_EDITION_PAGE;
+        load_replica_file_variable_list_navigation();
+        a_replica_file_variable_list_edition_title.get()->set_text("Liste de variables : " + currently_displayed_replica_file_variable()->name);
     }
 
     // Display the project replica global variable page
@@ -581,7 +666,10 @@ namespace scls {
         if(a_pattern_project_main_body.get() != 0) a_pattern_project_main_body.get()->set_visible(false);
         if(a_replica_file_creator_body.get() != 0) a_replica_file_creator_body.get()->set_visible(false);
         if(a_replica_file_edition_body.get() != 0) a_replica_file_edition_body.get()->set_visible(false);
+        if(a_replica_file_settings_body.get() != 0) a_replica_file_settings_body.get()->set_visible(false);
         if(a_replica_file_variable_edition.get() != 0) a_replica_file_variable_edition.get()->set_visible(false);
+        if(a_replica_file_variable_element_edition.get() != 0) a_replica_file_variable_element_edition.get()->set_visible(false);
+        if(a_replica_file_variable_list_edition.get() != 0) a_replica_file_variable_list_edition.get()->set_visible(false);
         if(a_replica_text_file_edition_body.get() != 0) a_replica_text_file_edition_body.get()->set_visible(false);
         if(a_replica_global_variable_edition_body.get() != 0) a_replica_global_variable_edition_body.get()->set_visible(false);
         if(a_replica_project_creator_body.get() != 0) a_replica_project_creator_body.get()->set_visible(false);
@@ -680,8 +768,7 @@ namespace scls {
         if(a_pattern_project_file_creator_validate.get() != 0 && a_pattern_project_file_creator_validate.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
             if(currently_displayed_pattern_project_file_creator_name() != "") {
                 // Validate the creation of the file
-                a_current_state.currently_displayed_pattern_project_file = create_pattern_project_file();
-                display_pattern_project_file();
+                display_pattern_project_file(create_pattern_project_file());
             }
         }
     }
@@ -737,8 +824,7 @@ namespace scls {
                 else if(i - 1 < a_current_state.pattern_project_navigation_files.size()) {
                     // Display a file
                     std::shared_ptr<Text_Pattern> chosen_pattern_file = a_current_state.pattern_project_navigation_files[i - 1];
-                    a_current_state.currently_displayed_pattern_project_file = chosen_pattern_file;
-                    display_pattern_project_file();
+                    display_pattern_project_file(chosen_pattern_file);
                 }
                 break;
             }
@@ -757,11 +843,62 @@ namespace scls {
 
     // Check the events for the replica file edition page
     void SCLS_Workspace_Agatha_Page::check_replica_file_edition_events() {
+        // Settings button
+        if(a_replica_file_edition_settings.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            display_replica_file_settings();
+        }
+
         for(int i = 0;i<static_cast<int>(a_replica_file_edition_variable_buttons.size());i++) {
             if(a_replica_file_edition_variable_buttons[i].get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
-                // Show the pattern variable edition page
+                // Show the replica file variable edition page
                 a_current_state.currently_displayed_replica_file_variable = a_replica_file_edition_variable_by_buttons[a_replica_file_edition_variable_buttons[i].get()];
-                display_replica_file_variable_edition();
+                if(currently_displayed_replica_file_variable()->listed()) display_replica_file_variable_list_edition();
+                else display_replica_file_variable_edition();
+            }
+        }
+    }
+
+    // Check the events for the replica file settings page
+    void SCLS_Workspace_Agatha_Page::check_replica_file_settings_events() {
+        if(a_replica_file_settings_back.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            // Back button
+            display_replica_file_edition();
+        }
+
+        if(a_replica_file_settings_delete.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            // Delete button
+            std::shared_ptr<Replica_File> file_to_delete = a_current_state.currently_displayed_replica_file;
+            a_current_state.currently_displayed_replica_file.reset();
+            currently_displayed_replica_project()->remove_replica_file(file_to_delete);
+            display_replica_project();
+        }
+    }
+
+    // Check the events for the replica file variable element page
+    void SCLS_Workspace_Agatha_Page::check_replica_file_variable_element_edition_events() {
+        for(int i = 0;i<static_cast<int>(a_replica_file_variable_element_edition_buttons.size());i++) {
+            if(a_replica_file_variable_element_edition_buttons[i].get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+                // Show the replica file variable edition page
+                a_current_state.currently_displayed_replica_file_variable = a_replica_file_variable_element_edition_by_buttons[a_replica_file_variable_element_edition_buttons[i].get()];
+                if(currently_displayed_replica_file_variable()->listed()) display_replica_file_variable_list_edition();
+                else display_replica_file_variable_edition();
+            }
+        }
+    }
+
+    // Check the events for the replica file variable list page
+    void SCLS_Workspace_Agatha_Page::check_replica_file_variable_list_events() {
+        if(a_replica_file_variable_element_create.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            // Create a replica file variable element in a variable list
+            std::shared_ptr<Replica_File_Variable_Element> new_element = create_replica_file_variable_element(a_current_state.currently_displayed_replica_file_variable);
+            currently_displayed_replica_file_variable_list()->elements.push_back(new_element);
+            load_replica_file_variable_list_navigation();
+        }
+
+        for(int i = 0;i<static_cast<int>(a_replica_file_variable_edition_list_buttons.size());i++) {
+            if(a_replica_file_variable_edition_list_buttons[i].get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+                a_current_state.currently_displayed_replica_file_variable_element = a_replica_file_edition_variable_list_by_buttons[a_replica_file_variable_edition_list_buttons[i].get()];
+                display_replica_file_variable_element_edition();
             }
         }
     }
@@ -890,6 +1027,15 @@ namespace scls {
         // Replica file creator
         if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_CREATOR_PAGE) check_replica_file_creator_events();
 
+        // Replica file settings
+        if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_SETTINGS_PAGE) check_replica_file_settings_events();
+
+        // Replica file variable element
+        if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_ELEMENT_EDITION_PAGE) check_replica_file_variable_element_edition_events();
+
+        // Replica file variable list
+        if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_LIST_EDITION_PAGE) check_replica_file_variable_list_events();
+
         // Replica project creator
         if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_CREATOR_PAGE) check_replica_project_creator_events();
 
@@ -901,7 +1047,10 @@ namespace scls {
 
         // Replica project navigation
         if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_EDITION_PAGE ||
+           a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_SETTINGS_PAGE ||
            a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_EDITION_PAGE ||
+           a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_ELEMENT_EDITION_PAGE ||
+           a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_LIST_EDITION_PAGE ||
            a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_GLOBAL_VARIABLE_PAGE ||
            a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_EXPORT_PAGE ||
            a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_MAIN_PAGE ||
@@ -910,7 +1059,10 @@ namespace scls {
         // Replica project footer
         if(a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_CREATOR_PAGE ||
            a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_EDITION_PAGE ||
+           a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_SETTINGS_PAGE ||
            a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_EDITION_PAGE ||
+           a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_ELEMENT_EDITION_PAGE ||
+           a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_LIST_EDITION_PAGE ||
            a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_GLOBAL_VARIABLE_PAGE ||
            a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_EXPORT_PAGE ||
            a_current_state.current_page == SCLS_WORKSPACE_AGATHA_REPLICA_PROJECT_MAIN_PAGE ||
@@ -1090,6 +1242,15 @@ namespace scls {
         return created_file;
     }
 
+    // Creates a new replica file variable element and returns it
+    std::shared_ptr<Replica_File_Variable_Element> SCLS_Workspace_Agatha_Page::create_replica_file_variable_element(std::shared_ptr<Replica_File_Variable> parent_variable) {
+        std::shared_ptr<Replica_File_Variable_Element> new_element = std::make_shared<Replica_File_Variable_Element>();
+        new_element.get()->element_number = currently_displayed_replica_file_variable_list()->elements.size();
+        new_element.get()->parent_variable = parent_variable;
+        new_element.get()->set_pattern(currently_displayed_replica_file()->pattern);
+        return new_element;
+    }
+
     // Exports the current replica project
     void SCLS_Workspace_Agatha_Page::export_replica_project() {
         // Export the project
@@ -1199,7 +1360,7 @@ namespace scls {
             for(int i = 0;i<static_cast<int>(variables.size());i++) {
                 // Create the button
                 if(variables[i].get() == 0 || variables[i].get()->global) continue;
-                std::shared_ptr<Replica_File_Variable> current_variable = currently_displayed_replica_file()->variable_by_name(variables[i].get()->name);
+                std::shared_ptr<Replica_File_Variable> current_variable = currently_displayed_replica_file()->variable_by_pattern_variable(variables[i]);
                 current_button = *a_replica_file_edition_variable.get()->new_object<GUI_Text>("replica_file_edition_variable_button_" + std::to_string(i));
                 current_button.get()->set_font_size(40);
                 current_button.get()->set_height_in_pixel(50);
@@ -1224,6 +1385,85 @@ namespace scls {
 
             // Finalize the creation
             a_replica_file_edition_variable.get()->check_scroller();
+        }
+    }
+
+    // Loads the button to navigate in the replica file variable element
+    void SCLS_Workspace_Agatha_Page::load_replica_file_variable_element_navigation() {
+        unload_replica_file_variable_element_navigation();
+
+        // Create each buttons
+        if(currently_displayed_replica_file_variable_element() != 0) {
+            // Create the buttons
+            const std::vector<std::shared_ptr<Replica_File_Variable>>& variables = currently_displayed_replica_file_variable_element()->variables;
+            std::shared_ptr<GUI_Text> current_button;
+            for(int i = 0;i<static_cast<int>(variables.size());i++) {
+                // Create the button
+                std::shared_ptr<Replica_File_Variable> current_variable = variables[i];
+                if(current_variable.get() == 0 || current_variable.get()->global()) continue;
+                current_button = *a_replica_file_variable_element_edition_scroller.get()->new_object<GUI_Text>("replica_file_edition_variable_element_button_" + current_variable.get()->name);
+                current_button.get()->set_font_size(40);
+                current_button.get()->set_height_in_pixel(50);
+                current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
+                current_button.get()->set_text(current_variable.get()->name);
+                current_button.get()->set_width_in_scale(1);
+                current_button.get()->set_x_in_scale(0);
+                a_replica_file_variable_element_edition_buttons.push_back(current_button);
+                a_replica_file_variable_element_edition_by_buttons[current_button.get()] = current_variable;
+            }
+
+            if(a_replica_file_variable_element_edition_buttons.size() > 0) {
+                // Place the buttons
+                std::shared_ptr<GUI_Text> last_button = a_replica_file_variable_element_edition_buttons[a_replica_file_variable_element_edition_buttons.size() - 1];
+                last_button.get()->attach_bottom_in_parent();
+                for(int i = 1;i<static_cast<int>(a_replica_file_variable_element_edition_buttons.size());i++) {
+                    unsigned int current_i = a_replica_file_variable_element_edition_buttons.size() - (i + 1);
+                    a_replica_file_variable_element_edition_buttons[current_i].get()->attach_top_of_object_in_parent(last_button);
+                    last_button = a_replica_file_variable_element_edition_buttons[current_i];
+                }
+            } //*/
+
+            // Finalize the creation
+            a_replica_file_variable_element_edition_scroller.get()->check_scroller();
+        }
+    }
+
+    // Loads the button to navigate in the replica file variable list
+    void SCLS_Workspace_Agatha_Page::load_replica_file_variable_list_navigation() {
+        unload_replica_file_variable_list_navigation();
+
+        // Create each buttons
+        if(currently_displayed_replica_file_variable_list() != 0) {
+            // Create the buttons
+            std::vector<std::shared_ptr<Replica_File_Variable_Element>>& elements = currently_displayed_replica_file_variable_list()->elements;
+            std::shared_ptr<GUI_Text> current_button;
+            for(int i = 0;i<static_cast<int>(elements.size());i++) {
+                // Create the button
+                if(elements[i].get() == 0) continue;
+                current_button = *a_replica_file_variable_list_edition_scroller.get()->new_object<GUI_Text>("replica_file_edition_variable_list_button_" + std::to_string(i));
+                current_button.get()->set_font_size(40);
+                current_button.get()->set_height_in_pixel(50);
+                current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
+                current_button.get()->set_text(scls::to_utf_8_code_point("Élément ") + std::to_string(i));
+                current_button.get()->set_width_in_scale(1);
+                current_button.get()->set_x_in_scale(0);
+                a_replica_file_variable_edition_list_buttons.push_back(current_button);
+                a_replica_file_edition_variable_list_by_buttons[current_button.get()] = elements[i];
+            }
+
+            if(a_replica_file_variable_edition_list_buttons.size() > 0) {
+                // Place the buttons
+                std::shared_ptr<GUI_Text> last_button = a_replica_file_variable_edition_list_buttons[a_replica_file_variable_edition_list_buttons.size() - 1];
+                last_button.get()->attach_bottom_in_parent();
+                for(int i = 1;i<static_cast<int>(a_replica_file_variable_edition_list_buttons.size());i++) {
+                    unsigned int current_i = a_replica_file_variable_edition_list_buttons.size() - (i + 1);
+                    a_replica_file_variable_edition_list_buttons[current_i].get()->attach_top_of_object_in_parent(last_button);
+                    last_button = a_replica_file_variable_edition_list_buttons[current_i];
+                }
+            }
+
+            // Finalize the creation
+            a_replica_file_variable_list_edition_scroller.get()->check_scroller();
         }
     }
 
