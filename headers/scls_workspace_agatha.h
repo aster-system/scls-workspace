@@ -260,7 +260,7 @@ namespace scls {
         // Getters and setters
         inline Pattern_Project* currently_displayed_pattern_project() const {return a_current_state.currently_displayed_pattern_project.get();};
         inline Text_Pattern* currently_displayed_pattern_project_file() const {return a_current_state.currently_displayed_pattern_project_file.get();};
-        inline Replica_File_Variable_Element* currently_displayed_replica_file_variable_element() const {return a_current_state.currently_displayed_replica_file_variable_element.get();};
+        inline __Replica_File_Variable_Element_Base* currently_displayed_replica_file_variable_element() const {return a_current_state.currently_displayed_replica_file_variable_element.get();};
         inline Replica_Project* currently_displayed_replica_project() const {return a_current_state.currently_displayed_replica_project.get();};
 
 	private:
@@ -322,7 +322,7 @@ namespace scls {
             // Currently displayed replica file variable
             std::shared_ptr<Replica_File_Variable> currently_displayed_replica_file_variable;
             // Currently displayed replica file variable element
-            std::shared_ptr<Replica_File_Variable_Element> currently_displayed_replica_file_variable_element;
+            std::shared_ptr<__Replica_File_Variable_Element_Base> currently_displayed_replica_file_variable_element;
             // Currently chosen creator path
             std::string currently_displayed_replica_project_creator_path = "";
             // Name of the currently displayed replica global variable
@@ -359,7 +359,7 @@ namespace scls {
 
         // Buttons in the replica file variable list edition navigation
         std::vector<std::shared_ptr<GUI_Text>> a_replica_file_variable_edition_list_buttons = std::vector<std::shared_ptr<GUI_Text>>();
-        std::map<GUI_Text*, std::shared_ptr<Replica_File_Variable_Element>> a_replica_file_edition_variable_list_by_buttons = std::map<GUI_Text*, std::shared_ptr<Replica_File_Variable_Element>>();
+        std::map<GUI_Text*, std::shared_ptr<__Replica_File_Variable_Element_Base>> a_replica_file_edition_variable_list_by_buttons = std::map<GUI_Text*, std::shared_ptr<__Replica_File_Variable_Element_Base>>();
 
         // Buttons in the replica file variable element edition navigation
         std::vector<std::shared_ptr<GUI_Text>> a_replica_file_variable_element_edition_buttons = std::vector<std::shared_ptr<GUI_Text>>();
