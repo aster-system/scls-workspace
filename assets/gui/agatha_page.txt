@@ -565,6 +565,7 @@
 	<height value=100 type=pixel>
 	<parent name="agatha_replica_file_edition">
 	<width value=9/10 type=scale>
+	<texture alignment=fit>
 	<x value=1/2 type=object_scale>
 	<y attach=top offset=11>
 </gui_object>
@@ -659,6 +660,7 @@
 	<content font_size=75>Variable</content>
 	<height value=100 type=pixel>
 	<parent name="agatha_replica_file_variable_element_edition">
+	<texture alignment=fit>
 	<width value=9/10 type=scale>
 	<x value=1/2 type=object_scale>
 	<y attach=top offset=11>
@@ -668,6 +670,7 @@
 	<content font_size=75>Variables</content>
 	<height value=100 type=pixel>
 	<parent name="agatha_replica_file_variable_element_edition">
+	<texture alignment=fit>
 	<width value=9/20 type=scale>
 	<x value=1/4 type=object_scale>
 	<y attach=bottom attached_object="agatha_replica_file_variable_element_edition_title" offset=10>
@@ -698,6 +701,7 @@
 	<content font_size=75>Fichier réplique</content>
 	<height value=100 type=pixel>
 	<parent name="agatha_replica_file_variable_edition">
+	<texture alignment=fit>
 	<width value=9/10 type=scale>
 	<x value=1/2 type=object_scale>
 	<y attach=top offset=11>
@@ -707,6 +711,7 @@
 	<content font_size=75>Texte</content>
 	<height value=100 type=pixel>
 	<parent name="agatha_replica_file_variable_edition">
+	<texture alignment=fit>
 	<width value=9/20 type=scale>
 	<x value=1/4 type=object_scale>
 	<y attach=bottom attached_object="agatha_replica_file_variable_edition_title" offset=10>
@@ -737,6 +742,7 @@
 	<content font_size=75>Liste de variable</content>
 	<height value=100 type=pixel>
 	<parent name="agatha_replica_file_variable_list_edition">
+	<texture alignment=fit>
 	<width value=9/10 type=scale>
 	<x value=1/2 type=object_scale>
 	<y attach=top offset=11>
@@ -746,6 +752,7 @@
 	<content font_size=75>Éléments</content>
 	<height value=100 type=pixel>
 	<parent name="agatha_replica_file_variable_list_edition">
+	<texture alignment=fit>
 	<width value=9/20 type=scale>
 	<x value=1/4 type=object_scale>
 	<y attach=bottom attached_object="agatha_replica_file_variable_list_edition_title" offset=10>
@@ -880,6 +887,7 @@
 	<content font_size=75>Réplique</content>
 	<height value=100 type=pixel>
 	<parent name="replica_project_main">
+	<texture alignment=fit>
 	<width value=9/10 type=scale>
 	<x value=1/2 type=object_scale>
 	<y attach=top offset=11>

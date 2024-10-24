@@ -239,8 +239,10 @@ namespace scls {
         void check_replica_file_edition_events();
         // Check the events for the replica file settings page
         void check_replica_file_settings_events();
-        // Check the events for the replica file variable element page
-        void check_replica_file_variable_element_edition_events();
+        // Check the events for the replica file variable edition page and returns if the page changed
+        bool check_replica_file_variable_edition_events();
+        // Check the events for the replica file variable element page and returns if the page changed
+        bool check_replica_file_variable_element_edition_events();
         // Check the events for the replica file variable list page
         void check_replica_file_variable_list_events();
         // Check the events for the replica project creator page
