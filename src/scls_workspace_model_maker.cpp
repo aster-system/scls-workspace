@@ -42,15 +42,19 @@ namespace scls {
         double max_x = 0; double min_x = 0;
         double max_z = 0; double min_z = 0;
         double one_angle = SCLS_PI - angle_sum / static_cast<double>(wheel_number);
+        double side_number = 8 * wheel_number;
         std::shared_ptr<model_maker::Polygon> to_return = std::make_shared<model_maker::Polygon>();
+        // Configure the teeth
+        double support_teeth_factor = 0.8;
+        support_teeth_factor = std::pow(0.8, 12.0 / static_cast<double>(wheel_number));
 
         // Calculate each positions
         double angle_offset = SCLS_PI * 1.5 - one_angle / 2.0;
         double y = 0;
         for(unsigned short i = 0;i<wheel_number;i++) {
             // Calculate the position of the first point
-            double x = std::cos(current_angle + angle_offset) * 0.8;
-            double z = std::sin(current_angle + angle_offset) * 0.8;
+            double x = std::cos(current_angle + angle_offset) * support_teeth_factor;
+            double z = std::sin(current_angle + angle_offset) * support_teeth_factor;
             if(x > max_x) max_x = x; if(x < min_x) min_x = x;
             if(z > max_z) max_z = z; if(z < min_z) min_z = z;
 
@@ -82,8 +86,8 @@ namespace scls {
             to_return.get()->points.push_back(point);
 
             // Calculate the position of the fourth point
-            x = std::cos(current_angle + angle_offset + one_angle * (4.0 / 8.0)) * 0.8;
-            z = std::sin(current_angle + angle_offset + one_angle * (4.0 / 8.0)) * 0.8;
+            x = std::cos(current_angle + angle_offset + one_angle * (4.0 / 8.0)) * support_teeth_factor;
+            z = std::sin(current_angle + angle_offset + one_angle * (4.0 / 8.0)) * support_teeth_factor;
             if(x > max_x) max_x = x; if(x < min_x) min_x = x;
             if(z > max_z) max_z = z; if(z < min_z) min_z = z;
 
@@ -811,6 +815,17 @@ namespace scls {
                 // Create the needed face
                 std::shared_ptr<model_maker::Face> current_face = current_solid()->layers()[i].get()->layer_face;
 
+                // Test triangulation
+                /*std::shared_ptr<scls::model_maker::Face::__Triangulation_Datas> datas = current_face.get()->triangulate_start_datas(); int t = 0;
+                while(!datas.get()->finished) {
+                    if(current_face.get()->triangulation_step(datas)) {
+                        std::shared_ptr<scls::Image> img = std::make_shared<scls::Image>(500,500, scls::Color(255, 255, 255));
+                        __draw_face_in_image(img.get(), current_face.get());
+                        __draw_triangles_in_image(img.get(), current_face.get()->points_for_rendering(), 2, scls::Color(0, 0, 255), 2, scls::Color(0, 0, 255));
+                        img.get()->save_png("tests/img" + std::to_string(t) + ".png"); t++;
+                    }
+                } //*/
+
                 // Triangulate the face
                 current_face.get()->triangulate();
 
@@ -821,13 +836,14 @@ namespace scls {
                     // The top is the same shape as the bottom
                     double height = current_solid()->layers()[i].get()->layer_face.get()->y() + current_solid()->layers()[i].get()->layer_face.get()->scale_y();
                     std::shared_ptr<model_maker::Face> new_face = current_solid()->layers()[i].get()->layer_face.get()->copy_with_new_points();
+
                     new_face.get()->triangulate();
                     new_face.get()->set_y(height);
                     solid.get()->add_face(current_solid()->layers()[i].get()->name + "-top", new_face, solid);
                     solid.get()->fill_faces_point_by_point(current_face, new_face, solid);
                 }
             }
-            solid.get()->binary_stl_complete().get()->save("form.stl");
+            solid.get()->binary_stl_complete().get()->save("tests/form.stl");
         }
         return solid;
     }
