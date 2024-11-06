@@ -146,7 +146,7 @@ namespace scls {
             return a_replica_file_variable_element_edition;
         }
         else if(object_name == "agatha_replica_file_variable_element_edition_variable") {
-            a_replica_file_variable_element_edition_scroller = *parent->new_object<GUI_Scroller>(object_name);
+            a_replica_file_variable_element_edition_scroller = *parent->new_object<GUI_Scroller_Choice>(object_name);
             return a_replica_file_variable_element_edition_scroller;
         }
         else if(object_name == "agatha_replica_file_variable_list_edition_new_element") {
@@ -158,7 +158,8 @@ namespace scls {
             return a_replica_file_variable_list_edition;
         }
         else if(object_name == "agatha_replica_file_variable_list_edition_elements") {
-            a_replica_file_variable_list_edition_scroller = *parent->new_object<GUI_Scroller>(object_name);
+            a_replica_file_variable_list_edition_scroller = *parent->new_object<GUI_Scroller_Choice>(object_name);
+            a_replica_file_variable_list_edition_scroller.get()->selected_objects_style().a_background_color = scls::Color(0, 0, 255);
             return a_replica_file_variable_list_edition_scroller;
         }
         else if(object_name == "agatha_replica_file_variable_edition_content") {
@@ -517,6 +518,7 @@ namespace scls {
 
         // Add the needed datas
         a_current_state.current_page = SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_ELEMENT_EDITION_PAGE;
+        a_replica_file_variable_element_edition_scroller.get()->reset_objects();
         load_replica_file_variable_element_navigation();
         // Create the good name
         std::string current_name = currently_displayed_replica_file_variable_element()->parent_variable.get()->name;
@@ -534,6 +536,7 @@ namespace scls {
         // Add the needed datas
         a_current_state.current_page = SCLS_WORKSPACE_AGATHA_REPLICA_FILE_VARIABLE_LIST_EDITION_PAGE;
         load_replica_file_variable_list_navigation();
+        a_replica_file_variable_list_edition_scroller.get()->reset_objects();
         a_replica_file_variable_list_edition_title.get()->set_text("Liste de variables : " + currently_displayed_replica_file_variable()->name);
     }
 
@@ -900,8 +903,10 @@ namespace scls {
             return true;
         }
 
+        // Check if a file variable is chosen
         for(int i = 0;i<static_cast<int>(a_replica_file_variable_element_edition_buttons.size());i++) {
-            if(a_replica_file_variable_element_edition_buttons[i].get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            std::string current_button = a_replica_file_variable_element_edition_buttons[i].get()->name();
+            if(a_replica_file_variable_element_edition_scroller.get()->contains_selected_object(current_button)) {
                 // Show the replica file variable edition page
                 a_current_state.currently_displayed_replica_file_variable = a_replica_file_variable_element_edition_by_buttons[a_replica_file_variable_element_edition_buttons[i].get()];
                 if(currently_displayed_replica_file_variable()->listed()) display_replica_file_variable_list_edition();
@@ -933,8 +938,10 @@ namespace scls {
             load_replica_file_variable_list_navigation();
         }
 
+        // Check if an element is selected
         for(int i = 0;i<static_cast<int>(a_replica_file_variable_edition_list_buttons.size());i++) {
-            if(a_replica_file_variable_edition_list_buttons[i].get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+            std::string current_button = a_replica_file_variable_edition_list_buttons[i].get()->name();
+            if(a_replica_file_variable_list_edition_scroller.get()->contains_confirmed_object(current_button)) {
                 a_current_state.currently_displayed_replica_file_variable_element = a_replica_file_edition_variable_list_by_buttons[a_replica_file_variable_edition_list_buttons[i].get()];
                 display_replica_file_variable_element_edition();
             }

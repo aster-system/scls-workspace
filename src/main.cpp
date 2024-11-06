@@ -25,8 +25,7 @@
 
 #include "../headers/scls_workspace.h"
 
-SCLS_FOUNDATION_INIT
-SCLS_MATH_INIT
+SCLS_INIT
 
 // Main function of the project
 int main(int argc, char *argv[]) { return scls::use_scls_workspace(argv[0]); }

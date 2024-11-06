@@ -423,11 +423,11 @@ namespace scls {
         // Body of the replica file variable element edition part
         std::shared_ptr<GUI_Object> a_replica_file_variable_element_edition;
         // Scroller of the replica file variable element edition part
-        std::shared_ptr<GUI_Scroller> a_replica_file_variable_element_edition_scroller;
+        std::shared_ptr<GUI_Scroller_Choice> a_replica_file_variable_element_edition_scroller;
         // Body of the replica file variable list edition part
         std::shared_ptr<GUI_Object> a_replica_file_variable_list_edition;
         // Scroller of the replica file variable list edition part
-        std::shared_ptr<GUI_Scroller> a_replica_file_variable_list_edition_scroller;
+        std::shared_ptr<GUI_Scroller_Choice> a_replica_file_variable_list_edition_scroller;
         // Body of the replica global variable edition part
         std::shared_ptr<GUI_Object> a_replica_global_variable_edition_body;
         // Body of the replica project creator part
