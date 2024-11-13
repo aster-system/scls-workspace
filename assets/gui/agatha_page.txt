@@ -747,7 +747,7 @@
 	<x value=1/2 type=object_scale>
 	<y attach=top offset=11>
 </gui_object>
-// Variables handling
+// Elements handling
 <gui_object name="agatha_replica_file_variable_list_edition_elements_title" type="text">
 	<content font_size=75>Éléments</content>
 	<height value=100 type=pixel>
@@ -767,12 +767,51 @@
 </gui_object>
 <gui_object name="agatha_replica_file_variable_list_edition_new_element" type="text">
 	<border bottom=1 left=1 right=1 top=1>
-	<content font_size=50>Nouvelle variable</content>
+	<content font_size=50>Nouvel élément</content>
 	<height value=1/8 type=scale>
 	<parent name="agatha_replica_file_variable_list_edition">
 	<width value=9/20 type=scale>
 	<x value=3/4 type=object_scale>
 	<y attach=bottom attached_object="agatha_replica_file_variable_list_edition_elements_title" offset=10>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="agatha_replica_file_variable_list_element_down" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>v</content>
+	<height value=30 type=pixel>
+	<parent name="agatha_replica_file_variable_list_edition">
+	<width value=1/10 type=scale>
+	<x value=12/20 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_variable_list_edition_new_element" offset=5>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="agatha_replica_file_variable_list_element_up" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=30>^</content>
+	<height value=30 type=pixel>
+	<parent name="agatha_replica_file_variable_list_edition">
+	<width value=1/10 type=scale>
+	<x value=15/20 type=object_scale>
+	<y attach=bottom attached_object="agatha_replica_file_variable_list_edition_new_element" offset=5>
+
+	<when event="overflighted">
+		<cursor type=pointing_hand_cursor>
+	</when>
+</gui_object>
+<gui_object name="agatha_replica_file_variable_list_edition_element_delete" type="text">
+	<border bottom=1 left=1 right=1 top=1>
+	<content font_size=50>Supprimer l'élément</content>
+	<height value=1/8 type=scale>
+	<parent name="agatha_replica_file_variable_list_edition">
+	<width value=9/20 type=scale>
+	<x value=3/4 type=object_scale>
+	<y attach=bottom offset=10>
 
 	<when event="overflighted">
 		<cursor type=pointing_hand_cursor>

@@ -161,6 +161,9 @@ namespace scls {
         // Unloads the button to navigate in the project
         inline void unload_replica_project_navigation(){a_replica_file_by_replica_project_navigation_buttons.clear();a_replica_project_navigation_buttons.clear();a_replica_project_main_navigation.get()->reset();};
 
+        // Returns the name of a replica file variable list button
+        inline std::string replica_file_variable_list_button_name(int position) {if(position<0)position+=currently_displayed_replica_file_variable_list()->elements.size();return std::string("replica_file_edition_variable_list_button_") + std::to_string(position);};
+
         //*********
         //
         // Displaying members
@@ -331,6 +334,8 @@ namespace scls {
             std::string currently_displayed_replica_global_variable = "";
             // Currently displayed replica file
             std::shared_ptr<Replica_File> currently_displayed_replica_file;
+            // Currently asked delete text for a replica file ement
+            bool currently_replica_file_variable_list_delete_state = false;
         } a_current_state;
 
         //*********
@@ -514,6 +519,12 @@ namespace scls {
         std::shared_ptr<GUI_Text> a_replica_file_settings_delete;
         // Button to validate the creation of a replica file variable element
         std::shared_ptr<GUI_Text> a_replica_file_variable_element_create;
+        // Button to delete a replica file variable element
+        std::shared_ptr<GUI_Text> a_replica_file_variable_list_element_delete;
+        // Button to move downward a replica file variable element
+        std::shared_ptr<GUI_Text> a_replica_file_variable_list_element_down;
+        // Button to move upward a replica file variable element
+        std::shared_ptr<GUI_Text> a_replica_file_variable_list_element_up;
         // Button to open a replica
         std::shared_ptr<GUI_Text> a_replica_open_button;
         // Button to change a path in an creator of a replica project

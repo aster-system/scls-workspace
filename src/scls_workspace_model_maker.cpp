@@ -25,6 +25,10 @@
 
 #include "../headers/scls_workspace_model_maker.h"
 
+#ifndef SCLS_WORKSPACE_MODEL_MAKER_GEAR_SIZE
+#define SCLS_WORKSPACE_MODEL_MAKER_GEAR_SIZE 4.0
+#endif // SCLS_WORKSPACE_MODEL_MAKER_GEAR_SIZE
+
 // The namespace "scls" is used to simplify the all.
 namespace scls {
 
@@ -35,6 +39,7 @@ namespace scls {
 	//*********
 
     // Returns the point of a gear
+    double __gear_size_by_teeth(unsigned int teeth_number) {return 1.0 + std::log2(static_cast<double>(teeth_number) / 12.0);};
 	std::shared_ptr<model_maker::Polygon> __gear_solid(unsigned int wheel_number) {
         // Configurate the creation
         double angle_sum = static_cast<double>((wheel_number - 2) * SCLS_PI);
@@ -124,7 +129,9 @@ namespace scls {
         to_return.get()->min_z *= multiplier;
 
         // Add the inner hole
-        std::shared_ptr<model_maker::Polygon> inner_points = model_maker::regular_polygon_points(20, 0, 0.2);
+        double exclusion_factor = 0.2;
+        exclusion_factor = 1.0 - std::pow(1.0 - exclusion_factor, 12.0 / static_cast<double>(wheel_number));
+        std::shared_ptr<model_maker::Polygon> inner_points = model_maker::regular_polygon_points(20, 0, exclusion_factor);
         to_return.get()->exclusion_points.push_back(inner_points.get()->points);
 
         return to_return;

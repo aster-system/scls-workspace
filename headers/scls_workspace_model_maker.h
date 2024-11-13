@@ -38,6 +38,7 @@ namespace scls {
 	//*********
 
 	// Returns the point of a gear
+	double __gear_size_by_teeth(unsigned int teeth_number);
 	std::shared_ptr<model_maker::Polygon> __gear_solid(unsigned int wheel_number);
 
 	//*********

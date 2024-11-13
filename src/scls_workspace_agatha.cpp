@@ -161,8 +161,16 @@ namespace scls {
             a_replica_file_variable_list_edition_scroller = *parent->new_object<GUI_Scroller_Choice>(object_name);
             a_replica_file_variable_list_edition_scroller.get()->selected_objects_style().a_background_color = scls::Color(0, 0, 255);
             return a_replica_file_variable_list_edition_scroller;
-        }
-        else if(object_name == "agatha_replica_file_variable_edition_content") {
+        } else if(object_name == "agatha_replica_file_variable_list_edition_element_delete") {
+            a_replica_file_variable_list_element_delete = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_file_variable_list_element_delete;
+        } else if(object_name == "agatha_replica_file_variable_list_element_down") {
+            a_replica_file_variable_list_element_down = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_file_variable_list_element_down;
+        } else if(object_name == "agatha_replica_file_variable_list_element_up") {
+            a_replica_file_variable_list_element_up = *parent->new_object<GUI_Text>(object_name);
+            return a_replica_file_variable_list_element_up;
+        } else if(object_name == "agatha_replica_file_variable_edition_content") {
             a_replica_file_variable_edition_content = *parent->new_object<GUI_Text_Input>(object_name);
             return a_replica_file_variable_edition_content;
         }
@@ -538,6 +546,7 @@ namespace scls {
         load_replica_file_variable_list_navigation();
         a_replica_file_variable_list_edition_scroller.get()->reset_objects();
         a_replica_file_variable_list_edition_title.get()->set_text("Liste de variables : " + currently_displayed_replica_file_variable()->name);
+        a_replica_file_variable_list_element_delete.get()->set_text("Supprimer l'élément");
     }
 
     // Display the project replica global variable page
@@ -931,6 +940,7 @@ namespace scls {
             }
         }
 
+        // Create an element in the replica file
         if(a_replica_file_variable_element_create.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
             // Create a replica file variable element in a variable list
             std::shared_ptr<Replica_File_Variable_Element> new_element = create_replica_file_variable_element(a_current_state.currently_displayed_replica_file_variable);
@@ -938,13 +948,50 @@ namespace scls {
             load_replica_file_variable_list_navigation();
         }
 
+        // If the selection is changed
+        if(a_replica_file_variable_list_edition_scroller.get()->choice_modified_during_this_frame() && a_current_state.currently_replica_file_variable_list_delete_state) {
+            a_replica_file_variable_list_element_delete.get()->set_text("Supprimer l'élément");
+            a_current_state.currently_replica_file_variable_list_delete_state = false;
+        }
+
         // Check if an element is selected
         for(int i = 0;i<static_cast<int>(a_replica_file_variable_edition_list_buttons.size());i++) {
             std::string current_button = a_replica_file_variable_edition_list_buttons[i].get()->name();
+
+            // Go to the needed element
             if(a_replica_file_variable_list_edition_scroller.get()->contains_confirmed_object(current_button)) {
                 a_current_state.currently_displayed_replica_file_variable_element = a_replica_file_edition_variable_list_by_buttons[a_replica_file_variable_edition_list_buttons[i].get()];
                 display_replica_file_variable_element_edition();
-            }
+                break;
+            } else if(a_replica_file_variable_list_edition_scroller.get()->contains_selected_object(current_button)) {
+                // Move downward / upward an element in the replica file
+                if(a_replica_file_variable_list_element_down.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+                    int position = currently_displayed_replica_file_variable_list()->move_element_down(a_replica_file_edition_variable_list_by_buttons[a_replica_file_variable_edition_list_buttons[i].get()].get());
+                    load_replica_file_variable_list_navigation();
+                    a_replica_file_variable_list_edition_scroller.get()->reset_objects();
+                    if(position >= 0) a_replica_file_variable_list_edition_scroller.get()->select_object(replica_file_variable_list_button_name(position));
+                    else a_replica_file_variable_list_edition_scroller.get()->select_object(replica_file_variable_list_button_name(-1));
+                    break;
+                } else if(a_replica_file_variable_list_element_up.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+                    int position = currently_displayed_replica_file_variable_list()->move_element_up(a_replica_file_edition_variable_list_by_buttons[a_replica_file_variable_edition_list_buttons[i].get()].get());
+                    load_replica_file_variable_list_navigation();
+                    a_replica_file_variable_list_edition_scroller.get()->reset_objects();
+                    if(position >= 0) a_replica_file_variable_list_edition_scroller.get()->select_object(replica_file_variable_list_button_name(position));
+                    else a_replica_file_variable_list_edition_scroller.get()->select_object(replica_file_variable_list_button_name(0));
+                    break;
+                } else if(a_replica_file_variable_list_element_delete.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
+                    if(a_current_state.currently_replica_file_variable_list_delete_state) {
+                        currently_displayed_replica_file_variable_list()->delete_element(a_replica_file_edition_variable_list_by_buttons[a_replica_file_variable_edition_list_buttons[i].get()].get());
+                        load_replica_file_variable_list_navigation();
+                        a_replica_file_variable_list_edition_scroller.get()->reset_objects();
+                        a_replica_file_variable_list_element_delete.get()->set_text("Supprimer l'élément");
+                        a_current_state.currently_replica_file_variable_list_delete_state = false;
+                    } else {
+                        a_replica_file_variable_list_element_delete.get()->set_text("Êtes vous sur ?");
+                        a_current_state.currently_replica_file_variable_list_delete_state = true;
+                    }
+                }
+            } //*/
         }
     }
 
@@ -1497,7 +1544,7 @@ namespace scls {
                 // Get the needed text
                 std::string button_text = std::string("Élément ") + std::to_string(i);
                 if(elements[i].get()->variables.size() > 0 && elements[i].get()->variables[0].get()->content != "") button_text = elements[i].get()->variables[0].get()->content;
-                current_button = *a_replica_file_variable_list_edition_scroller.get()->new_object<GUI_Text>("replica_file_edition_variable_list_button_" + std::to_string(i));
+                current_button = *a_replica_file_variable_list_edition_scroller.get()->new_object<GUI_Text>(replica_file_variable_list_button_name(i));
                 current_button.get()->set_font_size(40);
                 current_button.get()->set_height_in_pixel(50);
                 current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
