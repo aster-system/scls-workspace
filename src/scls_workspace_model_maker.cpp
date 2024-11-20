@@ -38,15 +38,21 @@ namespace scls {
 	//
 	//*********
 
-    // Returns the point of a gear
-    double __gear_size_by_teeth(unsigned int teeth_number) {return 1.0 + std::log2(static_cast<double>(teeth_number) / 12.0);};
-	std::shared_ptr<model_maker::Polygon> __gear_solid(unsigned int wheel_number) {
+    // Returns the points of a gear
+    double __gear_size_by_one_angle(double one_angle) {
+        double angle_width = std::sqrt(std::pow(std::cos(one_angle) - 1.0, 2) + std::pow(std::sin(one_angle), 2));
+        double proportional_size = 0.517638 / angle_width;
+    };
+    // Fixed radius center size
+	std::shared_ptr<model_maker::Polygon> __gear_solid(double radius_center, unsigned int wheel_number) {
         // Configurate the creation
         double angle_sum = static_cast<double>((wheel_number - 2) * SCLS_PI);
+        double angle_total = angle_sum / static_cast<double>(wheel_number);
         double current_angle = 0;
         double max_x = 0; double min_x = 0;
         double max_z = 0; double min_z = 0;
-        double one_angle = SCLS_PI - angle_sum / static_cast<double>(wheel_number);
+        double one_angle = SCLS_PI - angle_total;
+        double proportional_size = __gear_size_by_one_angle(one_angle);
         double side_number = 8 * wheel_number;
         std::shared_ptr<model_maker::Polygon> to_return = std::make_shared<model_maker::Polygon>();
         // Configure the teeth
@@ -129,10 +135,27 @@ namespace scls {
         to_return.get()->min_z *= multiplier;
 
         // Add the inner hole
-        double exclusion_factor = 0.2;
-        exclusion_factor = 1.0 - std::pow(1.0 - exclusion_factor, 12.0 / static_cast<double>(wheel_number));
+        double exclusion_factor = (radius_center / 4.0);
+        //exclusion_factor = 1.0 - std::pow(1.0 - exclusion_factor, 12.0 / static_cast<double>(wheel_number));
+        exclusion_factor = exclusion_factor / proportional_size;
         std::shared_ptr<model_maker::Polygon> inner_points = model_maker::regular_polygon_points(20, 0, exclusion_factor);
         to_return.get()->exclusion_points.push_back(inner_points.get()->points);
+
+        // Scale the polygon
+        for(int i = 0;i<static_cast<int>(to_return.get()->points.size());i++) {
+            // Scale the points
+            model_maker::Point& point = to_return.get()->points[i];
+            point.set_x(point.x() * proportional_size);
+            point.set_z(point.z() * proportional_size);
+        }
+        for(int i = 0;i<static_cast<int>(to_return.get()->exclusion_points.size());i++) {
+            for(int j = 0;j<static_cast<int>(to_return.get()->exclusion_points[i].size());j++) {
+                // Scale the exclusion points
+                model_maker::Point& point = to_return.get()->exclusion_points[i][j];
+                point.set_x(point.x() * proportional_size);
+                point.set_z(point.z() * proportional_size);
+            }
+        }
 
         return to_return;
 	}
@@ -624,8 +647,9 @@ namespace scls {
         }
         else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR) {
             // Create a gear
+            double gear_size = 1.1;
             unsigned int teeth_count = teeth_gear_layer_creator_body();
-            std::shared_ptr<model_maker::Polygon> gear = __gear_solid(teeth_count);
+            std::shared_ptr<model_maker::Polygon> gear = __gear_solid(gear_size, teeth_count);
             std::shared_ptr<scls::Image> img = std::make_shared<scls::Image>(500, 500, scls::Color(255, 255, 255));
             __draw_polygon_in_image(img.get(), gear.get());
             img.get()->save_png("tests/test.png");
@@ -850,7 +874,7 @@ namespace scls {
                     solid.get()->fill_faces_point_by_point(current_face, new_face, solid);
                 }
             }
-            solid.get()->binary_stl_complete().get()->save("tests/form.stl");
+            solid.get()->binary_stl_complete(40).get()->save("tests/form.stl");
         }
         return solid;
     }
