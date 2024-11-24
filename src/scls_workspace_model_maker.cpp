@@ -42,6 +42,7 @@ namespace scls {
     double __gear_size_by_one_angle(double one_angle) {
         double angle_width = std::sqrt(std::pow(std::cos(one_angle) - 1.0, 2) + std::pow(std::sin(one_angle), 2));
         double proportional_size = 0.517638 / angle_width;
+        return proportional_size;
     };
     // Fixed radius center size
 	std::shared_ptr<model_maker::Polygon> __gear_solid(double radius_center, unsigned int wheel_number) {
