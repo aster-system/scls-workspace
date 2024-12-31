@@ -718,7 +718,7 @@
 </gui_object>
 <gui_object name="agatha_replica_file_variable_edition_content" type="text_input">
 	<border bottom=1 left=1 right=1 top=1>
-	<height value=1/5 type=scale>
+	<height value=3/5 type=scale>
 	<parent name="agatha_replica_file_variable_edition">
 	<width value=9/10 type=scale>
 	<x value=1/2 type=object_scale>

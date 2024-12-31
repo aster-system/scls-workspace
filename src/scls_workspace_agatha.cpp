@@ -1351,7 +1351,7 @@ namespace scls {
     // Exports the current replica project
     void SCLS_Workspace_Agatha_Page::export_replica_project() {
         // Export the project
-        currently_displayed_replica_project()->export_project(currently_displayed_export_path(), window_struct()->text_image_generator());
+        currently_displayed_replica_project()->export_project(currently_displayed_export_path(), window_struct()->text_image_generator()->balises());
 
         // Reset export datas
         a_current_state.currently_displayed_export_path = "";
