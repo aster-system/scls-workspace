@@ -118,7 +118,7 @@ namespace scls {
             return a_replica_file_edition_title;
         }
         else if(object_name == "agatha_replica_file_edition_variable") {
-            a_replica_file_edition_variable = *parent->new_object<GUI_Scroller>(object_name);
+            a_replica_file_edition_variable = *parent->new_object<GUI_Scroller_Choice>(object_name);
             return a_replica_file_edition_variable;
         }
         else if(object_name == "agatha_replica_file_settings") {
@@ -1460,31 +1460,13 @@ namespace scls {
                 if(variables[i].get() == 0 || variables[i].get()->global) continue;
                 std::shared_ptr<Replica_File_Variable> current_variable = currently_displayed_replica_file()->variable_by_pattern_variable(variables[i]);
                 if(current_variable.get() == 0) continue;
-                current_button = *a_replica_file_edition_variable.get()->new_object<GUI_Text>("replica_file_edition_variable_button_" + std::to_string(i));
-                current_button.get()->set_font_size(40);
-                current_button.get()->set_height_in_pixel(50);
-                current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
-                current_button.get()->set_text(current_variable.get()->name);
-                current_button.get()->set_texture_alignment(Alignment_Texture::T_Fit);
-                current_button.get()->set_width_in_scale(1);
-                current_button.get()->set_x_in_scale(0);
+                current_button = *a_replica_file_edition_variable.get()->add_object("replica_file_edition_variable_button_" + std::to_string(i), current_variable.get()->name);
                 a_replica_file_edition_variable_buttons.push_back(current_button);
                 a_replica_file_edition_variable_by_buttons[current_button.get()] = current_variable;
             }
 
-            if(a_replica_file_edition_variable_buttons.size() > 0) {
-                // Place the buttons
-                std::shared_ptr<GUI_Text> last_button = a_replica_file_edition_variable_buttons[a_replica_file_edition_variable_buttons.size() - 1];
-                last_button.get()->attach_bottom_in_parent();
-                for(int i = 1;i<static_cast<int>(a_replica_file_edition_variable_buttons.size());i++) {
-                    unsigned int current_i = a_replica_file_edition_variable_buttons.size() - (i + 1);
-                    a_replica_file_edition_variable_buttons[current_i].get()->attach_top_of_object_in_parent(last_button);
-                    last_button = a_replica_file_edition_variable_buttons[current_i];
-                }
-            }
-
             // Finalize the creation
-            a_replica_file_edition_variable.get()->check_scroller();
+            a_replica_file_edition_variable.get()->place_objects();
         }
     }
 
@@ -1501,31 +1483,13 @@ namespace scls {
                 // Create the button
                 std::shared_ptr<Replica_File_Variable> current_variable = variables[i];
                 if(current_variable.get() == 0) continue;
-                current_button = *a_replica_file_variable_element_edition_scroller.get()->new_object<GUI_Text>("replica_file_edition_variable_element_button_" + current_variable.get()->name);
-                current_button.get()->set_font_size(40);
-                current_button.get()->set_height_in_pixel(50);
-                current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
-                current_button.get()->set_text(current_variable.get()->name);
-                current_button.get()->set_texture_alignment(Alignment_Texture::T_Fit);
-                current_button.get()->set_width_in_scale(1);
-                current_button.get()->set_x_in_scale(0);
+                current_button = *a_replica_file_variable_element_edition_scroller.get()->add_object("replica_file_edition_variable_element_button_" + current_variable.get()->name, current_variable.get()->name);
                 a_replica_file_variable_element_edition_buttons.push_back(current_button);
                 a_replica_file_variable_element_edition_by_buttons[current_button.get()] = current_variable;
             }
 
-            if(a_replica_file_variable_element_edition_buttons.size() > 0) {
-                // Place the buttons
-                std::shared_ptr<GUI_Text> last_button = a_replica_file_variable_element_edition_buttons[a_replica_file_variable_element_edition_buttons.size() - 1];
-                last_button.get()->attach_bottom_in_parent();
-                for(int i = 1;i<static_cast<int>(a_replica_file_variable_element_edition_buttons.size());i++) {
-                    unsigned int current_i = a_replica_file_variable_element_edition_buttons.size() - (i + 1);
-                    a_replica_file_variable_element_edition_buttons[current_i].get()->attach_top_of_object_in_parent(last_button);
-                    last_button = a_replica_file_variable_element_edition_buttons[current_i];
-                }
-            } //*/
-
             // Finalize the creation
-            a_replica_file_variable_element_edition_scroller.get()->check_scroller();
+            a_replica_file_variable_element_edition_scroller.get()->place_objects();
         }
     }
 

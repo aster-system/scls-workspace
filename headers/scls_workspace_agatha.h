@@ -420,7 +420,7 @@ namespace scls {
         // Body of the replica file edition part
         std::shared_ptr<GUI_Object> a_replica_file_edition_body;
         // Body of the replica file edition variable part
-        std::shared_ptr<GUI_Scroller> a_replica_file_edition_variable;
+        std::shared_ptr<GUI_Scroller_Choice> a_replica_file_edition_variable;
         // Body of the replica file settings part
         std::shared_ptr<GUI_Object> a_replica_file_settings_body;
         // Body of the replica file variable edition part

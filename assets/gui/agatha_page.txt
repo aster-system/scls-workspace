@@ -539,7 +539,7 @@
 //
 //***************************************************
 
-<gui_object name="agatha_replica_file_creator_navigation" type="scroller">
+<gui_object name="agatha_replica_file_creator_navigation" type="scroller_choice">
 	<border bottom=1 left=1 right=1 top=1>
 	<height value=13/20 type=scale>
 	<width value=3/20 type=scale>
