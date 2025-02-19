@@ -272,7 +272,7 @@ namespace scls {
 
         // Getters and setter
         inline std::string name_layer_creator_body() const {return a_name_layer_creator_body.get()->text();};
-        inline std::string name_shape_2d_layer_creator_body() const {if(a_selection_other_shape_layer_creator_body.get()->currently_selected_objects().size() <= 0) return ""; return a_selection_other_shape_layer_creator_body.get()->currently_selected_objects()[0];};
+        inline std::string name_shape_2d_layer_creator_body() const {if(a_selection_other_shape_layer_creator_body.get()->currently_selected_objects().size() <= 0) return std::string(); return a_selection_other_shape_layer_creator_body.get()->currently_selected_objects()[0].name();};
         inline unsigned int side_regular_polygon_layer_creator_body() const {try{return string_to_double(a_side_regular_polygon_layer_creator_body.get()->text());}catch(std::invalid_argument){return 0;}};
         inline unsigned int teeth_gear_layer_creator_body() const {try{return string_to_double(a_teeth_gear_layer_creator_body.get()->text());}catch(std::invalid_argument){return 0;}};
 

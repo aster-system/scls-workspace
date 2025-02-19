@@ -913,15 +913,11 @@ namespace scls {
         }
 
         // Check if a file variable is chosen
-        for(int i = 0;i<static_cast<int>(a_replica_file_variable_element_edition_buttons.size());i++) {
-            std::string current_button = a_replica_file_variable_element_edition_buttons[i].get()->name();
-            if(a_replica_file_variable_element_edition_scroller.get()->contains_selected_object(current_button)) {
-                // Show the replica file variable edition page
-                a_current_state.currently_displayed_replica_file_variable = a_replica_file_variable_element_edition_by_buttons[a_replica_file_variable_element_edition_buttons[i].get()];
-                if(currently_displayed_replica_file_variable()->listed()) display_replica_file_variable_list_edition();
-                else display_replica_file_variable_edition();
-                return true;
-            }
+        if(a_replica_file_variable_element_edition_scroller.get()->currently_selected_objects_during_this_frame().size() > 0) {
+            a_current_state.currently_displayed_replica_file_variable = a_replica_file_variable_element_edition_by_buttons[reinterpret_cast<GUI_Text*>(a_replica_file_variable_element_edition_scroller.get()->currently_selected_objects_during_this_frame()[0].object())];
+            if(currently_displayed_replica_file_variable()->listed()){display_replica_file_variable_list_edition();}
+            else display_replica_file_variable_edition();
+            return true;
         } return false;
     }
 
@@ -955,15 +951,15 @@ namespace scls {
         }
 
         // Check if an element is selected
+        if(a_replica_file_variable_list_edition_scroller.get()->currently_selected_objects_during_this_frame().size() > 0) {
+            a_current_state.currently_displayed_replica_file_variable_element = a_replica_file_edition_variable_list_by_buttons[reinterpret_cast<GUI_Text*>(a_replica_file_variable_list_edition_scroller.get()->currently_selected_objects_during_this_frame()[0].object())];
+            display_replica_file_variable_element_edition();
+        }
         for(int i = 0;i<static_cast<int>(a_replica_file_variable_edition_list_buttons.size());i++) {
-            std::string current_button = a_replica_file_variable_edition_list_buttons[i].get()->name();
+            std::string current_button = a_replica_file_variable_edition_list_buttons[i].get()->text();
 
             // Go to the needed element
-            if(a_replica_file_variable_list_edition_scroller.get()->contains_confirmed_object(current_button)) {
-                a_current_state.currently_displayed_replica_file_variable_element = a_replica_file_edition_variable_list_by_buttons[a_replica_file_variable_edition_list_buttons[i].get()];
-                display_replica_file_variable_element_edition();
-                break;
-            } else if(a_replica_file_variable_list_edition_scroller.get()->contains_selected_object(current_button)) {
+            if(a_replica_file_variable_list_edition_scroller.get()->contains_selected_object(current_button)) {
                 // Move downward / upward an element in the replica file
                 if(a_replica_file_variable_list_element_down.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
                     int position = currently_displayed_replica_file_variable_list()->move_element_down(a_replica_file_edition_variable_list_by_buttons[a_replica_file_variable_edition_list_buttons[i].get()].get());
@@ -1329,7 +1325,7 @@ namespace scls {
         // Get the needed pattern
         std::shared_ptr<scls::Text_Pattern> used_pattern;
         if(!a_replica_file_creator_navigation.get()->contains_selected_object("replica_file_creator_navigation_0")) {
-            used_pattern = a_replica_file_creator_navigation_buttons_with_pattern[a_replica_file_creator_navigation.get()->currently_selected_objects()[0]];
+            used_pattern = a_replica_file_creator_navigation_buttons_with_pattern[a_replica_file_creator_navigation.get()->currently_selected_objects()[0].name()];
         }
 
         // Create the file
@@ -1508,31 +1504,10 @@ namespace scls {
                 // Get the needed text
                 std::string button_text = std::string("Élément ") + std::to_string(i);
                 if(elements[i].get()->variables.size() > 0 && elements[i].get()->variables[0].get()->content != "") button_text = elements[i].get()->variables[0].get()->content;
-                current_button = *a_replica_file_variable_list_edition_scroller.get()->new_object<GUI_Text>(replica_file_variable_list_button_name(i));
-                current_button.get()->set_font_size(40);
-                current_button.get()->set_height_in_pixel(50);
-                current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
-                current_button.get()->set_text(button_text);
-                current_button.get()->set_texture_alignment(Alignment_Texture::T_Fit);
-                current_button.get()->set_width_in_scale(1);
-                current_button.get()->set_x_in_scale(0);
+                current_button = *a_replica_file_variable_list_edition_scroller.get()->add_object(button_text, button_text);
                 a_replica_file_variable_edition_list_buttons.push_back(current_button);
                 a_replica_file_edition_variable_list_by_buttons[current_button.get()] = elements[i];
             }
-
-            if(a_replica_file_variable_edition_list_buttons.size() > 0) {
-                // Place the buttons
-                std::shared_ptr<GUI_Text> last_button = a_replica_file_variable_edition_list_buttons[a_replica_file_variable_edition_list_buttons.size() - 1];
-                last_button.get()->attach_bottom_in_parent();
-                for(int i = 1;i<static_cast<int>(a_replica_file_variable_edition_list_buttons.size());i++) {
-                    unsigned int current_i = a_replica_file_variable_edition_list_buttons.size() - (i + 1);
-                    a_replica_file_variable_edition_list_buttons[current_i].get()->attach_top_of_object_in_parent(last_button);
-                    last_button = a_replica_file_variable_edition_list_buttons[current_i];
-                }
-            }
-
-            // Finalize the creation
-            a_replica_file_variable_list_edition_scroller.get()->check_scroller();
         }
     }
 
@@ -1581,8 +1556,8 @@ namespace scls {
             for(int i = 0;i<static_cast<int>(replicas.get()->size());i++) {
                 // Create the button
                 home_button = *a_replica_project_main_navigation.get()->new_object<GUI_Text>("replica_file_button_" + std::to_string(i));
-                home_button.get()->set_font_size(40);
-                home_button.get()->set_height_in_pixel(50);
+                home_button.get()->set_font_size(26);
+                home_button.get()->set_height_in_pixel(30);
                 home_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
                 home_button.get()->set_text(replicas.get()->at(i).get()->internal_path);
                 home_button.get()->set_texture_alignment(Alignment_Texture::T_Fit);

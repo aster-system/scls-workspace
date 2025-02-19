@@ -641,12 +641,12 @@ namespace scls {
 
     // Adds a new layer to the model maker project
     void SCLS_Workspace_Model_Maker_Page::add_layer_solid() {
-        if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR) {
+        if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR) {
             // Create a regular polygon
             unsigned int side_count = side_regular_polygon_layer_creator_body();
             current_solid()->add_layer(name_layer_creator_body(), model_maker::regular_polygon_points(side_count));
         }
-        else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR) {
+        else if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR) {
             // Create a gear
             double gear_size = 1.1;
             unsigned int teeth_count = teeth_gear_layer_creator_body();
@@ -656,7 +656,7 @@ namespace scls {
             img.get()->save_png("tests/test.png");
             current_solid()->add_layer(name_layer_creator_body(), gear);
         }
-        else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR) {
+        else if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR) {
             // Create an other shape
             std::string shape_name = name_shape_2d_layer_creator_body();
             if(chosen_shape_2d() != 0) current_solid()->add_layer(name_layer_creator_body(), chosen_shape_2d()->to_polygon());
@@ -889,46 +889,10 @@ namespace scls {
 
     // Loads the navigation of the layer creator page
     void SCLS_Workspace_Model_Maker_Page::load_navigation_layer_creator() {
-        std::shared_ptr<GUI_Text> current_button;
-        std::shared_ptr<GUI_Text> last_button;
-
-        // Create the "other shape" solid button
-        current_button = *a_layer_creator_navigation.get()->new_object_in_scroller<GUI_Text>(SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR);
-        current_button.get()->set_border_width_in_pixel(1);
-        current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
-        current_button.get()->set_height_in_pixel(40);
-        current_button.get()->set_text(to_utf_8_code_point("Autre forme"));
-        current_button.get()->set_width_in_scale(Fraction(1));
-        if(last_button.get() == 0) current_button.get()->attach_bottom_in_parent();
-        else current_button.get()->attach_top_of_object_in_parent(last_button);
-        a_navigation_buttons_solid.push_back(current_button);
-        last_button = current_button;
-
-        // Create the "gear" solid button
-        current_button = *a_layer_creator_navigation.get()->new_object_in_scroller<GUI_Text>(SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR);
-        current_button.get()->set_border_width_in_pixel(1);
-        current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
-        current_button.get()->set_height_in_pixel(40);
-        current_button.get()->set_text(to_utf_8_code_point("Engrenage"));
-        current_button.get()->set_width_in_scale(Fraction(1));
-        if(last_button.get() == 0) current_button.get()->attach_bottom_in_parent();
-        else current_button.get()->attach_top_of_object_in_parent(last_button);
-        a_navigation_buttons_solid.push_back(current_button);
-        last_button = current_button;
-
-        // Create the "regular polygon" solid button
-        current_button = *a_layer_creator_navigation.get()->new_object_in_scroller<GUI_Text>(SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR);
-        current_button.get()->set_border_width_in_pixel(1);
-        current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
-        current_button.get()->set_height_in_pixel(40);
-        current_button.get()->set_text(to_utf_8_code_point("Polygône régulier"));
-        current_button.get()->set_width_in_scale(Fraction(1));
-        if(last_button.get() == 0) current_button.get()->attach_bottom_in_parent();
-        else current_button.get()->attach_top_of_object_in_parent(last_button);
-        a_navigation_buttons_solid.push_back(current_button);
-        last_button = current_button;
-
-        a_layer_creator_navigation.get()->check_scroller();
+        // Create the buttons
+        a_layer_creator_navigation.get()->add_object(SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR, std::string("Polygône régulier"));
+        a_layer_creator_navigation.get()->add_object(SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR, std::string("Engrenage"));
+        a_layer_creator_navigation.get()->add_object(SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR, std::string("Autre forme"));
     }
 
     // Loads the navigation of the model maker project
@@ -958,7 +922,7 @@ namespace scls {
         }
 
         // Create the "welcome" solid button
-        current_button = *a_solid_main_navigation.get()->new_object_in_scroller<GUI_Text>("welcome_navigation_model_maker_project"); button++;
+        current_button = *a_solid_main_navigation.get()->new_object_in_scroller<GUI_Text>(std::string("welcome_navigation_model_maker_project_") + std::to_string(button)); button++;
         current_button.get()->set_border_width_in_pixel(1);
         current_button.get()->set_overflighted_cursor(GLFW_HAND_CURSOR);
         current_button.get()->set_height_in_pixel(40);
@@ -1022,15 +986,15 @@ namespace scls {
         if(a_validate_layer_creator_body.get() != 0 && a_validate_layer_creator_body.get()->is_clicked_during_this_frame(GLFW_MOUSE_BUTTON_LEFT)) {
             // A layer should be created
             if(name_layer_creator_body() != "") {
-                if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR && side_regular_polygon_layer_creator_body() > 2) {
+                if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR && side_regular_polygon_layer_creator_body() > 2) {
                     add_layer_solid();
                     display_solid_main();
                 }
-                else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR && teeth_gear_layer_creator_body() > 3) {
+                else if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR && teeth_gear_layer_creator_body() > 3) {
                     add_layer_solid();
                     display_solid_main();
                 }
-                else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR && name_shape_2d_layer_creator_body() != "") {
+                else if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR && name_shape_2d_layer_creator_body() != "") {
                     add_layer_solid();
                     display_solid_main();
                 }
@@ -1044,13 +1008,13 @@ namespace scls {
 
         // Check the layer type
         if(a_layer_creator_navigation.get()->choice_modified()) {
-            if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR) {
+            if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR) {
                 display_layer_creator_regular_polygon();
             }
-            else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR) {
+            else if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR) {
                 display_layer_creator_other_shape();
             }
-            else if(a_layer_creator_navigation.get()->currently_selected_objects()[0] == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR) {
+            else if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR) {
                 display_layer_creator_gear();
             }
         }

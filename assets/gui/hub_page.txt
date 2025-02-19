@@ -33,7 +33,7 @@
 </gui_object>
 <gui_object name="hub_agatha_button" type="navigation-agatha">
 	<border bottom=1 left=1 right=1 top=1>
-	<content font_size=120>Agatha</content>
+	<content font_size=120 alignment_horizontal=center>Agatha</content>
 	<height value=150 type=pixel>
 	<parent name="hub_navigation">
 	<width value=1 type=scale>
@@ -46,7 +46,7 @@
 </gui_object>
 <gui_object name="hub_model_maker_button" type="navigation-model_maker">
 	<border bottom=1 left=1 right=1 top=1>
-	<content font_size=120>Model maker</content>
+	<content font_size=120 alignment_horizontal=center>Model maker</content>
 	<height value=150 type=pixel>
 	<parent name="hub_navigation">
 	<width value=1 type=scale>
