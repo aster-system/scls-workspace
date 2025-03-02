@@ -161,6 +161,21 @@ namespace scls {
         return to_return;
 	}
 
+	// Returns the points of a pipe
+	std::shared_ptr<model_maker::Polygon> __pipe_solid(double radius_center) {
+	    std::shared_ptr<model_maker::Polygon> to_return = std::make_shared<model_maker::Polygon>();
+
+	    // Add the outer hole
+        std::shared_ptr<model_maker::Polygon> outer_points = model_maker::regular_polygon_points(20, 0, 1);
+        for(int i = 0;i<static_cast<int>(outer_points.get()->points.size());i++){to_return.get()->points.push_back(outer_points.get()->points[i]);}
+
+	    // Add the inner hole
+        std::shared_ptr<model_maker::Polygon> inner_points = model_maker::regular_polygon_points(20, 0, radius_center);
+        to_return.get()->exclusion_points.push_back(inner_points.get()->points);
+
+	    return to_return;
+	}
+
 	//*********
 	//
 	// Model Maker project
@@ -460,26 +475,11 @@ namespace scls {
             a_validate_solid_creator_body = *parent->new_object<GUI_Text>(object_name);
             return a_validate_solid_creator_body;
         }
-        else if(object_name == "view_solid_main_body_model_maker") {
-            a_view_solid_main_body = *parent->new_object<GUI_Object>(object_name);
-            return a_view_solid_main_body;
-        }
-        else if(object_name == "width_layer_main_body_model_maker") {
-            a_width_layer_main_body = *parent->new_object<GUI_Text_Input>(object_name);
-            return a_width_layer_main_body;
-        }
-        else if(object_name == "x_layer_main_body_model_maker") {
-            a_x_layer_main_body = *parent->new_object<GUI_Text_Input>(object_name);
-            return a_x_layer_main_body;
-        }
-        else if(object_name == "y_layer_main_body_model_maker") {
-            a_y_layer_main_body = *parent->new_object<GUI_Text_Input>(object_name);
-            return a_y_layer_main_body;
-        }
-        else if(object_name == "z_layer_main_body_model_maker") {
-            a_z_layer_main_body = *parent->new_object<GUI_Text_Input>(object_name);
-            return a_z_layer_main_body;
-        }
+        else if(object_name == "view_solid_main_body_model_maker"){a_view_solid_main_body = *parent->new_object<pleos::Graphic_Object>(object_name);return a_view_solid_main_body;}
+        else if(object_name == "width_layer_main_body_model_maker"){a_width_layer_main_body = *parent->new_object<GUI_Text_Input>(object_name);return a_width_layer_main_body;}
+        else if(object_name == "x_layer_main_body_model_maker"){a_x_layer_main_body = *parent->new_object<GUI_Text_Input>(object_name);return a_x_layer_main_body;}
+        else if(object_name == "y_layer_main_body_model_maker"){a_y_layer_main_body = *parent->new_object<GUI_Text_Input>(object_name);return a_y_layer_main_body;}
+        else if(object_name == "z_layer_main_body_model_maker"){a_z_layer_main_body = *parent->new_object<GUI_Text_Input>(object_name);return a_z_layer_main_body;}
         return GUI_Page::__create_loaded_object_from_type(object_name, object_type, parent);
     };
 
@@ -646,14 +646,17 @@ namespace scls {
             unsigned int side_count = side_regular_polygon_layer_creator_body();
             current_solid()->add_layer(name_layer_creator_body(), model_maker::regular_polygon_points(side_count));
         }
+        else if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_PIPE_POLYGON_LAYER_CREATOR) {
+            // Create a pipe
+            double gear_size = 0.8;
+            std::shared_ptr<model_maker::Polygon> pipe = __pipe_solid(gear_size);
+            current_solid()->add_layer(name_layer_creator_body(), pipe);
+        }
         else if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR) {
             // Create a gear
             double gear_size = 1.1;
             unsigned int teeth_count = teeth_gear_layer_creator_body();
             std::shared_ptr<model_maker::Polygon> gear = __gear_solid(gear_size, teeth_count);
-            std::shared_ptr<scls::Image> img = std::make_shared<scls::Image>(500, 500, scls::Color(255, 255, 255));
-            __draw_polygon_in_image(img.get(), gear.get());
-            img.get()->save_png("tests/test.png");
             current_solid()->add_layer(name_layer_creator_body(), gear);
         }
         else if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR) {
@@ -891,6 +894,7 @@ namespace scls {
     void SCLS_Workspace_Model_Maker_Page::load_navigation_layer_creator() {
         // Create the buttons
         a_layer_creator_navigation.get()->add_object(SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR, std::string("Polygône régulier"));
+        a_layer_creator_navigation.get()->add_object(SCLS_WORKSPACE_MODEL_MAKER_PIPE_POLYGON_LAYER_CREATOR, std::string("Tuyau"));
         a_layer_creator_navigation.get()->add_object(SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR, std::string("Engrenage"));
         a_layer_creator_navigation.get()->add_object(SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR, std::string("Autre forme"));
     }
@@ -958,20 +962,13 @@ namespace scls {
     // Update the view of the solid main
     void SCLS_Workspace_Model_Maker_Page::update_solid_view() {
         // Create the image for the new texture
-        std::shared_ptr<Image> new_image = std::make_shared<Image>(500, 500, Color(255, 255, 255));
-        Color lines_color = Color(0, 255, 0);
-        unsigned int lines_width = 6;
-        Color point_color = Color(0, 255, 0);
-        unsigned int point_width = 15;
+        a_view_solid_main_body.get()->reset();
 
-        // Draw each layers
-        for(int i = 0;i<static_cast<int>(current_solid()->layers().size());i++) {
-            std::shared_ptr<__Model_Maker_Layer> current_layer = current_solid()->layers()[i];
-            __draw_layer_in_image(new_image, current_layer);
-        }
+        // Add each layers
+        for(int i = 0;i<static_cast<int>(current_solid()->layers().size());i++) {current_solid()->layers()[i].get()->add_to_graphic(a_view_solid_main_body.get()->graphic());}
 
         // Set the new texture
-        a_view_solid_main_body.get()->texture()->set_image(new_image);
+        a_view_solid_main_body.get()->update_texture();
     }
 
     //*********
@@ -998,6 +995,10 @@ namespace scls {
                     add_layer_solid();
                     display_solid_main();
                 }
+                else {
+                    add_layer_solid();
+                    display_solid_main();
+                }
             }
         }
 
@@ -1017,6 +1018,7 @@ namespace scls {
             else if(a_layer_creator_navigation.get()->currently_selected_objects()[0].name() == SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR) {
                 display_layer_creator_gear();
             }
+            else{hide_all_layer_creator();}
         }
     }
 

@@ -26,7 +26,7 @@
 #ifndef SCLS_WORKSPACE_MODEL_MAKER
 #define SCLS_WORKSPACE_MODEL_MAKER
 
-#include "../../scls-graphic-benoit/scls_graphic.h"
+#include "../../PLEOS/pleos_libs/pleos_mathematics.h"
 
 // The namespace "scls" is used to simplify the all.
 namespace scls {
@@ -40,6 +40,8 @@ namespace scls {
 	// Returns the point of a gear
 	double __gear_size_by_teeth(unsigned int teeth_number);
 	std::shared_ptr<model_maker::Polygon> __gear_solid(double radius_center, unsigned int wheel_number);
+	// Returns the points of a pipe
+	std::shared_ptr<model_maker::Polygon> __pipe_solid(double radius_center);
 
 	//*********
 	//
@@ -81,6 +83,8 @@ namespace scls {
 	struct __Model_Maker_Layer {
 	    // Constructor of the struct
 	    __Model_Maker_Layer():layer_face(std::make_shared<model_maker::Face>()),points(layer_face.get()->points()){};
+	    // Adds the layer to a graphic
+	    void add_to_graphic(pleos::Graphic* graphic) {graphic->new_form_from_face("form", layer_face.get());};
 
 	    // Transform datas
 	    // Face transformation of the layer
@@ -455,6 +459,7 @@ namespace scls {
 
         // Name of the regular polygon page of layer creator
         #define SCLS_WORKSPACE_MODEL_MAKER_GEAR_POLYGON_LAYER_CREATOR std::string("gear_button_layer_navigation_model_maker")
+        #define SCLS_WORKSPACE_MODEL_MAKER_PIPE_POLYGON_LAYER_CREATOR std::string("pipe_button_layer_navigation_model_maker")
         #define SCLS_WORKSPACE_MODEL_MAKER_OTHER_SHAPE_POLYGON_LAYER_CREATOR std::string("other_shape_button_layer_navigation_model_maker")
         #define SCLS_WORKSPACE_MODEL_MAKER_REGULAR_POLYGON_LAYER_CREATOR std::string("regular_polygon_button_layer_navigation_model_maker")
         #define SCLS_WORKSPACE_MODEL_MAKER_SAME_SHAPE_TOP_CONNECTION_LAYER_MAIN std::string("same_shape_button_top_connection_layer_main_model_maker")
@@ -529,7 +534,7 @@ namespace scls {
         // Title of the main solid
         std::shared_ptr<GUI_Text> a_title_solid_main_body;
         // View of the main solid
-        std::shared_ptr<GUI_Object> a_view_solid_main_body;
+        std::shared_ptr<pleos::Graphic_Object> a_view_solid_main_body;
         // Width value of the main layer
         std::shared_ptr<GUI_Text_Input> a_width_layer_main_body;
         // X value of the main layer
