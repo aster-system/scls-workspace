@@ -1,12 +1,3 @@
-<gui_object name="header">
-	<border bottom=1 left=1 right=1 top=1>
-	<height value=1/10 type=scale>
-	<parent name="hub_body">
-	<width value=1 type=scale>
-	<x value=1/2 type=object_scale>
-	<y attach=top>
-</gui_object>
-
 //***************************************************
 //
 //   HUB
@@ -19,6 +10,17 @@
 	<width value=1 type=scale>
 	<x value=0 type=scale>
 	<y value=0 type=scale>
+</gui_object>
+
+// Header
+
+<gui_object name="header">
+	<border bottom=1 left=1 right=1 top=1>
+	<height value=1/10 type=scale>
+	<parent name="hub_body">
+	<width value=1 type=scale>
+	<x value=1/2 type=object_scale>
+	<y attach=top>
 </gui_object>
 
 // Navigation into the software

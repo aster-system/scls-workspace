@@ -734,7 +734,7 @@ namespace scls {
             last_button = current_button;
             a_current_state.loaded_shape_2d_by_selection[selection_name] = a_loaded_shape_2d[i];
         }
-        a_selection_other_shape_layer_creator_body.get()->check_scroller();
+        a_selection_other_shape_layer_creator_body.get()->place_objects();
     }
 
     //*********
@@ -956,7 +956,7 @@ namespace scls {
         a_navigation_buttons_solid.push_back(current_button);
         last_button = current_button;
 
-        a_layer_main_top_connection_navigation.get()->check_scroller();
+        a_layer_main_top_connection_navigation.get()->place_objects();
     }
 
     // Update the view of the solid main

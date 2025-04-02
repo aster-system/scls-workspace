@@ -1437,7 +1437,7 @@ namespace scls {
             }
 
             // Finalize the creation
-            a_replica_file_creator_navigation.get()->check_scroller();
+            a_replica_file_creator_navigation.get()->check_objects();
             a_replica_file_creator_navigation.get()->select_object("replica_file_creator_navigation_0");
         }
     }
